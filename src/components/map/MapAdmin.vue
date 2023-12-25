@@ -20,10 +20,10 @@
   </template>
     
   <script>
-  import Building from "@/components/BuildingContainer.vue"
-  import BusLine from "@/components/BusLineContainer.vue"
-  import BusStop from "@/components/BusStopContainer.vue"
-  import BusRelation from "@/components/BusRelationContainer.vue"
+  import Building from "@/components/map/BuildingContainer.vue"
+  import BusLine from "@/components/map/BusLineContainer.vue"
+  import BusStop from "@/components/map/BusStopContainer.vue"
+  import BusRelation from "@/components/map/BusRelationContainer.vue"
   export default {
     components: {Building, BusLine, BusStop, BusRelation},
     data() {

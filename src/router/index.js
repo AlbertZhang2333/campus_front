@@ -1,22 +1,27 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Index from '@/views/index'
-import Admin from '@/views/admin'
+import Map from '@/views/map'
+import MapAdmin from '@/views/mapAdmin.vue'
+import Shop from "@/views/shop"
 
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/',
-        component: Index
+        component: Map
     },
     {
         path: '/map',
-        component: Index
+        component: Map
     },
     {
-        path: '/admin',
-        component: Admin
+        path: '/map/admin',
+        component: MapAdmin
+    },
+    {
+        path: '/shop',
+        component: Shop
     }
 ]
 

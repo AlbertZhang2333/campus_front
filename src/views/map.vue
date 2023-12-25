@@ -21,8 +21,8 @@
     
 <script>
     
-  import Main from "@/components/MapContainer.vue"
-  import Aside from "@/components/Aside";
+  import Main from "@/components/map/MapContainer.vue"
+  import Aside from "@/components/map/MapAside";
   import Header from "@/components/Header"
   import Foot from "@/components/Foot";
   

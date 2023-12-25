@@ -22,10 +22,16 @@
       </el-menu-item>
     </router-link>
 
-    <router-link :to="'/admin'">
+    <router-link :to="'/map/admin'">
       <el-menu-item :index="'/admin'" :width="width">
         <i class="el-icon-s-flag"></i>
         <span slot="title" style="text-align: center">地图信息管理</span>
+      </el-menu-item>
+    </router-link>
+    <router-link :to="'/shop'">
+      <el-menu-item :index="'/shop'" :width="width">
+        <i class="el-icon-s-flag"></i>
+        <span slot="title" style="text-align: center">商店</span>
       </el-menu-item>
     </router-link>
   </el-menu>
