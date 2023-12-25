@@ -1,0 +1,29 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Index from '@/views/index'
+import Admin from '@/views/admin'
+
+Vue.use(VueRouter)
+
+const routes = [
+    {
+        path: '/',
+        component: Index
+    },
+    {
+        path: '/map',
+        component: Index
+    },
+    {
+        path: '/admin',
+        component: Admin
+    }
+]
+
+const router=new VueRouter({
+    mode:'history',
+    base:process.env.BASE_URL,
+    routes
+})
+
+export default router
