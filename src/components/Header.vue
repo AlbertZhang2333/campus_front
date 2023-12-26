@@ -5,7 +5,7 @@
         <i :class="icon" style="font-size: 20px; cursor: pointer;" @click="collapse"></i>
       </div>
       <div style="flex: 1; text-align: center; font-size: 34px">
-        <span>Map</span>
+        <span>Campus</span>
       </div>
     </div>
   </template>

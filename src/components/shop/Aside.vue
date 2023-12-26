@@ -4,17 +4,19 @@
       <el-col :span="12">
         <el-menu
           default-active="2"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose">
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>管理员入口</span>
-            </template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-          </el-submenu>
+          class="el-menu-vertical-demo">
+          <router-link :to="'/shop'">
+            <el-menu-item :index="'/shop'" style="width: 100px">
+              <i class="el-icon-s-home"></i>
+              <span slot="title" style="text-align: center">商城首页</span>
+            </el-menu-item>
+          </router-link>
+          <router-link :to="'/shop/admin'">
+            <el-menu-item :index="'/shop/admin'" style="width: 100px">
+              <i class="el-icon-s-flag"></i>
+              <span slot="title" style="text-align: center">商城管理</span>
+            </el-menu-item>
+          </router-link>
           <el-menu-item index="2" @click="openShoppingCartDialog">
             <i class="el-icon-s-goods"></i>
             <span slot="title">购物车</span>
@@ -32,33 +34,33 @@
         stripe
         style="width: 100%">
         <el-table-column
-          prop="add date"
+          prop="date"
           label="商品加入购物车日期"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="item name"
+          prop="name"
           label="商品名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="shopping num"
+          prop="num"
           label="购买数量">
         </el-table-column>
         <el-table-column
-          prop="amount price"
+          prop="price"
           label="预计花费¥">
         </el-table-column>
         <el-table-column>
           <template #default="scope">
             <el-button style="margin-left: auto" @click="deleteShoppingCartItem(scope.$index)">移除此商品</el-button>
-            <el-button style="margin-left: auto">支付此商品</el-button>
+            <el-button style="margin-left: auto" @click="pay(scope.row)">支付宝支付</el-button>
           </template>
         </el-table-column>
 
-        <el-table-row>
+        <el-row>
           <span>通通拿下</span>
-        </el-table-row>
+        </el-row>
       </el-table>
     </el-dialog>
 
@@ -71,16 +73,9 @@
 </template>
 
 <script>
-import Sustech_Market from "./Sustech_Market.vue";
 export default {
   props:['MarketShoppingCartInfo'],
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    },
     openShoppingCartDialog() {
       this.shoppingCart_dialog=true;
       console.log(this.MarketShoppingCartInfo[0])
@@ -91,6 +86,13 @@ export default {
     },
     feedbackCollectionDialog(){
       this.feedback_dialog=true;
+    },
+    async pay(item){
+      console.log("item",item, "name",item.name,"num",item.num);
+      const response = await this.$axios.put(`http://localhost:8081/UserShopping/purchase?itemName=${item.name}&num=${item.num}`);
+      console.log(response.data.data);
+      var newPage = window.open("about:blank", "_blank");
+      newPage.document.write(response.data.data);
     }
   },
   data(){

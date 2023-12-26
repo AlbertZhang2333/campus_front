@@ -3,13 +3,13 @@ import VueRouter from 'vue-router'
 import Map from '@/views/map'
 import MapAdmin from '@/views/mapAdmin.vue'
 import Shop from "@/views/shop"
-
+import ShopAdmin from "@/views/shopAdmin"
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/',
-        component: Map
+        component: Shop
     },
     {
         path: '/map',
@@ -22,6 +22,10 @@ const routes = [
     {
         path: '/shop',
         component: Shop
+    },
+    {
+        path: '/shop/admin',
+        component: ShopAdmin
     }
 ]
 

@@ -1,7 +1,6 @@
 
 <template>
   <div>
-    <Market_headline></Market_headline>
     <h2>
      商场管理界面
     </h2>
@@ -151,11 +150,7 @@
 </template>
 
 <script>
-import Market_headline from "./Market_headline.vue";
 export default {
-components:{
-  Market_headline
-},
   methods: {
     tableRowClassName({row, rowIndex}) {
       if (rowIndex === 1) {
