@@ -123,14 +123,22 @@
           BusStopList:[],
           busStopAddRule:{
               name:[
-              {required:true,trigger:'blur'}
+              {required:true,message: "校巴站名不能为空", trigger:'blur'}
               ],
               lat:[
-              {required:true,trigger:'blur'}
+                {required:true, message: "纬度不能为空", trigger:'blur'},
+                {type: 'number', message: "纬度应为一个数字", trigger:'blur'},
+                {pattern: /^(\-|\+)?([0-8]?\d{1}\.\d{0,7}|90\.0{0,6}|[0-8]?\d{1}|90)$/,
+                  message: "整数部分为0-90,小数部分为0到7位",
+                  trigger: "blur"}
               ],
               lng:[
-              {required:true,trigger:'blur'}
-              ]
+                {required:true, message:"经度不能为空", trigger:'blur'},
+                {type: 'number', message: "经度应为一个数字", trigger:'blur'},
+                {pattern: /^(\-|\+)?(((\d|[1-9]\d|1[0-7]\d|0{1,3})\.\d{0,7})|(\d|[1-9]\d|1[0-7]\d|0{1,3})|180\.0{0,6}|180)$/,
+                message: "整数部分为0-180,小数部分为0到7位",
+                trigger: "blur"}
+              ],
   
           },
   
@@ -150,15 +158,12 @@
       openAddBusStopDialog(){
           this.addBusStop_dialog=true;
       },
-      submitAddBusStop(submitOrUpdate,index){
-      this.$refs.BusStop.validate((valid) =>{
-          if(valid){
-              this.$axios.post(`http://localhost:8081/addStop?lat=${this.BusStop.lat}&lng=${this.BusStop.lng}&name=${this.BusStop.name}`);
-              alert('submit!');
-              this.addBusStop_dialog=false;
-              this.updateBusStopList();
-          }
-      })
+      async submitAddBusStop(submitOrUpdate,index){
+        const response = await this.$axios.post(`http://localhost:8081/addStop?lat=${this.BusStop.lat}&lng=${this.BusStop.lng}&name=${this.BusStop.name}`);
+        if(response.data.code == 400) alert("添加失败");
+        else alert('submit!');
+        this.addBusStop_dialog=false;
+        this.updateBusStopList();
       },
       async editBusStop(curBusStop){
         //将当前站点信息填入弹窗
@@ -170,32 +175,26 @@
       },
       async updateAddBusStop(){
         //将弹窗中的信息更新到数据库
-          this.$axios.put(`http://localhost:8081/updateStop?id=${this.BusStop.id}&lat=${this.BusStop.lat}&lng=${this.BusStop.lng}&name=${this.BusStop.name}`);
-          alert('update!');
+          const response = await this.$axios.put(`http://localhost:8081/updateStop?id=${this.BusStop.id}&lat=${this.BusStop.lat}&lng=${this.BusStop.lng}&name=${this.BusStop.name}`);
+          if(response.data.code == 400) alert("修改失败");
+          else alert('update!');
           this.updateBusStop_dialog=false;
           this.updateBusStopList();
       },
-      deleteBusStop: _.debounce(async function(curBusStop) {
-        this.$axios.delete(`http://localhost:8081/deleteStop/${curBusStop.id}`)
-          .then(res => res.data)
-          .then(res => {
-            console.log(res);
-            this.$message({
-              message: '删除成功!',
-              type: 'success'
-            });
-            this.loadPost();
-            this.updateBusStopList();
-          })
-          .catch(error => {
-            console.error('Error deleting comment:', error);
-            this.$message.error('删除失败，请重试!');
-          });
-      }, 300),
+      async deleteBusStop(curBusStop) {
+        const response = await this.$axios.delete(`http://localhost:8081/deleteStop/${curBusStop.id}`);
+        if(response.data.code == 400) alert("删除失败");
+        else alert('delete!');
+        this.updateBusStopList();
+      },
       async updateBusStopList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
           const response = await this.$axios.get('http://localhost:8081/allStop');
-          this.BusStopList = response.data;
+          if(response.data.code == 400){
+            alert("查询失败");
+          }else{
+            this.BusStopList = response.data.data;
+          }
       },
       handleInputChange: _.debounce(async function() {
         try {
@@ -212,7 +211,7 @@
       }, 300),
       async searchOnServer(busStopInput) {
         const response = await this.$axios.get(`http://localhost:8081/searchingBusStop/${busStopInput}`);
-        return response.data;
+        return response.data.data;
       },
   }
   }

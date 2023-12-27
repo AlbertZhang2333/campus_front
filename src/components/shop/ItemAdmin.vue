@@ -129,16 +129,18 @@ export default {
         ItemList:[],
         ItemAddRule:{
             name:[
-            {required:true,trigger:'blur'}
+              {required:true, message:"商品名称不能为空", trigger: 'blur'}
             ],
             num:[
-            {required:true,trigger:'blur'}
+              {required:true, message:"库存数量不能为空", trigger: 'blur'},
+              {pattern:/^\d+$ /, message: "库存数量应为一个非负整数", trigger:'blur'}
             ],
             price:[
-            {required:true,trigger:'blur'}
+              {required:true, message:"价格不能为空", trigger: 'blur'},
+              {pattern:/^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$ /, message: "价格应为一个正数（可为小数）", trigger:'blur'}
             ],
             description:[
-            {required:true,trigger:'blur'}
+              {required:true, message:"商品描述信息", trigger: 'blur'}
             ]
         },
 
