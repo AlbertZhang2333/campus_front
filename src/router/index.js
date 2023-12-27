@@ -5,6 +5,9 @@ import Map from '@/views/map'
 import MapAdmin from '@/views/mapAdmin.vue'
 import Shop from "@/views/shop"
 import ShopAdmin from "@/views/shopAdmin"
+import Comment from '@/views/comment.vue'
+import CommentAdmin from "@/views/commentAdmin.vue";
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -27,6 +30,14 @@ const routes = [
     {
         path: '/shop/admin',
         component: ShopAdmin
+    },
+    {
+        path: '/comment',
+        component: Comment
+    },
+    {
+        path: '/comment/admin',
+        component: CommentAdmin
     }
 ]
 

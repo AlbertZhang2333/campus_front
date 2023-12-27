@@ -11,7 +11,7 @@ Vue.use(ElementUI);
 import axios from 'axios'
 
 Vue.prototype.$axios = axios;
-//Vue.prototype.$httpUrl = 'http://localhost:8080/';
+Vue.prototype.$httpUrl = 'http://localhost:8081/';
 
 new Vue({
     router,
