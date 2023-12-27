@@ -10,6 +10,9 @@
           <el-button @click="createAccountDialog" class="RowButtonSize">
             新增用户
           </el-button>
+          <el-button @click="fileUploadDialog" class="150px">
+            批量新增用户
+          </el-button>
           <el-switch
               v-model="toDeleteAccount"
               active-color="#ff4949"
@@ -109,33 +112,24 @@
 <!--        提交商品-->
 <!--      </el-button>-->
     </el-dialog>
-
-
-
+    <!-- 上传对话框 -->
+    <el-dialog title="上传" :visible.sync="fileUploadDialogVisible" width="35%" style="text-align: center;">
+      <el-upload class="upload-demo" action="#" drag multiple :headers="headers" :auto-upload="false"
+        :file-list="fileList" :on-change="handleChange">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">上传Excel格式文件</div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogOfUpload = false">取 消</el-button>
+        <el-button type="primary" @click="confirmUpload()">上 传</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 export default {
-  methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
-    createAccount(){
-      this.accountDialogVisible=false;
-    },
-    createAccountDialog(){
-      this.accountDialogVisible=true;
-      console.log("account", this.accountDialogVisible);
-    },
-
-    deleteItem(index){
-      this.accountInfoItemList.splice(index,1);
-    },
-
-
-
-  },
   data() {
     return {
       accountInfoItem:{
@@ -153,10 +147,51 @@ export default {
         "enabled":true
       }],
       accountDialogVisible:false,
+      fileUploadDialogVisible:false,
       activateName:"Current_accounts",
       toDeleteAccount:false,
-      toSetBlackList:false
+      toSetBlackList:false,
+      fileList: [],
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     }
+  },
+  methods: {
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
+    createAccount(){
+      this.accountDialogVisible=false;
+    },
+    createAccountDialog(){
+      this.accountDialogVisible=true;
+    },
+    fileUploadDialog(){
+      this.fileUploadDialogVisible=true;
+    },
+    handleChange(file, fileList) { //文件数量改变
+      this.fileList = fileList;
+    },
+
+    async confirmUpload() { //确认上传
+      var param = new FormData();
+      this.fileList.forEach(
+        (val, index) => {
+          param.append("file", val.raw);
+        }
+      );
+
+      const response = await this.$axios.post("http://localhost:8081/manageAccount/batchAddAccount", param);
+      if(response.data.code == 400) alert("批量添加用户失败");
+      else alert("批量添加用户成功");
+    },
+    deleteItem(index){
+      this.accountInfoItemList.splice(index,1);
+    },
+
+
+
   }
 }
 </script>

@@ -9,6 +9,7 @@ import Comment from '@/views/comment.vue'
 import CommentAdmin from "@/views/commentAdmin.vue";
 import ReservationAdmin from "@/views/reservationAdmin.vue";
 import Reservation from "@/views/reservation.vue";
+import User from "@components/user/AccountAdmin.vue"
 
 Vue.use(VueRouter)
 
@@ -49,6 +50,10 @@ const routes = [
         path: '/reservation/admin',
         component: ReservationAdmin
     },
+    {
+        path: '/user',
+        component: User
+    }
 ]
 
 const router=new VueRouter({

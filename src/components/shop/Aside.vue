@@ -106,6 +106,7 @@ export default {
         var newPage = window.open("about:blank", "_blank");
         newPage.document.write(response.data.data[1]);
         this.curRecordId = response.data.data[0];
+        await this.sleep(10000);
         this.intervalId = setInterval(this.fetchData, 3000);
       }
     },
@@ -141,7 +142,14 @@ export default {
       } catch (error) {
         console.error('获取数据时出错：', error);
       }
-    }
+    },
+    sleep(millisecond) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve()
+            }, millisecond)
+        })
+    },
   },
 }
 

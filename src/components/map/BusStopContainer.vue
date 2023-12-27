@@ -126,18 +126,16 @@
               {required:true,message: "校巴站名不能为空", trigger:'blur'}
               ],
               lat:[
-                {required:true, message: "纬度不能为空", trigger:'blur'},
-                {type: 'number', message: "纬度应为一个数字", trigger:'blur'},
-                {pattern: /^(\-|\+)?([0-8]?\d{1}\.\d{0,7}|90\.0{0,6}|[0-8]?\d{1}|90)$/,
-                  message: "整数部分为0-90,小数部分为0到7位",
-                  trigger: "blur"}
+              {required:true, message: "纬度不能为空", trigger:'blur'},
+              {pattern: /^2[1-3]\.\d{0,7}$/,
+                message: "纬度超出学校范围啦",
+                trigger: "blur"}
               ],
               lng:[
-                {required:true, message:"经度不能为空", trigger:'blur'},
-                {type: 'number', message: "经度应为一个数字", trigger:'blur'},
-                {pattern: /^(\-|\+)?(((\d|[1-9]\d|1[0-7]\d|0{1,3})\.\d{0,7})|(\d|[1-9]\d|1[0-7]\d|0{1,3})|180\.0{0,6}|180)$/,
-                message: "整数部分为0-180,小数部分为0到7位",
-                trigger: "blur"}
+              {required:true, message:"经度不能为空", trigger:'blur'},
+              {pattern: /^11[2-4]\.\d{0,7}$/,
+              message: "经度超出学校范围啦",
+              trigger: "blur"}
               ],
   
           },

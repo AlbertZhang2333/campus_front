@@ -133,11 +133,11 @@ export default {
             ],
             num:[
               {required:true, message:"库存数量不能为空", trigger: 'blur'},
-              {pattern:/^\d+$ /, message: "库存数量应为一个非负整数", trigger:'blur'}
+              {pattern: /^\d+$/, message: "库存数量应为一个非负整数", trigger:'blur'}
             ],
             price:[
               {required:true, message:"价格不能为空", trigger: 'blur'},
-              {pattern:/^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$ /, message: "价格应为一个正数（可为小数）", trigger:'blur'}
+              {pattern: /^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/, message: "价格应为一个正数（可为小数）", trigger:'blur'}
             ],
             description:[
               {required:true, message:"商品描述信息", trigger: 'blur'}
@@ -161,16 +161,12 @@ methods: {
     openAddItemDialog(){
         this.addItem_dialog=true;
     },
-    submitAddItem(submitOrUpdate,index){
-    this.$refs.Item.validate((valid) =>{
-        if(valid){
-            this.$axios.post(`http://localhost:8081/ManageItems/generateANewItem?name=${this.Item.name}&num=${this.Item.num}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
-            if(response.data.code == 400) alert("添加失败");
-            else alert('添加成功');
-            this.addItem_dialog=false;
-            this.updateItemList();
-        }
-    })
+    async submitAddItem(submitOrUpdate,index){
+      const response = await this.$axios.post(`http://localhost:8081/ManageItems/generateANewItem?name=${this.Item.name}&num=${this.Item.num}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
+      if(response.data.code == 400) alert("添加失败");
+      else alert('添加成功');
+      this.addItem_dialog=false;
+      this.updateItemList();
     },
     async editItem(curItem){
       //将当前建筑信息填入弹窗
@@ -184,29 +180,18 @@ methods: {
     },
     async updateAddItem(){
       //将弹窗中的信息更新到数据库
-        this.$axios.put(`http://localhost:8081/ManageItems/updateItem?itemName=${this.Item.name}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
+        const response = await this.$axios.put(`http://localhost:8081/ManageItems/updateItem?itemName=${this.Item.name}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
         if(response.data.code == 400) alert("更新失败");
         else alert('更新成功');
         this.updateItem_dialog=false;
         this.updateItemList();
     },
-    deleteItem: _.debounce(async function(curItem) {
-      this.$axios.delete(`http://localhost:8081/ManageItems/deleteItem?name=${curItem.name}`)
-        .then(res => res.data.data)
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: '删除成功!',
-            type: 'success'
-          });
-          this.loadPost();
-          this.updateItemList();
-        })
-        .catch(error => {
-          console.error('Error deleting comment:', error);
-          this.$message.error('删除失败，请重试!');
-        });
-    }, 300),
+    async deleteItem(curItem) {
+      const response = await this.$axios.delete(`http://localhost:8081/ManageItems/deleteItem?name=${curItem.name}`);
+      if(response.data.code == 400) alert("删除失败");
+      else alert('删除成功');
+    },
+
     async updateItemList(){
       //模糊查询相关，需要后端有通过 like 查询的接口
         const response = await this.$axios.get('http://localhost:8081/ManageItems/findAll');
