@@ -10,7 +10,8 @@
       </el-aside>
       <el-container style="margin-left: 200px; margin-top:100px; height: 100%; overflow-y: auto;">
         <el-main style="height: 100%;">
-            <Admin></Admin>
+          <!-- 根据 selectedMenuItem 切换 el-main 中的内容 -->
+          <Admin></Admin>
         </el-main>
         <el-footer style="height: 10%;">
           <Foot></Foot>
@@ -22,13 +23,13 @@
 
 <script>
 
-import Aside from "../components/comments/Aside.vue";
-import Header from "../components/comments/Header.vue"
-import Foot from "../components/comments/Foot.vue";
-import Admin from "../components/comments/Admin.vue";
+import Admin from "../components/reservation/Admin.vue"
+import Aside from "../components/reservation/Aside.vue";
+import Header from "../components/reservation/Header.vue"
+import Foot from "../components/reservation/Foot.vue";
 
 export default {
-  components: {Admin, Foot, Aside, Header},
+  components: {Foot, Aside, Admin, Header},
   data() {
     return {
       text: '',

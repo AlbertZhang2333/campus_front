@@ -29,7 +29,6 @@ import Header from "../components/comments/Header.vue"
 import Foot from "../components/comments/Foot.vue";
 
 export default {
-  name: "Index",
   components: {Foot, Aside, Main, Header},
   data() {
     return {
