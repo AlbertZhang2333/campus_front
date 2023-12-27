@@ -89,17 +89,16 @@ export default {
   methods: {
     openShoppingCartDialog() {
       this.shoppingCart_dialog=true;
-      console.log(this.MarketShoppingCartInfo[0])
     },
-    deleteShoppingCartItem(index){
+    async deleteShoppingCartItem(index){
+      const response = await this.$axios.delete(`http://localhost:8081/UserShopping/deleteItemFromTheCart?cartFormTime=${this.MarketShoppingCartInfo[index].time}`);
+      if(response.data.code == 400) alert("删除失败");
       this.MarketShoppingCartInfo.splice(index,1);
-      console.log(index);
     },
     feedbackCollectionDialog(){
       this.feedback_dialog=true;
     },
     async pay(item){
-      console.log("item",item, "name",item.name,"num",item.num);
       const response = await this.$axios.put(`http://localhost:8081/UserShopping/purchase?itemName=${item.name}&num=${item.num}`);
       if(response.data.code == 400){
         alert("购买失败");
@@ -123,9 +122,7 @@ export default {
           alert("支付失败");
           return;
         }else {
-          console.log("curRecordId", this.curRecordId);
           const response = await this.$axios.get('http://localhost:8081/UserShopping/checkIfUserHasPay?itemShoppingRecordId=' + this.curRecordId);
-          console.log("response", response);
           if(response.data.code == 400){
             console.log('停止发送请求，因为后端响应中包含 code 为 400');
             this.shouldContinue = false;
