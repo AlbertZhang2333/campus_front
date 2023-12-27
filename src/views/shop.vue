@@ -41,7 +41,7 @@
         // 拿取Sustech_Market中的新加入购物车的购物信息
           getMarketShoppingCart(infos){
               this.MarketShoppingCartInfo=infos;
-              console.log(infos);
+              console.log("intoCart", infos);
           },
   
       }

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Index from '@/views/index.vue'
 import Map from '@/views/map'
 import MapAdmin from '@/views/mapAdmin.vue'
 import Shop from "@/views/shop"

@@ -75,6 +75,17 @@
 <script>
 export default {
   props:['MarketShoppingCartInfo'],
+  data() {
+    return{
+      shoppingCart_dialog:false,
+      feedback_dialog:false,
+      feedbackContent:"",
+      intervalId: 0,
+      shouldContinue: true,
+      curRecordId: 0,
+    }
+
+  },
   methods: {
     openShoppingCartDialog() {
       this.shoppingCart_dialog=true;
@@ -90,19 +101,51 @@ export default {
     async pay(item){
       console.log("item",item, "name",item.name,"num",item.num);
       const response = await this.$axios.put(`http://localhost:8081/UserShopping/purchase?itemName=${item.name}&num=${item.num}`);
-      console.log(response.data.data);
-      var newPage = window.open("about:blank", "_blank");
-      newPage.document.write(response.data.data);
+      if(response.data.code == 400){
+        alert("购买失败");
+      }else if(response.data.code == 200){
+        var newPage = window.open("about:blank", "_blank");
+        newPage.document.write(response.data.data[1]);
+        this.curRecordId = response.data.data[0];
+        this.intervalId = setInterval(this.fetchData, 3000);
+      }
+    },
+    async fetchData() {
+      try {
+        if (!this.shouldContinue) {
+          console.log('停止发送请求，因为 shouldContinue 为 false');
+          clearInterval(this.intervalId); // 停止定时器
+          return;
+        }
+        if(this.curRecordId == 0){
+          console.log('停止发送请求，因为 curRecordId 为 0');
+          clearInterval(this.intervalId); // 停止定时器
+          alert("支付失败");
+          return;
+        }else {
+          console.log("curRecordId", this.curRecordId);
+          const response = await this.$axios.get('http://localhost:8081/UserShopping/checkIfUserHasPay?itemShoppingRecordId=' + this.curRecordId);
+          console.log("response", response);
+          if(response.data.code == 400){
+            console.log('停止发送请求，因为后端响应中包含 code 为 400');
+            this.shouldContinue = false;
+            clearInterval(this.intervalId); // 停止定时器
+            alert("支付失败");
+            return;
+          }else if(response.data.data == '支付成功！'){
+            console.log('停止发送请求，因为后端响应中包含 stopRequest 为 true');
+            this.shouldContinue = false;
+            clearInterval(this.intervalId); // 停止定时器
+            alert("支付成功");
+            return;
+          }
+          console.log('成功获取数据：', response.data);
+        }
+      } catch (error) {
+        console.error('获取数据时出错：', error);
+      }
     }
   },
-  data(){
-    return{
-      shoppingCart_dialog:false,
-      feedback_dialog:false,
-      feedbackContent:""
-    }
-
-  }
 }
 
 </script>
