@@ -29,49 +29,54 @@
               inactive-text="拉入黑名单已禁用">
           </el-switch>
         </el-row>
-        <el-table
+        <div class="g-table-content">
+          <el-table
             :data="accountInfoItemList"
             style="width: 100%">
 <!--            :row-class-name="tableRowClassName">-->
-          <el-table-column
-              prop="username"
-              label="用户名"
-              width="180">
-          </el-table-column>
-          <el-table-column
-              prop="userMail"
-              label="用户邮箱"
-              width="180">
-          </el-table-column>
-          <el-table-column
-              prop="identity"
-              label="用户身份">
-          </el-table-column>
-          <el-table-column
-              prop="enabled"
-              label="是否在黑名单内">
-            <template slot-scope="scope">
-              <span v-if="scope.row.enabled">是</span>
-              <span v-else>否</span>
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template #default="scope">
-<!--              <el-button @click="editItem(scope.$index)">-->
-<!--                编辑-->
-<!--              </el-button>-->
-              <el-button v-if="toDeleteAccount" class="FormButtonSize" @click="deleteItem(scope.$index)">
-                移除
-              </el-button>
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template #default="scope">
-              <el-button v-if="toSetBlackList" class="FormButtonSize" @click="deleteItem(scope.$index)">
-                拉入/释放
-              </el-button>
-            </template>
-          </el-table-column>
+            <el-table-column
+                prop="username"
+                label="用户名"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="userMail"
+                label="用户邮箱"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="identity"
+                label="用户身份">
+            </el-table-column>
+            <el-table-column
+                prop="enabled"
+                label="是否在黑名单内">
+              <template slot-scope="scope">
+                <span v-if="scope.row.enabled">是</span>
+                <span v-else>否</span>
+              </template>
+            </el-table-column>
+            <el-table-column>
+              <template #default="scope">
+  <!--              <el-button @click="editItem(scope.$index)">-->
+  <!--                编辑-->
+  <!--              </el-button>-->
+                <el-button v-if="toDeleteAccount" class="FormButtonSize" @click="deleteItem(scope.$index)">
+                  移除
+                </el-button>
+              </template>
+            </el-table-column>
+            <el-table-column>
+              <template #default="scope">
+                <el-button v-if="toSetBlackList" class="FormButtonSize" @click="deleteItem(scope.$index)">
+                  拉入/释放
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        
+      ``<div class="g-table-page clearfix">
           <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -81,7 +86,7 @@
               layout="total, sizes, prev, pager, next, jumper"
               :total="total">
           </el-pagination>
-        </el-table>
+        </div>   
       </el-tab-pane>
     </el-tabs>
 
