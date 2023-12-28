@@ -9,14 +9,16 @@ import Comment from '@/views/comment.vue'
 import CommentAdmin from "@/views/commentAdmin.vue";
 import ReservationAdmin from "@/views/reservationAdmin.vue";
 import Reservation from "@/views/reservation.vue";
-import User from "@components/user/AccountAdmin.vue"
+import User from "@/components/user/AccountAdmin.vue"
+import Login from "@/components/login/Login.vue"
+import Register from "@/components/login/Register.vue"
 
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/',
-        component: ReservationAdmin
+        component: Login
     },
     {
         path: '/map',
@@ -53,6 +55,15 @@ const routes = [
     {
         path: '/user',
         component: User
+    },
+    {
+        path: '/login',
+        component: Login
+    },
+    {
+        path: '/register',
+        component: Register
+    
     }
 ]
 
