@@ -34,11 +34,6 @@
             style="width: 100%">
 <!--            :row-class-name="tableRowClassName">-->
           <el-table-column
-              prop="Id"
-              label="用户id"
-              width="180">
-          </el-table-column>
-          <el-table-column
               prop="username"
               label="用户名"
               width="180">
@@ -77,6 +72,15 @@
               </el-button>
             </template>
           </el-table-column>
+          <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[5, 10, 20, 30]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total">
+          </el-pagination>
         </el-table>
       </el-tab-pane>
     </el-tabs>
@@ -130,6 +134,9 @@
 
 <script>
 export default {
+  mounted() {
+    this.loadUser()
+  },
   data() {
     return {
       accountInfoItem:{
@@ -139,13 +146,7 @@ export default {
         enabled:true
       },
       //-----------------------------
-      accountInfoItemList:[{
-        "Id":1,
-        "username":"张三",
-        "userMail":"3077161150@qq.com",
-        "identity":42,
-        "enabled":true
-      }],
+      accountInfoItemList:[],
       accountDialogVisible:false,
       fileUploadDialogVisible:false,
       activateName:"Current_accounts",
@@ -154,7 +155,11 @@ export default {
       fileList: [],
       headers: {
         'Content-Type': 'multipart/form-data'
-      }
+      },
+
+      pageSize: 5,
+      currentPage: 1,
+      total: 0,
     }
   },
   methods: {
@@ -190,7 +195,33 @@ export default {
       this.accountInfoItemList.splice(index,1);
     },
 
-
+    
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.pageSize = val
+      this.currentPage = 1
+      this.loadUser()
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.currentPage = val
+      this.loadUser()
+    },
+    loadUser() {
+      this.$axios.get(`http://localhost:8081/manageAccount/checkAllAccount?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
+      .then(res => res.data).then(res => {
+            console.log(res)
+            console.log([res.data])
+            if (res.code === 200) {
+              this.accountInfoItemList = res.data
+              // console.log(this.comments)
+              this.total = res.total
+            } else {
+              this.$message.warning('数据加载失败!');
+            }
+          }
+      )
+    },
 
   }
 }

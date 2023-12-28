@@ -18,7 +18,7 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        component: Login
+        component: User
     },
     {
         path: '/map',

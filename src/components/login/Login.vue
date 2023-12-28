@@ -39,7 +39,7 @@ export default {
       const response = await this.$axios.post(`http://localhost:8081/login/loginCheck?userMail=${this.loginForm.userMail}&password=${this.loginForm.password}`);
       if(response.data.code == 400) {alert("登录失败");}
       else{ alert('登录成功!');
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/shop' })
       }
     },
     toForgotPassword() {
