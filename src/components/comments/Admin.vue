@@ -1,15 +1,17 @@
 <template>
-  <div>
-    <div style="margin-top: 10px">
-      <el-main v-if="currentView === '查看评论'">
-        <!-- 显示查看评论页面的内容 -->
-        <el-row>
-          <el-button type="primary" icon="el-icon-search" @click="openSearch">搜索</el-button>
-        </el-row>
+  <div style="margin-top: 10px">
+    <el-main v-if="currentView === 'viewComment'">
+      <!-- 显示查看评论页面的内容 -->
+      <el-row>
+        <el-button type="primary" icon="el-icon-search" @click="openSearch">搜索</el-button>
+      </el-row>
 
-        <el-divider></el-divider>
-
+      <el-row style="margin-top: 10px; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px;"
+              v-if="checkFilter()">
+        <span style="font-weight: bold; margin-right: 10px;">搜索条件:</span>
         <el-tag
+            type="success"
+            style="margin-bottom: 5px; margin-left: 5px"
             :key="key"
             v-for="(value, key) in showFilterOptions"
             closable
@@ -18,146 +20,145 @@
         >
           {{ key }}: {{ value }}
         </el-tag>
+      </el-row>
 
-        <el-table :data="comments">
-          <el-table-column prop="date" label="日期" width="150" align="center">
-          </el-table-column>
-          <el-table-column prop="time" label="时间" width="150" align="center">
-          </el-table-column>
-          <el-table-column prop="userName" label="用户名" width="100" align="center">
-          </el-table-column>
-          <el-table-column prop="userMail" label="邮箱" width="120" align="center">
-          </el-table-column>
-          <el-table-column prop="type" label="类型" width="120" align="center">
-          </el-table-column>
-          <el-table-column prop="comment" label="内容" width="300" align="center">
-          </el-table-column>
-          <el-table-column prop="state" label="状态" width="80" align="center">
-            <template slot-scope="scope">
-              <span v-if="scope.row.state === 0">已删除</span>
-              <span v-else-if="scope.row.state === 1">在显示</span>
-              <span v-else-if="scope.row.state === 2">已拉黑</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="belongDepartment" label="部门" width="150" align="center">
-          </el-table-column>
-          <el-table-column label="操作" align="center">
-            <el-table-column align="right">
-              <template slot-scope="scope">
-                <el-button type="info" plain @click="loadReply(scope.row.id, scope.row.belongDepartment)"
-                           v-if="scope.row.type === 'Comment'">查看回复
-                </el-button>
-                <el-button type="success" icon="el-icon-check" circle
-                           :disabled="isButtonDisabled('success', scope.row)"
-                           @click="updateComment(scope.row, 1)"></el-button>
-                <el-button type="danger" icon="el-icon-close" circle
-                           :disabled="isButtonDisabled('danger', scope.row)"
-                           @click="updateComment(scope.row, 2)"></el-button>
-              </template>
-            </el-table-column>
-          </el-table-column>
-        </el-table>
+      <el-divider></el-divider>
 
-        <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[50, 80, 100, 150]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total">
-        </el-pagination>
-      </el-main>
 
-      <el-main v-else-if="currentView === '查看评论回复'">
-        <el-row>
-          <el-button type="primary" @click="goBack">返回</el-button>
-        </el-row>
+      <el-table :data="comments" border :header-cell-style="{ background: '#f5f7fa' }">
+        <el-table-column prop="date" label="日期" width="150" align="center">
+        </el-table-column>
+        <el-table-column prop="time" label="时间" width="150" align="center">
+        </el-table-column>
+        <el-table-column prop="userName" label="用户名" width="100" align="center">
+        </el-table-column>
+        <el-table-column prop="userMail" label="邮箱" width="120" align="center">
+        </el-table-column>
+        <el-table-column prop="type" label="类型" width="120" align="center">
+        </el-table-column>
+        <el-table-column prop="comment" label="内容" width="320" align="center">
+        </el-table-column>
+        <el-table-column prop="state" label="状态" width="80" align="center">
+          <template slot-scope="scope">
+            <span v-if="scope.row.state === 0">已删除</span>
+            <span v-else-if="scope.row.state === 1">在显示</span>
+            <span v-else-if="scope.row.state === 2">已拉黑</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="belongDepartment" label="部门" width="150" align="center">
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <div class="button-container">
+              <el-button type="info" plain @click="loadReply(scope.row.id, scope.row.belongDepartment)"
+                         v-if="scope.row.type === 'Comment'">查看回复
+              </el-button>
+              <el-button type="success" icon="el-icon-check" circle
+                         :disabled="isButtonDisabled('success', scope.row)"
+                         @click="updateComment(scope.row, 1)"></el-button>
+              <el-button type="danger" icon="el-icon-close" circle
+                         :disabled="isButtonDisabled('danger', scope.row)"
+                         @click="updateComment(scope.row, 2)"></el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
 
-        <el-table :data="replyComments">
-          <el-table-column prop="date" label="日期" width="150" align="center">
-          </el-table-column>
-          <el-table-column prop="time" label="时间" width="150" align="center">
-          </el-table-column>
-          <el-table-column prop="userName" label="用户名" width="100" align="center">
-          </el-table-column>
-          <el-table-column prop="userMail" label="邮箱" width="120" align="center">
-          </el-table-column>
-          <el-table-column prop="type" label="类型" width="120" align="center">
-          </el-table-column>
-          <el-table-column prop="comment" label="内容" width="400" align="center">
-          </el-table-column>
-          <el-table-column prop="state" label="状态" width="80" align="center">
-            <template slot-scope="scope">
-              <span v-if="scope.row.state === 0">已删除</span>
-              <span v-else-if="scope.row.state === 1">在显示</span>
-              <span v-else-if="scope.row.state === 2">已拉黑</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="belongDepartment" label="部门" width="150" align="center">
-            <span>{{ currentDepartment }}</span>
-          </el-table-column>
-          <el-table-column label="操作" align="center">
-            <el-table-column align="right">
-              <template slot-scope="scope">
-                <el-button type="info" plain @click="loadReply(scope.row.id, scope.row.belongDepartment)"
-                           v-if="scope.row.type === 'Comment'">查看回复
-                </el-button>
-                <el-button type="success" icon="el-icon-check" circle
-                           :disabled="isButtonDisabled('success', scope.row)"
-                           @click="updateReplyComment(scope.row, 1)"></el-button>
-                <el-button type="danger" icon="el-icon-close" circle
-                           :disabled="isButtonDisabled('danger', scope.row)"
-                           @click="updateReplyComment(scope.row, 2)"></el-button>
-              </template>
-            </el-table-column>
-          </el-table-column>
-        </el-table>
+      <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[50, 80, 100, 150]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
+      </el-pagination>
+    </el-main>
 
-        <el-pagination
-            @size-change="handleSizeRepChange"
-            @current-change="handleCurrentRepChange"
-            :current-page="currentPageRep"
-            :page-sizes="[50, 80, 100, 150]"
-            :page-size="pageSizeRep"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalRep">
-        </el-pagination>
-      </el-main>
+    <el-main v-else-if="currentView === 'viewReply'">
+      <el-row>
+        <el-button type="primary" @click="goBack">返回</el-button>
+      </el-row>
 
-      <el-dialog
-          :visible="showSearchDialog"
-          title="搜索"
-          @close="closeSearchDialog"
-      >
-        <el-form :model="filterOptions">
-          <el-form-item label="用户邮箱">
-            <el-input v-model="filterOptions.userMail"></el-input>
-          </el-form-item>
-          <el-form-item label="日期">
-            <el-date-picker v-model="filterOptions.date" type="date" @change="handleDateChange"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="归属部门">
-            <el-radio v-model="filterOptions.department" label="All Department">All Department</el-radio>
-            <el-radio v-model="filterOptions.department" label="Store">Store</el-radio>
-          </el-form-item>
-          <el-form-item label="类型">
-            <el-radio v-model="filterOptions.type" label="All Type">All Type</el-radio>
-            <el-radio v-model="filterOptions.type" label="Comment">Comment</el-radio>
-            <el-radio v-model="filterOptions.type" label="Reply">Reply</el-radio>
-            <el-radio v-model="filterOptions.type" label="Product Review">Product Review</el-radio>
-            <el-radio v-model="filterOptions.type" label="Building Review">Building Review</el-radio>
-          </el-form-item>
-        </el-form>
+      <el-table :data="replyComments" border :header-cell-style="{ background: '#f5f7fa' }">
+        <el-table-column prop="date" label="日期" width="150" align="center">
+        </el-table-column>
+        <el-table-column prop="time" label="时间" width="150" align="center">
+        </el-table-column>
+        <el-table-column prop="userName" label="用户名" width="100" align="center">
+        </el-table-column>
+        <el-table-column prop="userMail" label="邮箱" width="120" align="center">
+        </el-table-column>
+        <el-table-column prop="type" label="类型" width="120" align="center">
+        </el-table-column>
+        <el-table-column prop="comment" label="内容" width="400" align="center">
+        </el-table-column>
+        <el-table-column prop="state" label="状态" width="80" align="center">
+          <template slot-scope="scope">
+            <span v-if="scope.row.state === 0">已删除</span>
+            <span v-else-if="scope.row.state === 1">在显示</span>
+            <span v-else-if="scope.row.state === 2">已拉黑</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="belongDepartment" label="部门" width="150" align="center">
+          <span>{{ currentDepartment }}</span>
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <div class="button-container">
+              <el-button type="success" icon="el-icon-check" circle
+                         :disabled="isButtonDisabled('success', scope.row)"
+                         @click="updateReplyComment(scope.row, 1)"></el-button>
+              <el-button type="danger" icon="el-icon-close" circle
+                         :disabled="isButtonDisabled('danger', scope.row)"
+                         @click="updateReplyComment(scope.row, 2)"></el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
 
-        <!-- 确认和取消按钮 -->
-        <span slot="footer" class="dialog-footer">
-    <el-button @click="closeSearchDialog">取消</el-button>
-    <el-button type="primary" @click="searchComment">确认</el-button>
-  </span>
-      </el-dialog>
+      <el-pagination
+          @size-change="handleSizeRepChange"
+          @current-change="handleCurrentRepChange"
+          :current-page="currentPageRep"
+          :page-sizes="[50, 80, 100, 150]"
+          :page-size="pageSizeRep"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalRep">
+      </el-pagination>
+    </el-main>
 
-    </div>
+    <el-dialog
+        :visible="showSearchDialog"
+        title="搜索"
+        @close="closeSearchDialog"
+    >
+      <el-form :model="filterOptions">
+        <el-form-item label="用户邮箱">
+          <el-input v-model="filterOptions.userMail"></el-input>
+        </el-form-item>
+        <el-form-item label="日期">
+          <el-date-picker v-model="filterOptions.date" type="date" @change="handleDateChange"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="归属部门">
+          <el-radio v-model="filterOptions.department" label="All Department">All Department</el-radio>
+          <el-radio v-model="filterOptions.department" label="Store">Store</el-radio>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-radio v-model="filterOptions.type" label="All Type">All Type</el-radio>
+          <el-radio v-model="filterOptions.type" label="Comment">Comment</el-radio>
+          <el-radio v-model="filterOptions.type" label="Reply">Reply</el-radio>
+          <el-radio v-model="filterOptions.type" label="Product Review">Product Review</el-radio>
+          <el-radio v-model="filterOptions.type" label="Building Review">Building Review</el-radio>
+        </el-form-item>
+      </el-form>
+
+      <span slot="footer" class="dialog-footer" style="display: flex; justify-content: center;">
+  <el-button @click="closeSearchDialog">取消</el-button>
+  <el-button type="primary" @click="searchComment">确认</el-button>
+</span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -167,7 +168,7 @@ export default {
     return {
       comments: [],
       replyComments: [],
-      currentView: '查看评论',
+      currentView: 'viewComment',
       currentDepartment: '',
       pageSize: 50,
       pageSizeRep: 50,
@@ -266,6 +267,9 @@ export default {
         type: false,
       }
     },
+    checkFilter() {
+      return (this.showOptions.userMail || this.showOptions.date || this.showOptions.department || this.showOptions.type);
+    },
     hideCondition(key) {
       this.$set(this.showFilterOptions, key, null);
       this.$set(this.showOptions, key, false);
@@ -275,7 +279,7 @@ export default {
       return this.showOptions[key];
     },
     goBack() {
-      this.currentView = '查看评论';
+      this.currentView = 'viewComment';
       this.replyComments = [];
     },
     openSearch() {
@@ -297,6 +301,8 @@ export default {
       this.showOptions.type = (this.showFilterOptions.type !== null);
     },
     searchComment() {
+      this.currentPage = 1
+      this.pageSize = 50
       this.clearShowFilter()
       this.initialShow();
       console.log(this.filterOptions)
@@ -327,6 +333,12 @@ export default {
             this.$message.error('信息管理失败，请重试!');
           });
     },
+    loadChoose() {
+      if (this.showOptions.date || this.showOptions.userMail || this.showOptions.type || this.showOptions.department)
+        this.loadSearch();
+      else
+        this.loadAll();
+    },
     updateComment(comment, state) {
       comment.state = state
       this.$axios.put(`${this.$httpUrl}Comment/updateComment`, comment)
@@ -337,7 +349,7 @@ export default {
               message: state === 1 ? '审核通过!' : '拉黑成功',
               type: 'success'
             });
-            this.loadComment();
+            this.loadChoose();
           })
           .catch(error => {
             this.$message.error('信息管理失败，请重试!');
@@ -365,7 +377,7 @@ export default {
       })
     },
     loadReply(replyId, belongDepartment) {
-      this.currentView = '查看评论回复';
+      this.currentView = 'viewReply';
       this.currentDepartment = belongDepartment
       this.nowReplyId = replyId;
       this.$axios.post(this.$httpUrl + 'Comment/allReplyCommentsAdmin', null, {
@@ -389,7 +401,7 @@ export default {
           }
       )
     },
-    loadComment() {
+    loadAll() {
       this.$axios.post(this.$httpUrl + 'Comment/allCommentsAdmin', null, {
         params: {
           pageSize: this.pageSize,
@@ -423,18 +435,21 @@ export default {
       console.log(`每页 ${val} 条`);
       this.pageSize = val
       this.currentPage = 1
-      this.loadComment()
+      this.loadChoose();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.currentPage = val
-      this.loadComment()
+      this.loadChoose();
     },
   },
   beforeMount() {
-    this.loadComment()
+    this.loadAll()
   },
 }
 </script>
-<style>
+<style scoped>
+.button-container {
+  text-align: right;
+}
 </style>

@@ -21,14 +21,14 @@
 
     <el-timeline>
       <el-timeline-item v-for="(comment, index) in comments" :key="index">
-        <el-card>
-          <p>{{ comment.userName }}：</p>
-          <el-card>
+        <el-card class="comment-card">
+          <p class="comment-header">{{ comment.userName }}：</p>
+          <el-card class="comment-content">
             <p>{{ comment.comment }}</p>
           </el-card>
-          <p>评论时间：{{ comment.date + ' ' + comment.time }}</p> <!-- 使用管道格式化时间 -->
-          <el-button @click="() => deleteComment(index)" type="danger" size="mini" style="margin-top: 5px; ">删除</el-button>
-          <el-button @click="() => openReplyDialog(index)" type="primary" size="mini" style="margin-top: 5px;">回复</el-button>
+          <p class="comment-time">评论时间：{{ comment.date + ' ' + comment.time }}</p>
+          <el-button @click="() => deleteComment(index)" type="danger" size="mini" class="comment-action">删除</el-button>
+          <el-button @click="() => openReplyDialog(index)" type="primary" size="mini" class="comment-action">回复</el-button>
         </el-card>
 
         <!-- 回复列表 -->
@@ -362,5 +362,29 @@ export default {
 </script>
 
 <style scoped>
-/* 自定义样式可以放在这里 */
+.comment-card {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+}
+
+.comment-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.comment-content {
+  margin-bottom: 10px;
+}
+
+.comment-time {
+  color: #999;
+  margin-bottom: 5px;
+}
+
+.comment-action {
+  margin-top: 5px;
+  margin-right: 5px;
+}
 </style>
