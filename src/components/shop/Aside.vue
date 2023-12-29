@@ -30,16 +30,11 @@
     </el-row>
     <el-dialog :visible.sync="shoppingCart_dialog">
       <el-table
-        :data="MarketShoppingCartInfo"
+        :data="shoppingCart"
         stripe
         style="width: 100%">
         <el-table-column
-          prop="date"
-          label="商品加入购物车日期"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="name"
+          prop="itemName"
           label="商品名称"
           width="180">
         </el-table-column>
@@ -74,7 +69,6 @@
 
 <script>
 export default {
-  props:['MarketShoppingCartInfo'],
   data() {
     return{
       shoppingCart_dialog:false,
@@ -83,17 +77,26 @@ export default {
       intervalId: 0,
       shouldContinue: true,
       curRecordId: 0,
+      shoppingCart: []
     }
 
   },
   methods: {
+    async loadShoppingCart(){
+      const response = await this.$axios.get(`http://localhost:8081/UserShopping/checkItemCart`);
+      if(response.data.code == 400) alert("加载购物车信息失败");
+      this.shoppingCart = response.data.data;
+      console.log("loadResponse", response);
+    },
     openShoppingCartDialog() {
       this.shoppingCart_dialog=true;
+      this.loadShoppingCart();
     },
     async deleteShoppingCartItem(index){
-      const response = await this.$axios.delete(`http://localhost:8081/UserShopping/deleteItemFromTheCart?cartFormTime=${this.MarketShoppingCartInfo[index].time}`);
+      const response = await this.$axios.delete(`http://localhost:8081/UserShopping/deleteItemFromTheCart?cartFormTime=${this.shoppingCart[index].time}`);
       if(response.data.code == 400) alert("删除失败");
-      this.MarketShoppingCartInfo.splice(index,1);
+      else this.loadShoppingCart();
+      console.log("deleteResponse", response);
     },
     feedbackCollectionDialog(){
       this.feedback_dialog=true;

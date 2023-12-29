@@ -3,7 +3,7 @@
     <h2>
       用户账号管理界面
     </h2>
-    <el-tabs v-model="activateName" type="card" @tab-click="handleClick">
+    <el-tabs v-model="activateName" type="card">
       <el-tab-pane label="用户信息记录" name="Current_accounts">用户管理
         <el-row  class="headRowStyle">
 <!--          调整button和switch的位置-->
@@ -52,8 +52,8 @@
                 prop="enabled"
                 label="是否在黑名单内">
               <template slot-scope="scope">
-                <span v-if="scope.row.enabled">是</span>
-                <span v-else>否</span>
+                <span v-if="scope.row.enabled">否</span>
+                <span v-else>是</span>
               </template>
             </el-table-column>
             <el-table-column>
@@ -111,17 +111,16 @@
           <el-input v-model="accountInfoItem.identity"/>
         </el-form-item>
         <el-form-item label="是否在黑名单内" prop="enabled">
-          <el-input v-model="accountInfoItem.enabled"/>
+          <el-radio-group v-model="accountInfoItem.enabled">
+            <el-radio :label="true">否</el-radio>
+            <el-radio :label="false">是</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <el-button @click="createAccount()">
           创建新用户
       </el-button>
-<!--      <el-button @click="submitAddItem(true,-1)" style="margin-left: 45%">-->
-<!--        提交商品-->
-<!--      </el-button>-->
     </el-dialog>
-    <!-- 上传对话框 -->
     <el-dialog title="上传" :visible.sync="fileUploadDialogVisible" width="35%" style="text-align: center;">
       <el-upload class="upload-demo" action="#" drag multiple :headers="headers" :auto-upload="false"
         :file-list="fileList" :on-change="handleChange">
@@ -147,8 +146,9 @@ export default {
       accountInfoItem:{
         username:"",
         userMail:"",
-        identity:0,
-        enabled:true
+        identity:1,
+        password:"",
+        enabled:true,
       },
       //-----------------------------
       accountInfoItemList:[],
@@ -168,11 +168,12 @@ export default {
     }
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
-    createAccount(){
+    async createAccount(){
+      const response = await this.$axios.post(`http://localhost:8081/manageAccount/createANewAccount?userName=${this.accountInfoItem.username}&userMail=${this.accountInfoItem.userMail}&password=${this.accountInfoItem.password}&identity=${this.accountInfoItem.identity}`);
+      if(response.data.code == 400) alert(response.data.data);
+      else alert("已添加");
       this.accountDialogVisible=false;
+      this.loadUser();
     },
     createAccountDialog(){
       this.accountDialogVisible=true;
@@ -191,35 +192,33 @@ export default {
           param.append("file", val.raw);
         }
       );
-
       const response = await this.$axios.post("http://localhost:8081/manageAccount/batchAddAccount", param);
-      if(response.data.code == 400) alert("批量添加用户失败");
+      if(response.data.code == 400) alert(response.data.data);
       else alert("批量添加用户成功");
+      this.loadUser();
     },
     deleteItem(index){
-      this.accountInfoItemList.splice(index,1);
+      const response = this.$axios.delete(`http://localhost:8081/manageAccount/deleteUserByUserMail?userMail=${this.accountInfoItemList[index].userMail}`);
+      if(response.data.code == 400) alert(response.data.data);
+      else alert("删除成功");
+      this.loadUser();
     },
 
     
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
       this.pageSize = val
       this.currentPage = 1
       this.loadUser()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
       this.currentPage = val
       this.loadUser()
     },
     loadUser() {
       this.$axios.get(`http://localhost:8081/manageAccount/checkAllAccount?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
       .then(res => res.data).then(res => {
-            console.log(res)
-            console.log([res.data])
             if (res.code === 200) {
               this.accountInfoItemList = res.data
-              // console.log(this.comments)
               this.total = res.total
             } else {
               this.$message.warning('数据加载失败!');

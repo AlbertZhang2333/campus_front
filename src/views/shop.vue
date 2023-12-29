@@ -6,11 +6,10 @@
     </el-header>
     <el-container>
       <el-aside>
-        <Aside
-        :MarketShoppingCartInfo="this.MarketShoppingCartInfo"/>
+        <Aside></Aside>
       </el-aside>
       <el-main>
-        <Main @Market_sendShoppingCartInfo="getMarketShoppingCart"/>
+        <Main></Main>
       </el-main>
     </el-container>
 
@@ -25,26 +24,12 @@
   
   
   export default {
-      data() {
-          return {
-              MarketShoppingCartInfo: [],
-            deleteCartItem_index:-1
-          }
-      },
     components: {
         Aside,
         Market_headline,
         Foot,
         Main,
-    },
-      methods:{
-        // 拿取Sustech_Market中的新加入购物车的购物信息
-          getMarketShoppingCart(infos){
-              this.MarketShoppingCartInfo=infos;
-              console.log("intoCart", infos);
-          },
-  
-      }
+    }
   }
   </script>
   

@@ -57,8 +57,6 @@ export default {
   data() {
     const currentDate=new Date();
     return {
-      addToShoppingCart:[
-      ],
 
         carouselImageList:[
           {src:"https://img1.baidu.com/it/u=1069244915,946868715&fm=253&fmt=auto&app=138&f=JPEG?w=750&h=500"},
@@ -91,26 +89,13 @@ export default {
     },
     async submit_order(){
       const response = await this.$axios.post('http://localhost:8081/UserShopping/addItemToTheCart?itemName='+this.currentShoppingItem.name+'&num='+this.num);
+      console.log("addResponse", response);
       if(response.data.code == 400) alert("加入购物车失败");
-      this.addToShoppingCart.push({
-        "time":response.data.data.time,
-        "name":response.data.data.itemName,
-        "num":this.num,
-        "price":this.price,
-        "userMail": response.data.data.userMail
-      })
-      this.$emit('Market_sendShoppingCartInfo',this.addToShoppingCart);
       this.newShoppingDialog=false;
       this.num=0;
       this.currentShoppingItem=null;
       this.price=0;
       // this.currentShoppingItem=null;
-    },
-    deleteShoppingCartItem_(){
-      if (this.Cart_deleteItemIndex!==-1) {
-        this.addToShoppingCart.splice(this.Cart_deleteItemIndex, 1);
-      }
-      this.Cart_deleteItemIndex=-1;
     },
     async loadItemList(){
       const response = await this.$axios.get('http://localhost:8081/UserShopping/findAll');
