@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card>
+    <el-container style="max-width: 600px; margin: 0 auto;">
       <el-form :model="commentForm" ref="commentForm" size="small">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="commentForm.userName"></el-input>
@@ -13,22 +13,46 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitComment">发表评论</el-button>
+          <el-button type="primary" @click="toggleEmojiPopover('comment')">
+            <i class="el-icon-smile"></i> Emoji
+          </el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-popover
+              placement="bottom"
+              width="300"
+              trigger="click"
+              v-model="emojiPopoverVisible"
+          >
+            <div style="text-align: center; display: flex; flex-wrap: wrap; justify-content: center;">
+              <img
+                  v-for="emoji in emojiList"
+                  :key="emoji.title"
+                  :src="require(`@/assets/emoji/512_24x24/${emoji.url}`)"
+                  :alt="emoji.title"
+                  @click="selectEmoji('comment', emoji.title)"
+                  style="cursor: pointer; margin: 5px; width: 24px; height: 24px;"
+              />
+            </div>
+          </el-popover>
         </el-form-item>
       </el-form>
-    </el-card>
+    </el-container>
 
     <el-divider></el-divider>
 
     <el-timeline>
-      <el-timeline-item v-for="(comment, index) in comments" :key="index">
+      <el-timeline-item v-for="(comment, index) in processedComments" :key="index">
         <el-card class="comment-card">
           <p class="comment-header">{{ comment.userName }}：</p>
           <el-card class="comment-content">
-            <p>{{ comment.comment }}</p>
+            <p v-html="comment.comment"></p>
           </el-card>
           <p class="comment-time">评论时间：{{ comment.date + ' ' + comment.time }}</p>
-          <el-button @click="() => deleteComment(index)" type="danger" size="mini" class="comment-action">删除</el-button>
-          <el-button @click="() => openReplyDialog(index)" type="primary" size="mini" class="comment-action">回复</el-button>
+          <el-button @click="() => deleteComment(index)" type="danger" size="mini" class="comment-action">删除
+          </el-button>
+          <el-button @click="() => openReplyDialog(index)" type="primary" size="mini" class="comment-action">回复
+          </el-button>
         </el-card>
 
         <!-- 回复列表 -->
@@ -39,17 +63,29 @@
             @close="closeReplyDialog"
         >
           <div>
-            <el-timeline-item v-for="(replyComment, indexRep) in replyComments" :key="indexRep">
+            <el-timeline-item v-for="(replyComment, indexRep) in processedReplyComments" :key="indexRep">
               <el-card>
                 <p>{{ replyComment.userName }}：</p>
-                <el-card>
-                  <p>{{ replyComment.comment }}</p>
+                <el-card class="comment-content">
+                  <p v-html="replyComment.comment"></p>
                 </el-card>
                 <p>评论时间：{{ replyComment.date + ' ' + replyComment.time }}</p> <!-- 使用管道格式化时间 -->
-                <el-button @click="() => deleteReplyComment(index)" type="danger" size="mini" style="margin-top: 5px; ">删除</el-button>
+                <el-button @click="() => deleteReplyComment(index)" type="danger" size="mini" style="margin-top: 5px; ">
+                  删除
+                </el-button>
               </el-card>
             </el-timeline-item>
           </div>
+
+          <el-pagination
+              @size-change="handleSizeRepChange"
+              @current-change="handleCurrentRepChange"
+              :current-page="currentPageRep"
+              :page-sizes="[5, 10, 20, 30]"
+              :page-size="pageSizeRep"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalRep">
+          </el-pagination>
 
           <!-- 回复信息展示框 -->
           <el-card>
@@ -63,23 +99,36 @@
               <el-form-item label="评论内容" prop="content">
                 <el-input type="textarea" v-model="replyCommentForm.comment"></el-input>
               </el-form-item>
-              <el-pagination
-                  @size-change="handleSizeRepChange"
-                  @current-change="handleCurrentRepChange"
-                  :current-page="currentPageRep"
-                  :page-sizes="[5, 10, 20, 30]"
-                  :page-size="pageSizeRep"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="totalRep">
-              </el-pagination>
             </el-form>
+
             <el-container style="display: flex; justify-content: center; margin-top: 5px;">
-              <el-button @click="() => closeReplyDialog(replyDialogIndex)" type="primary" size="mini">取消回复</el-button>
-              <el-button @click="() => submitReplyComment(replyDialogIndex)" type="primary" size="mini">提交回复</el-button>
+              <el-button @click="() => closeReplyDialog(replyDialogIndex)" type="primary" size="mini">取消回复
+              </el-button>
+              <el-button @click="() => submitReplyComment(replyDialogIndex)" type="primary" size="mini">提交回复
+              </el-button>
+              <el-button type="primary" @click="toggleEmojiPopover('reply')">
+                <i class="el-icon-smile"></i> Emoji
+              </el-button>
+
+                <el-popover
+                    placement="bottom"
+                    width="300"
+                    trigger="click"
+                    v-model="emojiPopoverRepVisible"
+                >
+                  <div style="text-align: center; display: flex; flex-wrap: wrap; justify-content: center;">
+                    <img
+                        v-for="emoji in emojiList"
+                        :key="emoji.title"
+                        :src="require(`@/assets/emoji/512_24x24/${emoji.url}`)"
+                        :alt="emoji.title"
+                        @click="selectEmoji('reply', emoji.title)"
+                        style="cursor: pointer; margin: 5px; width: 24px; height: 24px;"
+                    />
+                  </div>
+                </el-popover>
             </el-container>
           </el-card>
-
-
         </el-dialog>
       </el-timeline-item>
     </el-timeline>
@@ -142,9 +191,41 @@ export default {
       totalRep: 0,
 
       belongDepartment: 0,
+
+      emojiPopoverVisible: false,
+      emojiPopoverRepVisible: false,
+      emojiList: [],
+
+      processedComments: [], // 保存处理后的评论内容
+      processedReplyComments: [],
     };
   },
   methods: {
+    toggleEmojiPopover(type) {
+      if (type === 'comment')
+        this.emojiPopoverVisible = !this.emojiPopoverVisible;
+      else
+        this.emojiPopoverRepVisible = !this.emojiPopoverRepVisible;
+    },
+    selectEmoji(type, emoji) {
+      if (type === 'comment') {
+        // 处理选中 emoji 的逻辑，可以插入到评论内容中等
+        this.commentForm.comment += '[' + emoji + ']';
+        // 关闭 popover
+        this.emojiPopoverVisible = false;
+      } else {
+        this.replyCommentForm.comment += '[' + emoji + ']';
+        this.emojiPopoverRepVisible = false;
+      }
+    },
+    replaceEmoji(text) {
+      // 遍历 emojiList，将 [emoji.title] 替换为实际表情
+      this.emojiList.forEach((emoji) => {
+        const regex = new RegExp(`\\[${emoji.title}\\]`, 'g');
+        text = text.replace(regex, `<img src="${require(`@/assets/emoji/512_24x24/${emoji.url}`)}" alt="${emoji.title}" />`);
+      });
+      return text;
+    },
     openReplyDialog(index) {
       console.log(index)
       console.log(this.comments[index])
@@ -161,7 +242,6 @@ export default {
       this.showReplyDialog = false;
       this.isReplyMode[index] = false;
     },
-
     loadReplyComments(index) {
       this.$axios.post(this.$httpUrl + 'Comment/allCommentsReplyUser', null, {
         params: {
@@ -176,6 +256,11 @@ export default {
             // console.log([res.data])
             if (res.code === 200) {
               this.replyComments = res.data
+              this.processedReplyComments = res.data.map(comment => ({
+                ...comment,
+                comment: this.replaceEmoji(comment.comment),
+              }));
+              console.log(this.processedReplyComments)
               // console.log(this.comments)
               this.totalRep = res.total
             } else {
@@ -193,30 +278,32 @@ export default {
           currentPage: this.currentPage
         }
       }).then(res => res.data).then(res => {
-            console.log(res)
-            // console.log([res.data])
-            if (res.code === 200) {
-              this.comments = res.data
-              // console.log(this.comments)
-              this.total = res.total
-            } else {
-              this.$message.warning('数据加载失败!');
-            }
-          }
-      )
+        console.log(res);
+        if (res.code === 200) {
+          // 处理评论内容
+          this.comments = res.data
+          this.processedComments = res.data.map(comment => ({
+            ...comment,
+            comment: this.replaceEmoji(comment.comment),
+          }));
+          this.total = res.total;
+        } else {
+          this.$message.warning('数据加载失败!');
+        }
+      });
     },
     clearForm() {
-      this.commentForm= {
+      this.commentForm = {
         id: 0, // 初始为0，具体情况视需求而定
-            userName: "",
-            userMail: "",
-            comment: "",
-            state: 1, // 初始为false，具体情况视需求而定
-            time: '', // 如果你需要设置时间，可以在提交时在后端进行处理，或者在前端使用合适的格式
-            date: '', // 同样，如果你需要设置日期，可以在提交时在后端进行处理，或者在前端使用合适的格式
-            belongDepartment: 0,
-            replyId: null,
-            type: null,
+        userName: "",
+        userMail: "",
+        comment: "",
+        state: 1, // 初始为false，具体情况视需求而定
+        time: '', // 如果你需要设置时间，可以在提交时在后端进行处理，或者在前端使用合适的格式
+        date: '', // 同样，如果你需要设置日期，可以在提交时在后端进行处理，或者在前端使用合适的格式
+        belongDepartment: 0,
+        replyId: null,
+        type: null,
       }
     },
     clearReplyForm() {
@@ -347,9 +434,22 @@ export default {
       this.currentPageRep = val
       this.loadReplyComments(this.replyDialogIndex)
     },
+    initialEmoji() {
+      for (let i = 1; i <= 48; i++) {
+        let dataObject = {
+          title: i.toString(),
+          url: i.toString() + ".png"
+        };
+        this.emojiList.push(dataObject)
+      }
+    },
+    chooseEmoji(inner) {
+      this.commentForm.comment += '[' + inner + ']';
+    },
   },
   beforeMount() {
     this.loadComment()
+    this.initialEmoji()
   },
   filters: {
     formatDate(timestamp) {
