@@ -68,7 +68,7 @@
             </el-table-column>
             <el-table-column>
               <template #default="scope">
-                <el-button v-if="toSetBlackList" class="FormButtonSize" @click="deleteItem(scope.$index)">
+                <el-button v-if="toSetBlackList" class="FormButtonSize" @click="addToBackList(scope.$index)">
                   拉入/释放
                 </el-button>
               </template>
@@ -108,7 +108,10 @@
           <el-input v-model="accountInfoItem.userMail"/>
         </el-form-item>
         <el-form-item label="用户身份" prop="identity">
-          <el-input v-model="accountInfoItem.identity"/>
+          <el-radio-group v-model="accountInfoItem.identity">
+            <el-radio :label="1">普通用户</el-radio>
+            <el-radio :label="2">管理员</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="是否在黑名单内" prop="enabled">
           <el-radio-group v-model="accountInfoItem.enabled">
@@ -197,13 +200,28 @@ export default {
       else alert("批量添加用户成功");
       this.loadUser();
     },
-    deleteItem(index){
-      const response = this.$axios.delete(`http://localhost:8081/manageAccount/deleteUserByUserMail?userMail=${this.accountInfoItemList[index].userMail}`);
+    async deleteItem(index){
+      const response = await this.$axios.get(`http://localhost:8081/manageAccount/deleteUserByUserMail?userMail=${this.accountInfoItemList[index].userMail}`);
       if(response.data.code == 400) alert(response.data.data);
       else alert("删除成功");
       this.loadUser();
     },
 
+    async addToBackList(index){
+      if(this.accountInfoItemList[index].enabled == true){
+        const response = await this.$axios.post(`http://localhost:8081/manageAccount/setBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
+        if(response.data.code == 400) alert(response.data.data);
+        else alert("操作成功");
+        this.loadUser();
+      }else{
+        console.log("releaseFromBlackList")
+        const response = await this.$axios.post(`http://localhost:8081/manageAccount/releaseFromBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
+        console.log("response", response);
+        if(response.data.code == 400) alert(response.data.data);
+        else alert("操作成功");
+        this.loadUser();
+      }
+    },
     
     handleSizeChange(val) {
       this.pageSize = val
@@ -214,7 +232,7 @@ export default {
       this.currentPage = val
       this.loadUser()
     },
-    loadUser() {
+    async loadUser() {
       this.$axios.get(`http://localhost:8081/manageAccount/checkAllAccount?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
       .then(res => res.data).then(res => {
             if (res.code === 200) {
