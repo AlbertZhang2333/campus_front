@@ -3,7 +3,8 @@
     <el-menu @select="handleMenuSelect">
       <el-menu-item index="1"></el-menu-item>
       <el-menu-item index="reservation">预约</el-menu-item>
-      <el-menu-item index="reservation/admin">管理员页面</el-menu-item>
+      <el-menu-item index="reservation/admin">预约管理</el-menu-item>
+      <el-menu-item index="reservation/room/admin">房间管理</el-menu-item>
     </el-menu>
   </div>
 </template>

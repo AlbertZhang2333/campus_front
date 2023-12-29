@@ -12,6 +12,7 @@ import Reservation from "@/views/reservation.vue";
 import User from "@/components/user/AccountAdmin.vue"
 import Login from "@/components/login/Login.vue"
 import Register from "@/components/login/Register.vue"
+import RoomAdmin from "@/views/roomAdmin.vue";
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,10 @@ const routes = [
     {
         path: '/reservation/admin',
         component: ReservationAdmin
+    },
+    {
+        path: '/reservation/room/admin',
+        component: RoomAdmin
     },
     {
         path: '/user',
