@@ -4,13 +4,12 @@
       <div>
         <el-radio-group v-model="searchMethod" @change="searchHandler()">
           <el-radio-button label="商品名"></el-radio-button>
-          <el-radio-button label="用户邮箱"></el-radio-button>
           <el-radio-button label="订单号"></el-radio-button>
         </el-radio-group>
         <el-input
             ref="input"
             v-model="input"
-            placeholder="输入查询信息"
+            placeholder="输入商品名称或订单号"
             @keyup.enter.native="searchHandler"
             id="input"
         >
@@ -41,19 +40,6 @@
         </el-table-column>
         <el-table-column label="时间" prop="createTime"
           width="180">
-        </el-table-column>
-        <el-table-column label="用户邮箱" prop="userMail"
-          width="180">
-        </el-table-column>
-        <el-table-column label="记录信息">
-          <div>{{this.result}}</div>
-        </el-table-column>
-        <el-table-column>
-          <template #default="scope">
-            <el-button @click="checkRecord(scope.row)" type="info">
-                查询记录
-            </el-button>
-          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -92,14 +78,9 @@
       }
       return '';
       },
-      async checkRecord(curRecord){
-        const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/checkAliRecord?itemShoppingRecordId=${curRecord.id}`);
-        if(response.data.code == 400) alert("查询失败");
-        else this.result = response.data.data;
-      },
       async updateRecordList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
-          const response = await this.$axios.get('http://localhost:8081/ManageShoppingRecord/findAll');
+          const response = await this.$axios.get('http://localhost:8081/UserCheckShoppingRecord/UserCheckSelfShoppingRecord');
           this.RecordList = response.data.data;
       },
       async searchHandler(){
@@ -107,13 +88,10 @@
         if(this.input == ""){
           this.updateRecordList();
         }else if(this.searchMethod == "商品名"){
-          const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/findShoppingRecordByItemName?itemName=${this.input}`);
-          this.RecordList = response.data.data;
-        }else if(this.searchMethod == "用户邮箱"){
-          const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/findShoppingRecordByUserMail?userMail=${this.input}`);
+          const response = await this.$axios.get(`http://localhost:8081/UserCheckShoppingRecord/UserCheckShoppingRecordByItemName?itemName=${this.input}`);
           this.RecordList = response.data.data;
         }else if(this.searchMethod == "订单号"){
-          const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/getShoppingRecordById?id=${this.input}`);
+          const response = await this.$axios.get(`http://localhost:8081/UserCheckShoppingRecord/UserCheckShoppingRecordById?id=${this.input}`);
           this.RecordList = [response.data.data];
         }
       }

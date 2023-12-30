@@ -15,8 +15,16 @@
             <i class="el-icon-s-goods"></i>
             <span slot="title">购物车</span>
           </el-menu-item>
+          <el-menu-item index="3">
+            <router-link :to="'/shop/record'">
+              <el-menu-item :index="'/shop/record'">
+                <i class="el-icon-user-solid"></i>
+                <span slot="title" style="text-align: center">消费记录</span>
+              </el-menu-item>
+            </router-link>
+          </el-menu-item>
           <el-menu-item index="3" @click="feedbackCollectionDialog">
-            <i class="el-icon-setting"></i>
+            <i class="el-icon-edit"></i>
             <span slot="title">意见收集</span>
           </el-menu-item>
           <router-link :to="'/shop/admin'">

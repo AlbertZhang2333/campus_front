@@ -15,6 +15,8 @@ import Register from "@/components/login/Register.vue"
 import RoomAdmin from "@/views/roomAdmin.vue";
 import Home from "@/views/Home.vue";
 import Sustech from "@/views/Sustech.vue";
+import UserRecord from "@/views/shopUserRecord.vue";
+import Appointment from "@/views/Appointment.vue";
 
 Vue.use(VueRouter)
 
@@ -38,6 +40,10 @@ const routes = [
     {
         path: '/shop/admin',
         component: ShopAdmin
+    },
+    {
+        path: '/shop/record',
+        component: UserRecord
     },
     {
         path: '/comment',
@@ -75,6 +81,10 @@ const routes = [
     {
         path: '/sustech',
         component: Sustech
+    },
+    {
+        path: '/appoint',
+        component: Appointment
     },
     {
         path: '*',

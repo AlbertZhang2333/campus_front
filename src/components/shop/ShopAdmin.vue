@@ -1,13 +1,15 @@
 
 <template>
     <div>
-      <h2 class="page-title">地图信息管理界面</h2>
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="商品信息管理" name="ItemAdmin">
           <Item></Item>
         </el-tab-pane>
-        <el-tab-pane label="消费记录信息管理" name="RecordAdmin">
+        <el-tab-pane label="消费记录查询" name="RecordAdmin">
           <Record></Record>
+        </el-tab-pane>
+        <el-tab-pane label="支付宝账单查询" name="BillAdmin">
+          <Bill></Bill>
         </el-tab-pane>
       </el-tabs>
       </div>
@@ -16,8 +18,9 @@
   <script>
   import Item from "@/components/shop/ItemAdmin.vue"
   import Record from "@/components/shop/RecordAdmin.vue"
+  import Bill from "@/components/shop/Bill.vue"
   export default {
-    components: {Item, Record},
+    components: {Item, Record, Bill},
     data() {
       return {
           itemInput: '',
