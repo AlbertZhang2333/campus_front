@@ -18,7 +18,7 @@
           
     <script>
           
-        import Main from "@/components/shop/Admin.vue"
+        import Main from "@/components/shop/ShopAdmin.vue"
         import Aside from "@/components/shop/AdminAside.vue";
         import Header from "@/components/global/Header.vue"
         import Foot from "@/components/global/Foot.vue";

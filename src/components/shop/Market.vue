@@ -8,6 +8,15 @@
         </el-carousel-item>
     </el-carousel>
     <h3>正在热卖！！！</h3>
+    <el-input
+          ref="input"
+          v-model="input"
+          placeholder="输入商品名称"
+          @keyup.enter.native="searchHandler"
+          id="input"
+      >
+      <el-button slot="append" icon="el-icon-search" id="search" @click="searchHandler"></el-button>
+    </el-input>
     <el-row style="position: relative">
       <el-col :span="4" v-for="shoppingItem in shoppingItemList" :key="shoppingItem.name" :offset="3" >
         <el-dialog :visible.sync="newShoppingDialog" class="dialog_style" >
@@ -48,8 +57,6 @@ export default {
   data() {
     const currentDate=new Date();
     return {
-      addToShoppingCart:[
-      ],
 
         carouselImageList:[
           {src:"https://img1.baidu.com/it/u=1069244915,946868715&fm=253&fmt=auto&app=138&f=JPEG?w=750&h=500"},
@@ -59,14 +66,14 @@ export default {
           {src:"https://img1.baidu.com/it/u=519386203,2870826372&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=628"}
 
         ],
-      shoppingItemList:[
-      ],
+      shoppingItemList:[],
       currentDate:new Date(),
       newShoppingDialog:false,
       currentShoppingItem:null,
       CanSubmit:true,
       num:1,
-      price:0
+      price:0,
+      input: ''
     }
   },
   methods:{
@@ -77,36 +84,33 @@ export default {
       this.price=0;
     },
     handleShoppingDialogCount(value){
-      console.log(value);
       this.price=this.num*this.currentShoppingItem.price;
       this.CanSubmit = this.num <= 0;
     },
-    submit_order(){
-      this.addToShoppingCart.push({
-        "date":new Date().toISOString().slice(0,10),
-          "name":this.currentShoppingItem.name,
-          "num":this.num,
-          "price":this.price
-      })
-      console.log(this.currentShoppingItem.name);
-      this.$emit('Market_sendShoppingCartInfo',this.addToShoppingCart);
+    async submit_order(){
+      const response = await this.$axios.post('http://localhost:8081/UserShopping/addItemToTheCart?itemName='+this.currentShoppingItem.name+'&num='+this.num);
+      console.log("addResponse", response);
+      if(response.data.code == 400) alert("加入购物车失败");
       this.newShoppingDialog=false;
       this.num=0;
       this.currentShoppingItem=null;
       this.price=0;
       // this.currentShoppingItem=null;
     },
-    deleteShoppingCartItem_(){
-      console.log(this.addToShoppingCart);
-      if (this.Cart_deleteItemIndex!==-1) {
-        this.addToShoppingCart.splice(this.Cart_deleteItemIndex, 1);
-      }
-      this.Cart_deleteItemIndex=-1;
-    },
     async loadItemList(){
-      const response = await this.$axios.get('http://localhost:8081/ManageItems/findAll');
+      const response = await this.$axios.get('http://localhost:8081/UserShopping/findAll');
+      if(response.data.code == 400) alert("加载商品信息失败");
       this.shoppingItemList=response.data.data;
-      console.log("shoppingList", this.shoppingItemList);
+    },
+    async searchHandler(){
+      this.input = this.$refs.input.$el.querySelector('input').value;
+      if(this.input == ""){
+        this.loadItemList();
+      }else{
+        const response = await this.$axios.get(`http://localhost:8081/UserShopping/searchItem?itemName=${this.input}`);
+        if(response.data.code == 400) alert("搜索失败");
+        this.shoppingItemList= [response.data.data];
+      }
     }
   }
 }

@@ -122,16 +122,19 @@
           BusLineList:[],
           busLineAddRule:{
               lineId:[
-              {required:true,trigger:'blur'}
+              {required:true, message:"校巴线路id不能为空", trigger:'blur'},
+              {pattern:/^[1-9]\d*$/, message: "校巴线路id应为一个正整数", trigger:'blur'}
               ],
               direction:[
-              {required:true,trigger:'blur'}
+              {required:true, message:"方向信息不能为空",trigger:'blur'}
               ],
               startTime:[
-              {required:true,trigger:'blur'}
+              {required:true, message:"开始运营时间不能为空", trigger:'blur'},
+              {pattern:/^([01][0-9]|2[0-3]):[0-5][0-9]$/, message: "时间格式应为hh:mm", trigger:'blur'}
               ],
               endTime:[
-              {required:true,trigger:'blur'}
+              {required:true, message:"结束运营时间不能为空",trigger:'blur'},
+              {pattern:/^([01][0-9]|2[0-3]):[0-5][0-9]$/, message: "时间格式应为hh:mm", trigger:'blur'}
               ]
           },
   
@@ -151,15 +154,12 @@
       openAddBusLineDialog(){
           this.addBusLine_dialog=true;
       },
-      submitAddBusLine(submitOrUpdate,index){
-      this.$refs.BusLine.validate((valid) =>{
-          if(valid){
-              this.$axios.post(`http://localhost:8081/addLine?lineId=${this.BusLine.lineId}&direction=${this.BusLine.direction}&startTime=${this.BusLine.startTime}&endTime=${this.BusLine.endTime}&inService=true&startStopId=-1&endStopId=-1`);
-              alert('submit!');
-              this.addBusLine_dialog=false;
-              this.updateBusLineList();
-          }
-      })
+      async submitAddBusLine(submitOrUpdate,index){
+        const response = await this.$axios.post(`http://localhost:8081/addLine?lineId=${this.BusLine.lineId}&direction=${this.BusLine.direction}&startTime=${this.BusLine.startTime}&endTime=${this.BusLine.endTime}&inService=true&startStopId=-1&endStopId=-1`);
+        if(response.data.code == 400) alert("添加失败");
+        else alert('submit!');
+        this.addBusLine_dialog=false;
+        this.updateBusLineList();
       },
       async editBusLine(curBusLine){
         //将当前建筑信息填入弹窗
@@ -173,32 +173,23 @@
       },
       async updateAddBusLine(){
         //将弹窗中的信息更新到数据库
-          this.$axios.put(`http://localhost:8081/updateLine?id=${this.BusLine.id}&LineId=${this.BusLine.lineId}&startTime=${this.BusLine.startTime}&endTime=${this.BusLine.endTime}&direction=${this.BusLine.direction}&inService=true&startStopId=-1&endStopId=-1`);
-          alert('update!');
+          const response = await this.$axios.put(`http://localhost:8081/updateLine?id=${this.BusLine.id}&LineId=${this.BusLine.lineId}&startTime=${this.BusLine.startTime}&endTime=${this.BusLine.endTime}&direction=${this.BusLine.direction}&inService=true&startStopId=-1&endStopId=-1`);
+          if(response.data.code == 400) alert("更新失败");
+          else alert('update!');
           this.updateBusLine_dialog=false;
           this.updateBusLineList();
       },
-      deleteBusLine: _.debounce(async function(curBusLine) {
-        this.$axios.delete(`http://localhost:8081/deleteLine/${curBusLine.id}`)
-          .then(res => res.data)
-          .then(res => {
-            console.log(res);
-            this.$message({
-              message: '删除成功!',
-              type: 'success'
-            });
-            this.loadPost();
-            this.updateBusLineList();
-          })
-          .catch(error => {
-            console.error('Error deleting comment:', error);
-            this.$message.error('删除失败，请重试!');
-          });
-      }, 300),
+      async deleteBusLine(curBusLine) {
+        const response = await this.$axios.delete(`http://localhost:8081/deleteLine/${curBusLine.id}`);
+        if(response.data.code == 400) alert("删除失败");
+        else alert('delete!');
+        this.updateBusLineList();
+      },
       async updateBusLineList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
           const response = await this.$axios.get('http://localhost:8081/allLine');
-          this.BusLineList = response.data;
+          if(response.data.code == 400) alert("查询失败");
+          else this.BusLineList = response.data.data;
       },
   }
   }

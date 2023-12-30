@@ -148,16 +148,22 @@ export default {
         BuildingList:[],
         buildingAddRule:{
             name:[
-            {required:true,trigger:'blur'}
+            {required:true,message: "建筑名不能为空", trigger:'blur'}
             ],
             lat:[
-            {required:true,trigger:'blur'}
+            {required:true, message: "纬度不能为空", trigger:'blur'},
+            {pattern: /^2[1-3]\.\d{0,7}$/,
+              message: "纬度超出学校范围啦",
+              trigger: "blur"}
             ],
             lng:[
-            {required:true,trigger:'blur'}
+            {required:true, message:"经度不能为空", trigger:'blur'},
+            {pattern: /^11[2-4]\.\d{0,7}$/,
+            message: "经度超出学校范围啦",
+            trigger: "blur"}
             ],
             description:[
-              {required:true, trigger: 'blur'}
+              {required:true, message:"建筑描述不能为空", trigger: 'blur'}
             ]
 
         },
@@ -181,15 +187,12 @@ methods: {
     openAddBuildingDialog(){
         this.addBuilding_dialog=true;
     },
-    submitAddBuilding(submitOrUpdate,index){
-    this.$refs.Building.validate((valid) =>{
-        if(valid){
-            this.$axios.post(`http://localhost:8081/addBuilding?lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
-            alert('submit!');
-            this.addBuilding_dialog=false;
-            this.updateBuildingList();
-        }
-    })
+    async submitAddBuilding(submitOrUpdate,index){
+      const response = await this.$axios.post(`http://localhost:8081/addBuilding?lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
+      if(response.data.code == 400) alert("添加失败");
+      else alert('submit!');
+      this.addBuilding_dialog=false;
+      this.updateBuildingList();
     },
     async editBuilding(curBuilding){
       //将当前建筑信息填入弹窗
@@ -204,32 +207,23 @@ methods: {
     },
     async updateAddBuilding(){
       //将弹窗中的信息更新到数据库
-        this.$axios.put(`http://localhost:8081/updateBuilding?id=${this.Building.id}&lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
-        alert('update!');
+        const response = await this.$axios.put(`http://localhost:8081/updateBuilding?id=${this.Building.id}&lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
+        if(response.data.code == 400) alert("更新失败");
+        else alert('update!');
         this.updateBuilding_dialog=false;
         this.updateBuildingList();
     },
-    deleteBuilding: _.debounce(async function(curBuilding) {
-      this.$axios.delete(`http://localhost:8081/deleteBuilding/${curBuilding.id}`)
-        .then(res => res.data)
-        .then(res => {
-          console.log(res);
-          this.$message({
-            message: '删除成功!',
-            type: 'success'
-          });
-          this.loadPost();
-          this.updateBuildingList();
-        })
-        .catch(error => {
-          console.error('Error deleting comment:', error);
-          this.$message.error('删除失败，请重试!');
-        });
-    }, 300),
+    async deleteBuilding(curBuilding) {
+      const response = await this.$axios.delete(`http://localhost:8081/deleteBuilding/${curBuilding.id}`);
+      if(response.data.code == 400) alert("删除失败");
+      else alert('delete!');
+      this.updateBuildingList();
+    },
     async updateBuildingList(){
       //模糊查询相关，需要后端有通过 like 查询的接口
         const response = await this.$axios.get('http://localhost:8081/allBuilding');
-        this.BuildingList = response.data;
+        if(response.data.code == 400) alert("加载失败");
+        else this.BuildingList = response.data.data;
     },
     handleInputChange: _.debounce(async function() {
       try {
@@ -246,7 +240,7 @@ methods: {
     }, 300),
     async searchOnServer(buildingInput) {
       const response = await this.$axios.get(`http://localhost:8081/searchingBuilding/${buildingInput}`);
-      return response.data;
+      return response.data.data;
     },
 }
 }

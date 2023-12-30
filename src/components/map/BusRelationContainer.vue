@@ -156,22 +156,25 @@
           BusRelationList:[],
           busRelationAddRule:{
               lineId:[
-              {required:true,trigger:'blur'}
+              {required:true, message:"校巴线路id不能为空", trigger:'blur'},
+              {pattern:/^[1-9]\d*$/, message: "线路id应为一个正整数", trigger:'blur'}
               ],
               direction:[
-              {required:true,trigger:'blur'}
+              {required:true, message:"方向信息不能为空",trigger:'blur'}
               ],
               startStop:[
-              {required:true,trigger:'blur'}
+              {required:true, message:"始发站信息不能为空", trigger:'blur'}
               ],
               endStop:[
-                {required:true, trigger: 'blur'}
+                {required:true, message:"终点站下信息不能为空", trigger: 'blur'}
               ],
               time:[
-              {required:true, trigger: 'blur'}
+              {required:true, message:"耗时信息不能为空", trigger: 'blur'},
+              {pattern:/^[1-9]\d*$/, message: "耗时应为一个正整数", trigger:'blur'}
               ],
               stopNum:[
-              {required:true, trigger: 'blur'}
+              {required:true, message:"所经站数不能为空", trigger: 'blur'},
+              {pattern:/^[1-9]\d*$/, message: "所经站数应为一个正整数", trigger:'blur'}
               ]
   
           },
@@ -195,15 +198,12 @@
       openAddBusRelationDialog(){
           this.addBusRelation_dialog=true;
       },
-      submitAddBusRelation(submitOrUpdate,index){
-      this.$refs.BusRelation.validate((valid) =>{
-          if(valid){
-              this.$axios.post(`http://localhost:8081/addRelation?lineId=${this.BusRelation.lineId}&direction=${this.BusRelation.direction}&startStop=${this.BusRelation.startStop}&endStop=${this.BusRelation.endStop}&time=${this.BusRelation.time}&stopNum=${this.BusRelation.stopNum}`);
-              alert('submit!');
-              this.addBusRelation_dialog=false;
-              this.updateBusRelationList();
-          }
-      })
+      async submitAddBusRelation(submitOrUpdate,index){
+        const response = await this.$axios.post(`http://localhost:8081/addRelation?lineId=${this.BusRelation.lineId}&direction=${this.BusRelation.direction}&startStop=${this.BusRelation.startStop}&endStop=${this.BusRelation.endStop}&time=${this.BusRelation.time}&stopNum=${this.BusRelation.stopNum}`);
+        if(response.data.code == 400) alert("添加失败");
+        else alert('submit!');
+        this.addBusRelation_dialog=false;
+        this.updateBusRelationList();
       },
       async editBusRelation(curBusRelation){
         //将当前路线信息填入弹窗
@@ -218,31 +218,22 @@
       },
       async updateAddBusRelation(){
         //将弹窗中的信息更新到数据库
-          this.$axios.put(`http://localhost:8081/updateRelation?id=${this.BusRelation.id}&lineId=${this.BusRelation.lineId}&direction=${this.BusRelation.direction}&startStop=${this.BusRelation.startStop}&endStop=${this.BusRelation.endStop}&time=${this.BusRelation.time}&stopNum=${this.BusRelation.stopNum}`);
-          alert('update!');
+          const response = await this.$axios.put(`http://localhost:8081/updateRelation?id=${this.BusRelation.id}&lineId=${this.BusRelation.lineId}&direction=${this.BusRelation.direction}&startStop=${this.BusRelation.startStop}&endStop=${this.BusRelation.endStop}&time=${this.BusRelation.time}&stopNum=${this.BusRelation.stopNum}`);
+          if(response.data.code == 400) alert("更新失败");
+          else alert('update!');
           this.updateBusRelation_dialog=false;
           this.updateBusRelationList();
       },
-      deleteBusRelation: _.debounce(async function(curBusRelation) {
-        this.$axios.delete(`http://localhost:8081/deleteRelation/${curBusRelation.id}`)
-          .then(res => res.data)
-          .then(res => {
-            console.log(res);
-            this.$message({
-              message: '删除成功!',
-              type: 'success'
-            });
-            this.loadPost();
-            this.updateBusRelationList();
-          })
-          .catch(error => {
-            console.error('Error deleting comment:', error);
-            this.$message.error('删除失败，请重试!');
-          });
-      }, 300),
+      async deleteBusRelation(curBusRelation) {
+        const response = await this.$axios.delete(`http://localhost:8081/deleteRelation/${curBusRelation.id}`);
+        if(response.data.code == 400) alert("删除失败");
+        else alert('delete!');
+        this.updateBusRelationList();
+      },
       async updateBusRelationList(){
           const response = await this.$axios.get('http://localhost:8081/allRelation');
-          this.BusRelationList = response.data;
+          if(response.data.code == 400) alert("查询失败");
+          else this.BusRelationList = response.data.data;
       },
       handleInputChange: _.debounce(async function() {
         try {
@@ -260,7 +251,7 @@
       async searchOnServer(busRelationInput) {
         //模糊查询相关，需要后端有通过 like 查询的接口
         const response = await this.$axios.get(`http://localhost:8081/searchByStartOrEnd/${busRelationInput}`);
-        return response.data;
+        return response.data.data;
       },
   }
   }

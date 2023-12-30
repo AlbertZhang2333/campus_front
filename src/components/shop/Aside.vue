@@ -30,16 +30,11 @@
     </el-row>
     <el-dialog :visible.sync="shoppingCart_dialog">
       <el-table
-        :data="MarketShoppingCartInfo"
+        :data="shoppingCart"
         stripe
         style="width: 100%">
         <el-table-column
-          prop="date"
-          label="商品加入购物车日期"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="name"
+          prop="itemName"
           label="商品名称"
           width="180">
         </el-table-column>
@@ -74,7 +69,6 @@
 
 <script>
 export default {
-  props:['MarketShoppingCartInfo'],
   data() {
     return{
       shoppingCart_dialog:false,
@@ -83,23 +77,31 @@ export default {
       intervalId: 0,
       shouldContinue: true,
       curRecordId: 0,
+      shoppingCart: []
     }
 
   },
   methods: {
+    async loadShoppingCart(){
+      const response = await this.$axios.get(`http://localhost:8081/UserShopping/checkItemCart`);
+      if(response.data.code == 400) alert("加载购物车信息失败");
+      this.shoppingCart = response.data.data;
+      console.log("loadResponse", response);
+    },
     openShoppingCartDialog() {
       this.shoppingCart_dialog=true;
-      console.log(this.MarketShoppingCartInfo[0])
+      this.loadShoppingCart();
     },
-    deleteShoppingCartItem(index){
-      this.MarketShoppingCartInfo.splice(index,1);
-      console.log(index);
+    async deleteShoppingCartItem(index){
+      const response = await this.$axios.delete(`http://localhost:8081/UserShopping/deleteItemFromTheCart?cartFormTime=${this.shoppingCart[index].time}`);
+      if(response.data.code == 400) alert("删除失败");
+      else this.loadShoppingCart();
+      console.log("deleteResponse", response);
     },
     feedbackCollectionDialog(){
       this.feedback_dialog=true;
     },
     async pay(item){
-      console.log("item",item, "name",item.name,"num",item.num);
       const response = await this.$axios.put(`http://localhost:8081/UserShopping/purchase?itemName=${item.name}&num=${item.num}`);
       if(response.data.code == 400){
         alert("购买失败");
@@ -107,6 +109,7 @@ export default {
         var newPage = window.open("about:blank", "_blank");
         newPage.document.write(response.data.data[1]);
         this.curRecordId = response.data.data[0];
+        await this.sleep(10000);
         this.intervalId = setInterval(this.fetchData, 3000);
       }
     },
@@ -123,9 +126,7 @@ export default {
           alert("支付失败");
           return;
         }else {
-          console.log("curRecordId", this.curRecordId);
           const response = await this.$axios.get('http://localhost:8081/UserShopping/checkIfUserHasPay?itemShoppingRecordId=' + this.curRecordId);
-          console.log("response", response);
           if(response.data.code == 400){
             console.log('停止发送请求，因为后端响应中包含 code 为 400');
             this.shouldContinue = false;
@@ -144,7 +145,14 @@ export default {
       } catch (error) {
         console.error('获取数据时出错：', error);
       }
-    }
+    },
+    sleep(millisecond) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve()
+            }, millisecond)
+        })
+    },
   },
 }
 

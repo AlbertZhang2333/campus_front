@@ -309,7 +309,6 @@ export default {
           const response4 = await this.searchNearStop(tmpStart.lng, tmpStart.lat);
           var tmpStartPoint = tmpStart;
           tmpStart = response4;
-          console.log("tmpStart", tmpStart);
           this.plotWalkingRoute(this.AMap, this.map, tmpStartPoint.lng, tmpStartPoint.lat, tmpStart.lng, tmpStart.lat);
         }else if(!tmpStart.name.includes("校巴站")){
           const response4 = await this.searchAll(tmpStart.busStop);
@@ -321,7 +320,6 @@ export default {
           const response4 = await this.searchNearStop(tmpEnd.lng, tmpEnd.lat);
           var tmpEndPoint = tmpEnd;
           tmpEnd = response4;
-          console.log("tmpEnd", tmpEnd);
           this.plotWalkingRoute(this.AMap, this.map, tmpEnd.lng, tmpEnd.lat, tmpEndPoint.lng, tmpEndPoint.lat);
         }else if(!tmpEnd.name.includes("校巴站")){
           const response4 = await this.searchAll(tmpEnd.busStop);
@@ -337,18 +335,18 @@ export default {
       const response = await this.$axios.get(`http://localhost:8081/searchBuildingName/${search}`);
       const response2 = await this.$axios.get(`http://localhost:8081/searchStopName/${search}`);
       let result = response;
-      if(response.data.name == undefined){
+      if(response.data.data == null){
         result = response2;
       }
-      return result.data;
+      return result.data.data;
     },
     async searchBusLine(startStop, endStop){
       const response = await this.$axios.get(`http://localhost:8081/startEndRelation/${startStop}/${endStop}`);
-      return response.data;
+      return response.data.data;
     },
     async searchLineInfo(){
       const response = await this.$axios.get(`http://localhost:8081/allLine`);
-      return response.data;
+      return response.data.data;
     },
     async searchNearStop(lng, lat){
       const response = await this.$axios({
@@ -359,7 +357,7 @@ export default {
           lat: lat
         }
       });
-      return response.data;
+      return response.data.data;
     },
     plotWalkingRoute(AMap, map, startLng, startLat, endLng, endLat) {
       this.AMap.plugin('AMap.Walking', function () {
@@ -465,7 +463,7 @@ export default {
     async searchOnServer(startPoint) {
       const response = await this.$axios.get(`http://localhost:8081/searchingBuilding/${startPoint}`);
       const response2 = await this.$axios.get(`http://localhost:8081/searchingBusStop/${startPoint}`);
-      const result = response.data.concat(response2.data);
+      const result = response.data.data.concat(response2.data.data);
       return result;
     },
     handleInputChange2: _.debounce(async function() {
@@ -479,7 +477,7 @@ export default {
     async searchOnServer2(endPoint) {
       const response = await this.$axios.get(`http://localhost:8081/searchingBuilding/${endPoint}`);
       const response2 = await this.$axios.get(`http://localhost:8081/searchingBusStop/${endPoint}`);
-      const result = response.data.concat(response2.data);
+      const result = response.data.data.concat(response2.data.data);
       return result;
     },
     selectSearchResult(result) {

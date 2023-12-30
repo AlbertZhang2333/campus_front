@@ -3,12 +3,15 @@
     <h2>
       用户账号管理界面
     </h2>
-    <el-tabs v-model="activateName" type="card" @tab-click="handleClick">
+    <el-tabs v-model="activateName" type="card">
       <el-tab-pane label="用户信息记录" name="Current_accounts">用户管理
         <el-row  class="headRowStyle">
 <!--          调整button和switch的位置-->
           <el-button @click="createAccountDialog" class="RowButtonSize">
             新增用户
+          </el-button>
+          <el-button @click="fileUploadDialog" class="150px">
+            批量新增用户
           </el-button>
           <el-switch
               v-model="toDeleteAccount"
@@ -26,55 +29,64 @@
               inactive-text="拉入黑名单已禁用">
           </el-switch>
         </el-row>
-        <el-table
+        <div class="g-table-content">
+          <el-table
             :data="accountInfoItemList"
             style="width: 100%">
 <!--            :row-class-name="tableRowClassName">-->
-          <el-table-column
-              prop="Id"
-              label="用户id"
-              width="180">
-          </el-table-column>
-          <el-table-column
-              prop="username"
-              label="用户名"
-              width="180">
-          </el-table-column>
-          <el-table-column
-              prop="userMail"
-              label="用户邮箱"
-              width="180">
-          </el-table-column>
-          <el-table-column
-              prop="identity"
-              label="用户身份">
-          </el-table-column>
-          <el-table-column
-              prop="enabled"
-              label="是否在黑名单内">
-            <template slot-scope="scope">
-              <span v-if="scope.row.enabled">是</span>
-              <span v-else>否</span>
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template #default="scope">
-<!--              <el-button @click="editItem(scope.$index)">-->
-<!--                编辑-->
-<!--              </el-button>-->
-              <el-button v-if="toDeleteAccount" class="FormButtonSize" @click="deleteItem(scope.$index)">
-                移除
-              </el-button>
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template #default="scope">
-              <el-button v-if="toSetBlackList" class="FormButtonSize" @click="deleteItem(scope.$index)">
-                拉入/释放
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+            <el-table-column
+                prop="username"
+                label="用户名"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="userMail"
+                label="用户邮箱"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="identity"
+                label="用户身份">
+            </el-table-column>
+            <el-table-column
+                prop="enabled"
+                label="是否在黑名单内">
+              <template slot-scope="scope">
+                <span v-if="scope.row.enabled">否</span>
+                <span v-else>是</span>
+              </template>
+            </el-table-column>
+            <el-table-column>
+              <template #default="scope">
+  <!--              <el-button @click="editItem(scope.$index)">-->
+  <!--                编辑-->
+  <!--              </el-button>-->
+                <el-button v-if="toDeleteAccount" class="FormButtonSize" @click="deleteItem(scope.$index)">
+                  移除
+                </el-button>
+              </template>
+            </el-table-column>
+            <el-table-column>
+              <template #default="scope">
+                <el-button v-if="toSetBlackList" class="FormButtonSize" @click="addToBackList(scope.$index)">
+                  拉入/释放
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        
+      ``<div class="g-table-page clearfix">
+          <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[5, 10, 20, 30]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total">
+          </el-pagination>
+        </div>   
       </el-tab-pane>
     </el-tabs>
 
@@ -96,67 +108,143 @@
           <el-input v-model="accountInfoItem.userMail"/>
         </el-form-item>
         <el-form-item label="用户身份" prop="identity">
-          <el-input v-model="accountInfoItem.identity"/>
+          <el-radio-group v-model="accountInfoItem.identity">
+            <el-radio :label="1">普通用户</el-radio>
+            <el-radio :label="2">管理员</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="是否在黑名单内" prop="enabled">
-          <el-input v-model="accountInfoItem.enabled"/>
+          <el-radio-group v-model="accountInfoItem.enabled">
+            <el-radio :label="true">否</el-radio>
+            <el-radio :label="false">是</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <el-button @click="createAccount()">
           创建新用户
       </el-button>
-<!--      <el-button @click="submitAddItem(true,-1)" style="margin-left: 45%">-->
-<!--        提交商品-->
-<!--      </el-button>-->
     </el-dialog>
-
-
-
+    <el-dialog title="上传" :visible.sync="fileUploadDialogVisible" width="35%" style="text-align: center;">
+      <el-upload class="upload-demo" action="#" drag multiple :headers="headers" :auto-upload="false"
+        :file-list="fileList" :on-change="handleChange">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">上传Excel格式文件</div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogOfUpload = false">取 消</el-button>
+        <el-button type="primary" @click="confirmUpload()">上 传</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 export default {
-  methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
-    createAccount(){
-      this.accountDialogVisible=false;
-    },
-    createAccountDialog(){
-      this.accountDialogVisible=true;
-      console.log("account", this.accountDialogVisible);
-    },
-
-    deleteItem(index){
-      this.accountInfoItemList.splice(index,1);
-    },
-
-
-
+  mounted() {
+    this.loadUser()
   },
   data() {
     return {
       accountInfoItem:{
         username:"",
         userMail:"",
-        identity:0,
-        enabled:true
+        identity:1,
+        password:"",
+        enabled:true,
       },
       //-----------------------------
-      accountInfoItemList:[{
-        "Id":1,
-        "username":"张三",
-        "userMail":"3077161150@qq.com",
-        "identity":42,
-        "enabled":true
-      }],
+      accountInfoItemList:[],
       accountDialogVisible:false,
+      fileUploadDialogVisible:false,
       activateName:"Current_accounts",
       toDeleteAccount:false,
-      toSetBlackList:false
+      toSetBlackList:false,
+      fileList: [],
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+
+      pageSize: 5,
+      currentPage: 1,
+      total: 0,
     }
+  },
+  methods: {
+    async createAccount(){
+      const response = await this.$axios.post(`http://localhost:8081/manageAccount/createANewAccount?userName=${this.accountInfoItem.username}&userMail=${this.accountInfoItem.userMail}&password=${this.accountInfoItem.password}&identity=${this.accountInfoItem.identity}`);
+      if(response.data.code == 400) alert(response.data.data);
+      else alert("已添加");
+      this.accountDialogVisible=false;
+      this.loadUser();
+    },
+    createAccountDialog(){
+      this.accountDialogVisible=true;
+    },
+    fileUploadDialog(){
+      this.fileUploadDialogVisible=true;
+    },
+    handleChange(file, fileList) { //文件数量改变
+      this.fileList = fileList;
+    },
+
+    async confirmUpload() { //确认上传
+      var param = new FormData();
+      this.fileList.forEach(
+        (val, index) => {
+          param.append("file", val.raw);
+        }
+      );
+      const response = await this.$axios.post("http://localhost:8081/manageAccount/batchAddAccount", param);
+      if(response.data.code == 400) alert(response.data.data);
+      else alert("批量添加用户成功");
+      this.loadUser();
+    },
+    async deleteItem(index){
+      const response = await this.$axios.get(`http://localhost:8081/manageAccount/deleteUserByUserMail?userMail=${this.accountInfoItemList[index].userMail}`);
+      if(response.data.code == 400) alert(response.data.data);
+      else alert("删除成功");
+      this.loadUser();
+    },
+
+    async addToBackList(index){
+      if(this.accountInfoItemList[index].enabled == true){
+        const response = await this.$axios.post(`http://localhost:8081/manageAccount/setBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
+        if(response.data.code == 400) alert(response.data.data);
+        else alert("操作成功");
+        this.loadUser();
+      }else{
+        console.log("releaseFromBlackList")
+        const response = await this.$axios.post(`http://localhost:8081/manageAccount/releaseFromBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
+        console.log("response", response);
+        if(response.data.code == 400) alert(response.data.data);
+        else alert("操作成功");
+        this.loadUser();
+      }
+    },
+    
+    handleSizeChange(val) {
+      this.pageSize = val
+      this.currentPage = 1
+      this.loadUser()
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.loadUser()
+    },
+    async loadUser() {
+      this.$axios.get(`http://localhost:8081/manageAccount/checkAllAccount?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
+      .then(res => res.data).then(res => {
+            if (res.code === 200) {
+              this.accountInfoItemList = res.data
+              this.total = res.total
+            } else {
+              this.$message.warning('数据加载失败!');
+            }
+          }
+      )
+    },
+
   }
 }
 </script>
