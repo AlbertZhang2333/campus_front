@@ -1,4 +1,19 @@
-body{
+:root{
+    --sustech-cyan: #2bb7b3;
+    --sustech-dark-green: #003f43;
+    --sustech-orange: #ed6c00;
     margin:0;
     padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+head {
+
+}
+body {
+}
+
+.center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

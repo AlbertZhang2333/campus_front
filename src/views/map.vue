@@ -23,8 +23,8 @@
     
   import Main from "@/components/map/MapContainer.vue"
   import Aside from "@/components/map/MapAside";
-  import Header from "@/components/Header"
-  import Foot from "@/components/Foot";
+  import Header from "@/components/global/Header.vue"
+  import Foot from "@/components/global/Foot.vue";
   
   export default {
     components: {Foot, Aside, Main, Header},

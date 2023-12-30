@@ -1,12 +1,16 @@
 <template>
   <div id="app">
+    <CampusAside/>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import CampusAside from "@/views/CampusAside.vue";
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {CampusAside}
 }
 </script>
 
