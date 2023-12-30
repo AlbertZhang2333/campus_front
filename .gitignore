@@ -6,9 +6,3 @@ package-lock.json
 package.json
 vue.config.js
 webpack.dev.conf.js
-babel.config.js
-jsconfig.json
-package-lock.json
-package.json
-vue.config.js
-webpack.dev.conf.js
