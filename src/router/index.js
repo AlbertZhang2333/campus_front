@@ -5,21 +5,15 @@ import Map from '@/views/map'
 import MapAdmin from '@/views/mapAdmin.vue'
 import Shop from "@/views/shop"
 import ShopAdmin from "@/views/shopAdmin"
-import Comment from '@/views/comment.vue'
-import CommentAdmin from "@/views/commentAdmin.vue";
-import ReservationAdmin from "@/views/reservationAdmin.vue";
-import Reservation from "@/views/reservation.vue";
-import User from "@/components/user/AccountAdmin.vue"
-import Login from "@/components/login/Login.vue"
-import Register from "@/components/login/Register.vue"
-import RoomAdmin from "@/views/roomAdmin.vue";
+import Home from "@/views/Home.vue";
+import Sustech from "@/views/Sustech.vue";
 
 Vue.use(VueRouter)
 
 const routes = [
     {
-        path: '/',
-        component: User
+        path: '/home',
+        component: Home
     },
     {
         path: '/map',
@@ -36,6 +30,10 @@ const routes = [
     {
         path: '/shop/admin',
         component: ShopAdmin
+    },
+    {
+        path: '/venue',
+        component: Sustech
     },
     {
         path: '/comment',
@@ -68,13 +66,16 @@ const routes = [
     {
         path: '/register',
         component: Register
-    
-    }
+    },
+    {
+        path: '*',
+        redirect: '/home'
+    },
 ]
 
-const router=new VueRouter({
-    mode:'history',
-    base:process.env.BASE_URL,
+const router = new VueRouter({
+    mode: 'history',
+    base: process.env.BASE_URL,
     routes
 })
 

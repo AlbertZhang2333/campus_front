@@ -1,6 +1,5 @@
 <template>
     <div style="display: flex; line-height: 60px">
-  
       <div>
         <i :class="icon" style="font-size: 20px; cursor: pointer;" @click="collapse"></i>
       </div>

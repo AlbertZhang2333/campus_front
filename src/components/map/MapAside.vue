@@ -1,10 +1,10 @@
 <template>
   <el-menu
     style="height: 100%"
-    background-color="#545c64"
+    background-color="#2bb7b3"
     text-color="#fff"
     active-text-color="#ffd04b"
-    default-active="/"
+    default-active="1"
     :collapse="isCollapse"
     :collapse-transition="false"
   >

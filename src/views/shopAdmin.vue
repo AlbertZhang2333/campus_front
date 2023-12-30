@@ -20,8 +20,8 @@
           
         import Main from "@/components/shop/ShopAdmin.vue"
         import Aside from "@/components/shop/AdminAside.vue";
-        import Header from "@/components/Header"
-        import Foot from "@/components/Foot";
+        import Header from "@/components/global/Header.vue"
+        import Foot from "@/components/global/Foot.vue";
     
         export default {
             components: {Foot, Aside, Main, Header},
