@@ -1,17 +1,17 @@
 <template>
   <el-container class="card-container">
-<!--    <video-->
-<!--        src="@/assets/sustech.mp4"-->
-<!--        id="campus_video"-->
-<!--        preload="auto"-->
-<!--        poster="@/assets/sustech_map1.jpg"-->
-<!--        @click="play"-->
-<!--        autoplay-->
-<!--        playsinline-->
-<!--        loop-->
-<!--        muted-->
-<!--        style="width: 80%; align-self: center"-->
-<!--    />-->
+    <video
+        src="https://www.sustech.edu.cn/uploads/files/2023/12/13145220_64059.mp4"
+        id="campus_video"
+        preload="auto"
+        poster="@/assets/sustech_map1.jpg"
+        @click="play"
+        autoplay
+        playsinline
+        loop
+        muted
+        style="width: 80%; align-self: center"
+    />
     <el-container class="card-container">
       <StuffCard
           v-for="(stuff, index) in stuff_cards"
