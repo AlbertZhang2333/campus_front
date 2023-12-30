@@ -163,6 +163,8 @@
 </template>
 
 <script>
+import axiosInstance from "@/main";
+
 export default {
   data() {
     return {
@@ -319,7 +321,7 @@ export default {
     },
     updateReplyComment(comment, state) {
       comment.state = state
-      this.$axios.put(`${this.$httpUrl}Comment/updateComment`, comment)
+      axiosInstance.put(`${this.$httpUrl}Comment/updateComment`, comment)
           .then(res => res.data)
           .then(res => {
             console.log(res);
@@ -341,7 +343,7 @@ export default {
     },
     updateComment(comment, state) {
       comment.state = state
-      this.$axios.put(`${this.$httpUrl}Comment/updateComment`, comment)
+      axiosInstance.put(`${this.$httpUrl}Comment/updateComment`, comment)
           .then(res => res.data)
           .then(res => {
             console.log(res);
@@ -356,7 +358,7 @@ export default {
           });
     },
     loadSearch() {
-      this.$axios.get(this.$httpUrl + 'Comment/commentSearchAdmin', {
+      axiosInstance.get(this.$httpUrl + 'Comment/commentSearchAdmin', {
         params: {
           userMail: this.showFilterOptions.userMail,
           date: this.showFilterOptions.date,
@@ -380,7 +382,7 @@ export default {
       this.currentView = 'viewReply';
       this.currentDepartment = belongDepartment
       this.nowReplyId = replyId;
-      this.$axios.post(this.$httpUrl + 'Comment/allReplyCommentsAdmin', null, {
+      axiosInstance.post(this.$httpUrl + 'Comment/allReplyCommentsAdmin', null, {
         params: {
           type: 1,
           replyId: this.nowReplyId,
@@ -402,7 +404,7 @@ export default {
       )
     },
     loadAll() {
-      this.$axios.post(this.$httpUrl + 'Comment/allCommentsAdmin', null, {
+      axiosInstance.post(this.$httpUrl + 'Comment/allCommentsAdmin', null, {
         params: {
           pageSize: this.pageSize,
           currentPage: this.currentPage

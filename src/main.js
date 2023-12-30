@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
+
 import App from './App.vue'
 import router from './router'
 import '@/css/global.css'
@@ -12,6 +13,26 @@ import axios from 'axios'
 
 Vue.prototype.$axios = axios;
 Vue.prototype.$httpUrl = 'http://localhost:8081/';
+
+const axiosInstance = axios.create();
+
+// 添加请求拦截器
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const storedToken = localStorage.getItem('jwtToken');
+        console.log(storedToken)
+        if (storedToken) {
+            config.headers['Authorization'] = `Bearer ${storedToken}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// 在应用程序中使用这个全局的 Axios 实例，而不是直接使用 axios
+export default axiosInstance;
 
 new Vue({
     router,

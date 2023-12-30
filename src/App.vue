@@ -6,18 +6,21 @@
 </template>
 
 <script>
+// import CampusAside from "@/views/CampusAside.vue";
+
 import CampusAside from "@/views/CampusAside.vue";
 
 export default {
   name: 'App',
-  components: {CampusAside}
+  components: {CampusAside},
+  // components: {CampusAside}
 }
 </script>
 
-<style  scoped>
-  #app {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-  }
+<style scoped>
+#app {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
 </style>
