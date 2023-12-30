@@ -18,8 +18,8 @@
   
   <script>
   import Aside from "@/components/shop/Aside.vue";
-  import Market_headline from "@/components/Header"
-  import Foot from "@/components/Foot";
+  import Market_headline from "@/components/comments/Header"
+  import Foot from "@/components/comments/Foot";
   import Main from "@/components/shop/Market.vue";
   
   

@@ -11,12 +11,6 @@
               <span slot="title" style="text-align: center">商城首页</span>
             </el-menu-item>
           </router-link>
-          <router-link :to="'/shop/admin'">
-            <el-menu-item :index="'/shop/admin'" style="width: 100px">
-              <i class="el-icon-s-flag"></i>
-              <span slot="title" style="text-align: center">商城管理</span>
-            </el-menu-item>
-          </router-link>
           <el-menu-item index="2" @click="openShoppingCartDialog">
             <i class="el-icon-s-goods"></i>
             <span slot="title">购物车</span>
@@ -25,6 +19,12 @@
             <i class="el-icon-setting"></i>
             <span slot="title">意见收集</span>
           </el-menu-item>
+          <router-link :to="'/shop/admin'">
+            <el-menu-item :index="'/shop/admin'" style="width: 100px">
+              <i class="el-icon-s-flag"></i>
+              <span slot="title" style="text-align: center">商城管理</span>
+            </el-menu-item>
+          </router-link>
         </el-menu>
       </el-col>
     </el-row>
@@ -109,11 +109,11 @@ export default {
         var newPage = window.open("about:blank", "_blank");
         newPage.document.write(response.data.data[1]);
         this.curRecordId = response.data.data[0];
-        await this.sleep(10000);
-        this.intervalId = setInterval(this.fetchData, 3000);
+        /* await this.sleep(10000);
+        this.intervalId = setInterval(this.fetchData, 3000); */
       }
     },
-    async fetchData() {
+    /* async fetchData() {
       try {
         if (!this.shouldContinue) {
           console.log('停止发送请求，因为 shouldContinue 为 false');
@@ -152,7 +152,7 @@ export default {
                 resolve()
             }, millisecond)
         })
-    },
+    }, */
   },
 }
 
