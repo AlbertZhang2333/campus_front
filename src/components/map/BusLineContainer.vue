@@ -104,6 +104,7 @@
   </template>
     
   <script>
+  import axiosInstance from "@/main";
   export default {
     mounted(){
       this.updateBusLineList();
@@ -155,7 +156,7 @@
           this.addBusLine_dialog=true;
       },
       async submitAddBusLine(submitOrUpdate,index){
-        const response = await this.$axios.post(`http://localhost:8081/addLine?lineId=${this.BusLine.lineId}&direction=${this.BusLine.direction}&startTime=${this.BusLine.startTime}&endTime=${this.BusLine.endTime}&inService=true&startStopId=-1&endStopId=-1`);
+        const response = await axiosInstance.post(`http://localhost:8081/addLine?lineId=${this.BusLine.lineId}&direction=${this.BusLine.direction}&startTime=${this.BusLine.startTime}&endTime=${this.BusLine.endTime}&inService=true&startStopId=-1&endStopId=-1`);
         if(response.data.code == 400) alert("添加失败");
         else alert('submit!');
         this.addBusLine_dialog=false;
@@ -173,21 +174,21 @@
       },
       async updateAddBusLine(){
         //将弹窗中的信息更新到数据库
-          const response = await this.$axios.put(`http://localhost:8081/updateLine?id=${this.BusLine.id}&LineId=${this.BusLine.lineId}&startTime=${this.BusLine.startTime}&endTime=${this.BusLine.endTime}&direction=${this.BusLine.direction}&inService=true&startStopId=-1&endStopId=-1`);
+          const response = await axiosInstance.put(`http://localhost:8081/updateLine?id=${this.BusLine.id}&LineId=${this.BusLine.lineId}&startTime=${this.BusLine.startTime}&endTime=${this.BusLine.endTime}&direction=${this.BusLine.direction}&inService=true&startStopId=-1&endStopId=-1`);
           if(response.data.code == 400) alert("更新失败");
           else alert('update!');
           this.updateBusLine_dialog=false;
           this.updateBusLineList();
       },
       async deleteBusLine(curBusLine) {
-        const response = await this.$axios.delete(`http://localhost:8081/deleteLine/${curBusLine.id}`);
+        const response = await axiosInstance.delete(`http://localhost:8081/deleteLine/${curBusLine.id}`);
         if(response.data.code == 400) alert("删除失败");
         else alert('delete!');
         this.updateBusLineList();
       },
       async updateBusLineList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
-          const response = await this.$axios.get('http://localhost:8081/allLine');
+          const response = await axiosInstance.get('http://localhost:8081/allLine');
           if(response.data.code == 400) alert("查询失败");
           else this.BusLineList = response.data.data;
       },

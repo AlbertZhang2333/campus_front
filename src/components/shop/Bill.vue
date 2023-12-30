@@ -18,7 +18,7 @@
 </template>
 
 <script>
-
+import axiosInstance from "@/main";
 export default {
     data(){
         return{
@@ -53,7 +53,7 @@ export default {
     },
     methods: {
         async searchHandler(){
-            const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/alipayDataBillQuery?date=${this.value}`);
+            const response = await axiosInstance.get(`http://localhost:8081/ManageShoppingRecord/alipayDataBillQuery?date=${this.value}`);
             if(response.data.code == 400) alert("查询失败");
             else {
                 var newPage = window.open("about:blank", "_blank");

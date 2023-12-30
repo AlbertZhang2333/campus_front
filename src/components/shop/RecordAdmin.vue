@@ -60,6 +60,7 @@
   </template>
     
   <script>
+  import axiosInstance from "@/main";
   export default {
     mounted(){
       this.updateRecordList();
@@ -93,13 +94,13 @@
       return '';
       },
       async checkRecord(curRecord){
-        const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/checkAliRecord?itemShoppingRecordId=${curRecord.id}`);
+        const response = await axiosInstance.get(`http://localhost:8081/ManageShoppingRecord/checkAliRecord?itemShoppingRecordId=${curRecord.id}`);
         if(response.data.code == 400) alert("查询失败");
         else this.result = response.data.data;
       },
       async updateRecordList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
-          const response = await this.$axios.get('http://localhost:8081/ManageShoppingRecord/findAll');
+          const response = await axiosInstance.get('http://localhost:8081/ManageShoppingRecord/findAll');
           this.RecordList = response.data.data;
       },
       async searchHandler(){
@@ -107,13 +108,13 @@
         if(this.input == ""){
           this.updateRecordList();
         }else if(this.searchMethod == "商品名"){
-          const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/findShoppingRecordByItemName?itemName=${this.input}`);
+          const response = await axiosInstance.get(`http://localhost:8081/ManageShoppingRecord/findShoppingRecordByItemName?itemName=${this.input}`);
           this.RecordList = response.data.data;
         }else if(this.searchMethod == "用户邮箱"){
-          const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/findShoppingRecordByUserMail?userMail=${this.input}`);
+          const response = await axiosInstance.get(`http://localhost:8081/ManageShoppingRecord/findShoppingRecordByUserMail?userMail=${this.input}`);
           this.RecordList = response.data.data;
         }else if(this.searchMethod == "订单号"){
-          const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/getShoppingRecordById?id=${this.input}`);
+          const response = await axiosInstance.get(`http://localhost:8081/ManageShoppingRecord/getShoppingRecordById?id=${this.input}`);
           this.RecordList = [response.data.data];
         }
       }
