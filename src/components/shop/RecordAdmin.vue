@@ -2,6 +2,11 @@
 <template>
     <div>
       <div>
+        <el-radio-group v-model="searchMethod" @change="searchHandler()">
+          <el-radio-button label="商品名"></el-radio-button>
+          <el-radio-button label="用户邮箱"></el-radio-button>
+          <el-radio-button label="订单号"></el-radio-button>
+        </el-radio-group>
         <el-input
             ref="input"
             v-model="input"
@@ -12,139 +17,70 @@
           <el-button slot="append" icon="el-icon-search" id="search" @click="searchHandler"></el-button>
         </el-input>
       </div>
-      <el-row>
-          <el-button @click="openAddItemDialog">
-              增加商品
-          </el-button>
-      </el-row>
       <el-table
-        :data="ItemList"
+        :data="RecordList"
         style="width: 100%"
         :row-class-name="tableRowClassName">
-        <el-table-column label="商品名称" prop="name"
+        <el-table-column label="订单号" prop="id"
           width="180">
         </el-table-column>
-        <el-table-column label="商品库存" prop="num"
+        <el-table-column label="商品名" prop="itemName"
           width="180">
         </el-table-column>
-        <el-table-column label="商品售价(¥)" prop="price"
+        <el-table-column label="数量" prop="num"
           width="180">
         </el-table-column>
-        <el-table-column label="商品描述" prop="description" width="180">
+        <el-table-column label="总消费" prop="amount"
+          width="180">
+        </el-table-column>
+        <el-table-column label="当前状态" prop="status"
+          width="180">
+        </el-table-column>
+        <el-table-column label="日期" prop="date"
+          width="180">
+        </el-table-column>
+        <el-table-column label="时间" prop="createTime"
+          width="180">
+        </el-table-column>
+        <el-table-column label="用户邮箱" prop="userMail"
+          width="180">
+        </el-table-column>
+        <el-table-column label="记录信息">
+          <div>{{this.result}}</div>
         </el-table-column>
         <el-table-column>
-            <template #default="scope">
-            <el-button @click="editItem(scope.row)" type="primary" icon="el-icon-edit">
-                编辑
+          <template #default="scope">
+            <el-button @click="checkRecord(scope.row)" type="info">
+                查询记录
             </el-button>
-            <el-button @click="deleteItem(scope.row)" type="danger" icon="el-icon-delete">
-                移除
-            </el-button>
-            </template>
+          </template>
         </el-table-column>
       </el-table>
-  
-      <el-dialog :visible.sync="addItem_dialog">
-        <h3 class="dialog-title">新增商品信息</h3>
-        <el-form
-          ref="Item"
-          :model="Item"
-          :rules="ItemAddRule"
-          label-width="100px"
-          label-position="right"
-          size="small"
-          class="dialog-form"
-        >
-        <el-form-item label="商品名称" prop="name">
-          <el-input v-model="Item.name"/>
-        </el-form-item>
-        <el-form-item label="商品库存" prop="num">
-          <el-input v-model="Item.num"/>
-        </el-form-item>
-        <el-form-item label="商品售价(¥)" prop="price">
-          <el-input v-model="Item.price"/>
-        </el-form-item>
-        <el-form-item label="商品描述" prop="description">
-          <el-input v-model="Item.description"/>
-        </el-form-item>
-        <el-form-item label="商品照片路径" prop="imagePath">
-          <el-input v-model="Item.imagePath"/>
-        </el-form-item>
-        </el-form>
-        <el-button @click="submitAddItem(true, -1)" class="dialog-button">
-          提交添加
-        </el-button>
-      </el-dialog>
-  
-      <el-dialog :visible.sync="updateItem_dialog">
-        <h3 class="dialog-title">修改商品信息</h3>
-        <el-form
-          ref="Item"
-          :model="Item"
-          :rules="ItemAddRule"
-          label-width="100px"
-          label-position="right"
-          size="small"
-          class="dialog-form"
-        >
-          <el-form-item label="商品名称" prop="name">
-            <el-input v-model="Item.name"/>
-          </el-form-item>
-          <el-form-item label="商品库存" prop="num">
-            <el-input v-model="Item.num"/>
-          </el-form-item>
-          <el-form-item label="商品售价(¥)" prop="price">
-            <el-input v-model="Item.price"/>
-          </el-form-item>
-          <el-form-item label="商品描述" prop="description">
-            <el-input v-model="Item.description"/>
-          </el-form-item>
-          <el-form-item label="商品照片路径" prop="imagePath">
-            <el-input v-model="Item.imagePath"/>
-          </el-form-item>
-        </el-form>
-        <el-button @click="updateAddItem()" class="dialog-button">
-          提交修改
-        </el-button>
-      </el-dialog>
     </div>
   </template>
     
   <script>
   export default {
     mounted(){
-      this.updateItemList();
+      this.updateRecordList();
     },
     data() {
       return {
-          ItemInput: '',
-          activeName: 'Current_sales_items',
-          Item: {
-            name: "",
+          activeName: 'Current_sales_Records',
+          Record: {
+            id: 0,
+            itemName: '',
             num: 0,
-            price: 0,
-            description: "",
-            imagePath: ""
+            amount: 0,
+            status: 0,
+            createTime: '',
+            date: '',
+            userMail: ''
           },
-          ItemList:[],
-          ItemAddRule:{
-              name:[
-              {required:true,trigger:'blur'}
-              ],
-              num:[
-              {required:true,trigger:'blur'}
-              ],
-              price:[
-              {required:true,trigger:'blur'}
-              ],
-              description:[
-              {required:true,trigger:'blur'}
-              ]
-          },
-  
-          addItem_dialog:false,
-          updateItem_dialog:false,
-          input: ""
+          RecordList:[],
+          result: "",
+          input: "",
+          searchMethod: "商品名"
       }
       },
   methods: {
@@ -156,65 +92,29 @@
       }
       return '';
       },
-      openAddItemDialog(){
-          this.addItem_dialog=true;
+      async checkRecord(curRecord){
+        const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/checkAliRecord?itemShoppingRecordId=${curRecord.id}`);
+        if(response.data.code == 400) alert("查询失败");
+        else this.result = response.data.data;
       },
-      submitAddItem(submitOrUpdate,index){
-      this.$refs.Item.validate((valid) =>{
-          if(valid){
-              this.$axios.post(`http://localhost:8081/ManageItems/generateANewItem?name=${this.Item.name}&num=${this.Item.num}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
-              alert('submit!');
-              this.addItem_dialog=false;
-              this.updateItemList();
-          }
-      })
-      },
-      async editItem(curItem){
-        //将当前建筑信息填入弹窗
-          this.updateItem_dialog=true;
-          this.Item.name = curItem.name;
-          this.Item.num = curItem.num;
-          this.Item.price = curItem.price;
-          this.Item.description = curItem.description;
-          this.Item.imagePath = curItem.imagePath;
-          console.log("editItem",this.Item);
-      },
-      async updateAddItem(){
-        //将弹窗中的信息更新到数据库
-          this.$axios.put(`http://localhost:8081/ManageItems/updateItem?itemName=${this.Item.name}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
-          alert('update!');
-          this.updateItem_dialog=false;
-          this.updateItemList();
-      },
-      deleteItem: _.debounce(async function(curItem) {
-        this.$axios.delete(`http://localhost:8081/ManageItems/deleteItem?name=${curItem.name}`)
-          .then(res => res.data.data)
-          .then(res => {
-            console.log(res);
-            this.$message({
-              message: '删除成功!',
-              type: 'success'
-            });
-            this.loadPost();
-            this.updateItemList();
-          })
-          .catch(error => {
-            console.error('Error deleting comment:', error);
-            this.$message.error('删除失败，请重试!');
-          });
-      }, 300),
-      async updateItemList(){
+      async updateRecordList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
-          const response = await this.$axios.get('http://localhost:8081/ManageItems/findAll');
-          this.ItemList = response.data.data;
+          const response = await this.$axios.get('http://localhost:8081/ManageShoppingRecord/findAll');
+          this.RecordList = response.data.data;
       },
       async searchHandler(){
         this.input = this.$refs.input.$el.querySelector('input').value;
         if(this.input == ""){
-          this.updateItemList();
-        }else{
-          const response = await this.$axios.get(`http://localhost:8081/ManageItems/findByName?name=${this.input}`);
-          this.ItemList = [response.data.data];
+          this.updateRecordList();
+        }else if(this.searchMethod == "商品名"){
+          const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/findShoppingRecordByItemName?itemName=${this.input}`);
+          this.RecordList = response.data.data;
+        }else if(this.searchMethod == "用户邮箱"){
+          const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/findShoppingRecordByUserMail?userMail=${this.input}`);
+          this.RecordList = response.data.data;
+        }else if(this.searchMethod == "订单号"){
+          const response = await this.$axios.get(`http://localhost:8081/ManageShoppingRecord/getShoppingRecordById?id=${this.input}`);
+          this.RecordList = [response.data.data];
         }
       }
     }
@@ -226,18 +126,7 @@
       text-align: center;
       margin-bottom: 20px;
     }
-  
-    .dialog-title {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-  
-    .dialog-form {
-      margin-top: 10px;
-    }
-  
-    .dialog-button {
-      margin-left: 45%;
-      margin-top: 20px;
+    .custom-button {
+      margin-bottom: 10px; /* Adjust margin as needed */
     }
   </style>
