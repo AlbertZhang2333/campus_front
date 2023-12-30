@@ -110,7 +110,8 @@ export default {
       this.feedback_dialog=true;
     },
     async pay(item){
-      const response = await this.$axios.put(`http://localhost:8081/UserShopping/purchase?itemName=${item.name}&num=${item.num}`);
+      console.log("item", item);
+      const response = await this.$axios.put(`http://localhost:8081/UserShopping/purchase?itemName=${item.itemName}&num=${item.num}`);
       if(response.data.code == 400){
         alert("购买失败");
       }else if(response.data.code == 200){
