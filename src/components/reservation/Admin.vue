@@ -88,6 +88,8 @@
 
 <script>
 
+import axiosInstance from "@/main";
+
 export default {
   data() {
     return {
@@ -232,7 +234,7 @@ export default {
       }
     },
     deleteReservation(rowData) {
-      this.$axios.delete(this.$httpUrl + 'ManageReservationRecord/deleteById', {
+      axiosInstance.delete(this.$httpUrl + 'ManageReservationRecord/deleteById', {
         params: {
           id: rowData.id
         }
@@ -252,7 +254,7 @@ export default {
           })
     },
     cancelReservation(rowData) {
-      this.$axios.put(this.$httpUrl + 'ManageReservationRecord/reservationCancel', null, {
+      axiosInstance.put(this.$httpUrl + 'ManageReservationRecord/reservationCancel', null, {
         params: {
           id: rowData.id,
         }
@@ -314,7 +316,7 @@ export default {
       console.log(param)
       console.log(this.showFilter)
 
-      this.$axios.get(url, {
+      axiosInstance.get(url, {
         params: param
       }).then(res => res.data).then(res => {
         console.log(res)
@@ -334,7 +336,7 @@ export default {
         this.loadReservation()
     },
     loadReservation() {
-      this.$axios.get(this.$httpUrl + 'ManageReservationRecord/findAll', {
+      axiosInstance.get(this.$httpUrl + 'ManageReservationRecord/findAll', {
         params: {
           pageSize: this.pageSize,
           currentPage: this.currentPage,
