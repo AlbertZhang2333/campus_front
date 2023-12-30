@@ -10,7 +10,7 @@
         <el-input
             ref="input"
             v-model="input"
-            placeholder="输入商品名称"
+            placeholder="输入查询信息"
             @keyup.enter.native="searchHandler"
             id="input"
         >
