@@ -1,2 +1,8 @@
 node_modules
 dist
+babel.config.js
+jsconfig.json
+package-lock.json
+package.json
+vue.config.js
+webpack.dev.conf.js
