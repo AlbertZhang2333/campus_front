@@ -113,6 +113,8 @@
   </template>
     
   <script>
+  import axiosInstance from "@/main";
+
   export default {
     mounted(){
       this.handleInputChange();
@@ -158,8 +160,8 @@
           this.addRoom_dialog=true;
       },
       async submitAddRoom(submitOrUpdate,index){
-        const response = await this.$axios.post(`http://localhost:8081/ManageRoom/createRoom?roomName=${this.Room.roomName}&location=${this.Room.location}&capacity=${this.Room.capacity}`);
-        if(response.data.code == 400) alert(response.data.data);
+        const response = await axiosInstance.post(`http://localhost:8081/ManageRoom/createRoom?roomName=${this.Room.roomName}&location=${this.Room.location}&capacity=${this.Room.capacity}`);
+        if(response.data.code === 400) alert(response.data.data);
         else alert('submit!');
         this.addRoom_dialog=false;
         this.handleInputChange();
@@ -173,15 +175,15 @@
       },
       async updateAddRoom(){
         //将弹窗中的信息更新到数据库
-          const response = await this.$axios.put(`http://localhost:8081/ManageRoom/updateRoom?roomName=${this.Room.roomName}&location=${this.Room.location}&capacity=${this.Room.capacity}`);
-          if(response.data.code == 400) alert(response.data.data);
+          const response = await axiosInstance.put(`http://localhost:8081/ManageRoom/updateRoom?roomName=${this.Room.roomName}&location=${this.Room.location}&capacity=${this.Room.capacity}`);
+          if(response.data.code === 400) alert(response.data.data);
           else alert('update!');
           this.updateRoom_dialog=false;
           this.handleInputChange();
       },
       async deleteRoom(curRoom) {
-        const response = await this.$axios.delete(`http://localhost:8081/ManageRoom/deleteRoomByRoomName?roomName=${curRoom.roomName}`);
-        if(response.data.code == 400) alert(response.data.data);
+        const response = await axiosInstance.delete(`http://localhost:8081/ManageRoom/deleteRoomByRoomName?roomName=${curRoom.roomName}`);
+        if(response.data.code === 400) alert(response.data.data);
         else alert('delete!');
         this.handleInputChange();
       },
@@ -194,11 +196,11 @@
         }
       }, 300),
       async searchOnServer(roomInput, location) {
-        if(roomInput == ""){
-            const response = await this.$axios.get(`http://localhost:8081/ManageRoom/findRoomByLocation?location=${location}`);
+        if(roomInput === ""){
+            const response = await axiosInstance.get(`http://localhost:8081/ManageRoom/findRoomByLocation?location=${location}`);
             return response.data.data;
         }else {
-            const response = await this.$axios.get(`http://localhost:8081/ManageRoom/searchByRoomAndLocation?roomName=${roomInput}&location=${location}`);
+            const response = await axiosInstance.get(`http://localhost:8081/ManageRoom/searchByRoomAndLocation?roomName=${roomInput}&location=${location}`);
             console.log("response", response);
             return response.data.data;
         }

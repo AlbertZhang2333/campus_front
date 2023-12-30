@@ -19,10 +19,10 @@ const axiosInstance = axios.create();
 // 添加请求拦截器
 axiosInstance.interceptors.request.use(
     (config) => {
-        const storedToken = localStorage.getItem('jwtToken');
+        const storedToken = localStorage.getItem('passToken');
         console.log(storedToken)
         if (storedToken) {
-            config.headers['Authorization'] = `Bearer ${storedToken}`;
+            config.headers['passToken'] = `${storedToken}`;
         }
         return config;
     },

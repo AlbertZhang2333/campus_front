@@ -291,6 +291,9 @@ export default {
         } else {
           this.$message.warning('数据加载失败!');
         }
+      }).catch(error => {
+        console.error('Error adding comment:', error);
+        this.$message.error('评论发表失败，请重试!');
       });
     },
     clearForm() {

@@ -25,6 +25,8 @@
 </template>
 <script>
 
+import axiosInstance from "@/main";
+
 export default {
   name: 'Login',
   data() {
@@ -38,11 +40,11 @@ export default {
   methods: {
     async Login() {
       console.log("usermail:" + this.loginForm.userMail + "password:" + this.loginForm.password);
-      const response = await this.$axios.post(`http://localhost:8081/login/loginCheck?userMail=${this.loginForm.userMail}&password=${this.loginForm.password}`);
-      if (response.data.code == 400) {
+      const response = await axiosInstance.post(`http://localhost:8081/login/loginCheck?userMail=${this.loginForm.userMail}&password=${this.loginForm.password}`);
+      if (response.data.code === 400) {
         alert("登录失败");
       } else {
-        localStorage.setItem('jwtToken', response.data.data)
+        localStorage.setItem('passToken', response.data.data)
 
         alert('登录成功!');
         this.$router.push({path: '/shop'})
