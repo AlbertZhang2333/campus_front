@@ -110,23 +110,23 @@
                 <i class="el-icon-smile"></i> Emoji
               </el-button>
 
-                <el-popover
-                    placement="bottom"
-                    width="300"
-                    trigger="click"
-                    v-model="emojiPopoverRepVisible"
-                >
-                  <div style="text-align: center; display: flex; flex-wrap: wrap; justify-content: center;">
-                    <img
-                        v-for="emoji in emojiList"
-                        :key="emoji.title"
-                        :src="require(`@/assets/emoji/512_24x24/${emoji.url}`)"
-                        :alt="emoji.title"
-                        @click="selectEmoji('reply', emoji.title)"
-                        style="cursor: pointer; margin: 5px; width: 24px; height: 24px;"
-                    />
-                  </div>
-                </el-popover>
+              <el-popover
+                  placement="bottom"
+                  width="300"
+                  trigger="click"
+                  v-model="emojiPopoverRepVisible"
+              >
+                <div style="text-align: center; display: flex; flex-wrap: wrap; justify-content: center;">
+                  <img
+                      v-for="emoji in emojiList"
+                      :key="emoji.title"
+                      :src="require(`@/assets/emoji/512_24x24/${emoji.url}`)"
+                      :alt="emoji.title"
+                      @click="selectEmoji('reply', emoji.title)"
+                      style="cursor: pointer; margin: 5px; width: 24px; height: 24px;"
+                  />
+                </div>
+              </el-popover>
             </el-container>
           </el-card>
         </el-dialog>
@@ -147,6 +147,7 @@
 <script>
 import {date, time} from "mockjs/src/mock/random/date";
 import {int} from "mockjs/src/mock/random/basic";
+import axiosInstance from "@/main";
 
 export default {
   name: "Main",
@@ -243,7 +244,7 @@ export default {
       this.isReplyMode[index] = false;
     },
     loadReplyComments(index) {
-      this.$axios.post(this.$httpUrl + 'Comment/allCommentsReplyUser', null, {
+      axiosInstance.post(this.$httpUrl + 'Comment/allCommentsReplyUser', null, {
         params: {
           belongDepartment: this.belongDepartment,
           type: 1,
@@ -270,7 +271,7 @@ export default {
       )
     },
     loadComment() {
-      this.$axios.post(this.$httpUrl + 'Comment/allCommentsUser', null, {
+      axiosInstance.post(this.$httpUrl + 'Comment/allCommentsUser', null, {
         params: {
           belongDepartment: this.belongDepartment,
           type: 0,
@@ -334,7 +335,7 @@ export default {
         console.log(this.comments[index])
         console.log(this.replyCommentForm)
 
-        this.$axios.post(this.$httpUrl + 'Comment/addComment', this.replyCommentForm).then(res => res.data).then(res => {
+        axiosInstance.post(this.$httpUrl + 'Comment/addComment', this.replyCommentForm).then(res => res.data).then(res => {
           console.log(res)
           this.$message({
             message: '回复成功!',
@@ -358,7 +359,7 @@ export default {
 
         // console.log(this.commentForm.comment)
 
-        this.$axios.post(this.$httpUrl + 'Comment/addComment', this.commentForm).then(res => res.data).then(res => {
+        axiosInstance.post(this.$httpUrl + 'Comment/addComment', this.commentForm).then(res => res.data).then(res => {
           console.log(res)
           this.$message({
             message: '评论发表成功!',
@@ -380,7 +381,7 @@ export default {
     },
     deleteReplyComment(index) {
       this.replyComments[index].state = 0;
-      this.$axios.put(`${this.$httpUrl}Comment/updateComment`, this.replyComments[index])
+      axiosInstance.put(`${this.$httpUrl}Comment/updateComment`, this.replyComments[index])
           .then(res => res.data)
           .then(res => {
             console.log(res);
@@ -397,7 +398,7 @@ export default {
     },
     deleteComment(index) {
       this.comments[index].state = 0
-      this.$axios.put(`${this.$httpUrl}Comment/updateComment`, this.comments[index])
+      axiosInstance.put(`${this.$httpUrl}Comment/updateComment`, this.comments[index])
           .then(res => res.data)
           .then(res => {
             console.log(res);

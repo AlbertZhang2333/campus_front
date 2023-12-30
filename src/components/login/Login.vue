@@ -1,24 +1,26 @@
 <template>
   <body id="poster">
-    <el-form class="login-container" label-position="left" label-width="0px">
-      <h3 class="login_title">
-        系统登录
-        <el-button @click="toRegister">点我注册</el-button>
-      </h3>
-      <el-form-item label="">
-        <el-input type="text" v-model="loginForm.userMail" autocomplete="off" placeholder="账号"></el-input>
-      </el-form-item>
-      <el-form-item label="">
-        <el-input type="password" v-model="loginForm.password" autocomplete="off" placeholder="密码"></el-input>
-      </el-form-item>
-      <el-form-item style="width: 100%;">
-        <el-button type="primary" style="width:100% ; background:#505814 ;border:none;" v-on:click="Login">登录</el-button>
-      </el-form-item>
-      <el-form-item style="width: 100%;">
-        <el-button type="primary" style="width:100% ; background:#505814 ;border:none;"
-          v-on:click="toForgotPassword">忘记密码</el-button>
-      </el-form-item>
-    </el-form>
+  <el-form class="login-container" label-position="left" label-width="0px">
+    <h3 class="login_title">
+      系统登录
+      <el-button @click="toRegister">点我注册</el-button>
+    </h3>
+    <el-form-item label="">
+      <el-input type="text" v-model="loginForm.userMail" autocomplete="off" placeholder="账号"></el-input>
+    </el-form-item>
+    <el-form-item label="">
+      <el-input type="password" v-model="loginForm.password" autocomplete="off" placeholder="密码"></el-input>
+    </el-form-item>
+    <el-form-item style="width: 100%;">
+      <el-button type="primary" style="width:100% ; background:#505814 ;border:none;" v-on:click="Login">登录
+      </el-button>
+    </el-form-item>
+    <el-form-item style="width: 100%;">
+      <el-button type="primary" style="width:100% ; background:#505814 ;border:none;"
+                 v-on:click="toForgotPassword">忘记密码
+      </el-button>
+    </el-form-item>
+  </el-form>
   </body>
 </template>
 <script>
@@ -37,16 +39,20 @@ export default {
     async Login() {
       console.log("usermail:" + this.loginForm.userMail + "password:" + this.loginForm.password);
       const response = await this.$axios.post(`http://localhost:8081/login/loginCheck?userMail=${this.loginForm.userMail}&password=${this.loginForm.password}`);
-      if(response.data.code == 400) {alert("登录失败");}
-      else{ alert('登录成功!');
-      this.$router.push({ path: '/shop' })
+      if (response.data.code == 400) {
+        alert("登录失败");
+      } else {
+        localStorage.setItem('jwtToken', response.data.data)
+
+        alert('登录成功!');
+        this.$router.push({path: '/shop'})
       }
     },
     toForgotPassword() {
-      this.$router.push({ path: '/ForgotPassword' })
+      this.$router.push({path: '/ForgotPassword'})
     },
     toRegister() {
-      this.$router.push({ path: '/Register' })
+      this.$router.push({path: '/Register'})
     }
   }
 }
