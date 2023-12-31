@@ -1,17 +1,17 @@
-<!--<template>-->
-<!--  <div>-->
-<!--    <Main></Main>-->
-<!--  </div>-->
-<!--</template>-->
+<template>
+  <div>
+    <Main></Main>
+  </div>
+</template>
 
-<!--<script>-->
-<!--import Main from '@/components/chat/Chat.vue'-->
+<script>
+import Main from '@/components/chat/Chat.vue'
 
-<!--export default {-->
-<!--  components: {Main}-->
-<!--}-->
-<!--</script>-->
+export default {
+  components: {Main}
+}
+</script>
 
-<!--<style scoped>-->
+<style scoped>
 
-<!--</style>-->
+</style>

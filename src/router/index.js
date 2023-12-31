@@ -18,7 +18,7 @@ import Home from "@/views/Home.vue";
 import Sustech from "@/views/Sustech.vue";
 import VenueInfo from "@/views/VenueInfo.vue";
 import UserRecord from "@/views/shopUserRecord.vue";
-// import Chat from "@/views/Chat.vue";
+import Chat from "@/views/Chat.vue";
 
 Vue.use(VueRouter)
 
@@ -96,10 +96,10 @@ const routes = [
         path: '*',
         redirect: '/home'
     },
-    // {
-    //     path: '/chat',
-    //     component: Chat
-    // }
+    {
+        path: '/chat',
+        component: Chat
+    }
 ]
 
 const router = new VueRouter({
