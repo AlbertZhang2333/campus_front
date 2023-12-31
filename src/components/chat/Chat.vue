@@ -111,10 +111,17 @@ export default {
       // 当用户单击fab按钮打开聊天时调用
       this.isChatOpen = true
       this.newMessagesCount = 0
+
+      this.initSocket()
     },
     closeChat() {
       // // 当用户单击按钮关闭聊天时调用
       this.isChatOpen = false
+
+      if (this.socket) {
+        this.socket.close();
+        this.socket = null;
+      }
     },
     handleScrollToTop() {
 
@@ -144,20 +151,14 @@ export default {
             }
           });
     },
-  },
-  mounted() {
-    // Adding WebSocket event listener
-    this.getUserMail().then(() => {
-      // 在获取用户邮件后创建 WebSocket 连接
-      console.log(this.userMail)
-      this.socket = new WebSocket(`ws://localhost:8081/ws/${this.userMail}?passToken=${localStorage.getItem('passToken')}`);
-      this.socket.addEventListener('message', this.handleWebSocketMessage);
-    });
-    // this.socket.addEventListener('message', this.handleWebSocketMessage);
-  },
-  beforeDestroy() {
-    // Removing WebSocket event listener
-    this.socket.removeEventListener('message', this.handleWebSocketMessage);
+    initSocket() {
+      this.getUserMail().then(() => {
+        // 在获取用户邮件后创建 WebSocket 连接
+        console.log(this.userMail)
+        this.socket = new WebSocket(`ws://localhost:8081/ws/${this.userMail}?passToken=${localStorage.getItem('passToken')}`);
+        this.socket.addEventListener('message', this.handleWebSocketMessage);
+      });
+    },
   },
 };
 </script>
