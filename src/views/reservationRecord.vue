@@ -4,6 +4,14 @@
     <el-button type="primary" style="width:30% ; background:#505814 ;border:none;"
         v-on:click="$router.push(`/reservation`)">继续预约</el-button>
     </el-aside>
+    <el-date-picker
+    v-model="selectedDate"
+    align="right"
+    type="date"
+    value-format="yyyy-MM-dd"
+    placeholder="选择日期"
+    @change="showReservation">
+    </el-date-picker>
     <el-table
     :data="reservationRecordList"
     style="width: 100%">
@@ -61,7 +69,7 @@
 import axiosInstance from "@/main";
 export default {
   mounted() {
-    this.loadUser()
+    this.loadReservation()
   },
   data() {
     return {
@@ -77,26 +85,35 @@ export default {
       pageSize: 5,
       currentPage: 1,
       total: 0,
+      selectedDate: "",
     }
   },
   methods: {
+    async showReservation(){
+      const response = await axiosInstance.get(`http://localhost:8081/Reservation/UserCheckDateSelfReservation?date=${this.selectedDate}`);
+      if(response.data.code == 400) alert(response.data.data);
+      else{
+        this.reservationRecordList = response.data.data;
+        this.total = response.data.total;
+      }
+    },
     async cancelReservation(curReservation){
-      const response = await axiosInstance.get(`http://localhost:8081/Reservation/reservationCancel?id=${curReservation.id}`);
+      const response = await axiosInstance.put(`http://localhost:8081/Reservation/reservationCancel?id=${curReservation.id}`);
       if(response.data.code == 400) alert(response.data.data);
       else alert("删除成功");
-      this.loadUser();
+      this.loadReservation();
     },
     
     handleSizeChange(val) {
       this.pageSize = val
       this.currentPage = 1
-      this.loadUser()
+      this.loadReservation()
     },
     handleCurrentChange(val) {
       this.currentPage = val
-      this.loadUser()
+      this.loadReservation()
     },
-    async loadUser() {
+    async loadReservation() {
       axiosInstance.get(`http://localhost:8081/Reservation/UserCheckSelfHistoryReservation?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
       .then(res => res.data).then(res => {
             if (res.code === 200) {
