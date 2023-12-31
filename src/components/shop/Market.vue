@@ -120,7 +120,7 @@ export default {
 
 
 
-<style>
+<style scoped>
 .Menu_style{
     color: #eee176;
     font-size:18px;

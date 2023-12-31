@@ -156,6 +156,7 @@ export default {
         // 在获取用户邮件后创建 WebSocket 连接
         console.log(this.userMail)
         this.socket = new WebSocket(`ws://localhost:8081/ws/${this.userMail}?passToken=${localStorage.getItem('passToken')}`);
+        console.log(666)
         this.socket.addEventListener('message', this.handleWebSocketMessage);
       });
     },
