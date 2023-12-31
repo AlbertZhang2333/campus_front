@@ -16,6 +16,7 @@ import RoomAdmin from "@/views/roomAdmin.vue";
 import Home from "@/views/Home.vue";
 import Sustech from "@/views/Sustech.vue";
 import UserRecord from "@/views/shopUserRecord.vue";
+import Chat from "@/views/Chat.vue";
 
 Vue.use(VueRouter)
 
@@ -85,6 +86,10 @@ const routes = [
         path: '*',
         redirect: '/home'
     },
+    {
+        path: '/chat',
+        component: Chat
+    }
 ]
 
 const router = new VueRouter({
