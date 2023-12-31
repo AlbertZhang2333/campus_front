@@ -2,12 +2,6 @@
   <div>
     <el-container style="max-width: 600px; margin: 0 auto;">
       <el-form :model="commentForm" ref="commentForm" size="small">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="commentForm.userName"></el-input>
-        </el-form-item>
-        <el-form-item label="用户邮箱" prop="userMail">
-          <el-input v-model="commentForm.userMail"></el-input>
-        </el-form-item>
         <el-form-item label="评论内容" prop="content">
           <el-input type="textarea" v-model="commentForm.comment"></el-input>
         </el-form-item>
@@ -51,7 +45,7 @@
           <p class="comment-time">评论时间：{{ comment.date + ' ' + comment.time }}</p>
           <el-button @click="() => deleteComment(index)" type="danger" size="mini" class="comment-action">删除
           </el-button>
-          <el-button @click="() => openReplyDialog(index)" type="primary" size="mini" class="comment-action">回复
+          <el-button @click="() => openReplyDialog(index)" type="primary" size="mini" class="comment-action" v-if="params.hasReply">回复
           </el-button>
         </el-card>
 
@@ -90,12 +84,6 @@
           <!-- 回复信息展示框 -->
           <el-card>
             <el-form :model="replyCommentForm" ref="replyCommentForm" size="small">
-              <el-form-item label="用户名" prop="username">
-                <el-input v-model="replyCommentForm.userName"></el-input>
-              </el-form-item>
-              <el-form-item label="用户邮箱" prop="userMail">
-                <el-input v-model="replyCommentForm.userMail"></el-input>
-              </el-form-item>
               <el-form-item label="评论内容" prop="content">
                 <el-input type="textarea" v-model="replyCommentForm.comment"></el-input>
               </el-form-item>
@@ -191,14 +179,26 @@ export default {
       total: 0,
       totalRep: 0,
 
-      belongDepartment: 0,
-
       emojiPopoverVisible: false,
       emojiPopoverRepVisible: false,
       emojiList: [],
 
       processedComments: [], // 保存处理后的评论内容
       processedReplyComments: [],
+
+      params: {
+        urlList: {
+          commentUrl: null,
+          replyCommentUrl: null,
+          submitCommentUrl: null,
+          submitReplyCommentUrl: null,
+          deleteCommentUrl: null,
+          deleteReplyCommentUrl: null,
+        },
+        type: int,
+        belongDepartment: 0,
+        hasReply: false,
+      },
     };
   },
   methods: {
@@ -244,9 +244,9 @@ export default {
       this.isReplyMode[index] = false;
     },
     loadReplyComments(index) {
-      axiosInstance.post(this.$httpUrl + 'Comment/allCommentsReplyUser', null, {
+      axiosInstance.post(this.$httpUrl + this.params.urlList.replyCommentUrl, null, {
         params: {
-          belongDepartment: this.belongDepartment,
+          belongDepartment: this.params.belongDepartment,
           type: 1,
           replyId: this.comments[index].id,
           pageSize: this.pageSizeRep,
@@ -271,13 +271,20 @@ export default {
       )
     },
     loadComment() {
-      axiosInstance.post(this.$httpUrl + 'Comment/allCommentsUser', null, {
-        params: {
-          belongDepartment: this.belongDepartment,
-          type: 0,
-          pageSize: this.pageSize,
-          currentPage: this.currentPage
-        }
+      const requestParams = {
+        belongDepartment: this.params.belongDepartment,
+        type: this.params.type,
+        pageSize: this.pageSize,
+        currentPage: this.currentPage
+      };
+
+// 添加 replyid 参数（如果不为 null）
+      if (this.replyid !== null) {
+        requestParams.replyid = this.params.replyId;
+      }
+
+      axiosInstance.post(this.$httpUrl + this.params.urlList.commentUrl, null, {
+        params: requestParams
       }).then(res => res.data).then(res => {
         console.log(res);
         if (res.code === 200) {
@@ -293,7 +300,7 @@ export default {
         }
       }).catch(error => {
         console.error('Error adding comment:', error);
-        this.$message.error('评论发表失败，请重试!');
+        this.$message.warning('数据加载失败!');
       });
     },
     clearForm() {
@@ -332,13 +339,13 @@ export default {
         this.replyCommentForm.date = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate();
         this.replyCommentForm.comment = this.replyCommentForm.comment.toString();
         this.replyCommentForm.replyId = this.comments[index].id;
-        this.replyCommentForm.belongDepartment = this.belongDepartment;
+        this.replyCommentForm.belongDepartment = this.params.belongDepartment;
         this.replyCommentForm.type = 1;
         console.log(index)
         console.log(this.comments[index])
         console.log(this.replyCommentForm)
 
-        axiosInstance.post(this.$httpUrl + 'Comment/addComment', this.replyCommentForm).then(res => res.data).then(res => {
+        axiosInstance.post(this.$httpUrl + this.params.urlList.submitReplyCommentUrl, this.replyCommentForm).then(res => res.data).then(res => {
           console.log(res)
           this.$message({
             message: '回复成功!',
@@ -362,7 +369,7 @@ export default {
 
         // console.log(this.commentForm.comment)
 
-        axiosInstance.post(this.$httpUrl + 'Comment/addComment', this.commentForm).then(res => res.data).then(res => {
+        axiosInstance.post(this.$httpUrl + this.params.urlList.submitCommentUrl, this.commentForm).then(res => res.data).then(res => {
           console.log(res)
           this.$message({
             message: '评论发表成功!',
@@ -384,7 +391,7 @@ export default {
     },
     deleteReplyComment(index) {
       this.replyComments[index].state = 0;
-      axiosInstance.put(`${this.$httpUrl}Comment/updateComment`, this.replyComments[index])
+      axiosInstance.put(this.$httpUrl + this.params.urlList.deleteReplyCommentUrl, this.replyComments[index])
           .then(res => res.data)
           .then(res => {
             console.log(res);
@@ -401,7 +408,7 @@ export default {
     },
     deleteComment(index) {
       this.comments[index].state = 0
-      axiosInstance.put(`${this.$httpUrl}Comment/updateComment`, this.comments[index])
+      axiosInstance.put(this.$httpUrl + this.params.urlList.deleteCommentUrl, this.comments[index])
           .then(res => res.data)
           .then(res => {
             console.log(res);
@@ -446,9 +453,6 @@ export default {
         };
         this.emojiList.push(dataObject)
       }
-    },
-    chooseEmoji(inner) {
-      this.commentForm.comment += '[' + inner + ']';
     },
   },
   beforeMount() {
