@@ -64,13 +64,19 @@ export default {
       if (this.commentForm.comment !== "") {
         const date = new Date(); // 获取当前时间戳
         this.commentForm.time = date.getHours().toString() + ':' + date.getMinutes().toString() + ':' + date.getSeconds().toString();
-        this.commentForm.date = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString() + '-' + date.getDate();
+        // 获取年份
+        var year = date.getFullYear();
+// 获取月份，并确保为两位数
+        var month = (date.getMonth() + 1).toString().padStart(2, '0');
+// 获取日期，并确保为两位数
+        var day = date.getDate().toString().padStart(2, '0');
+// 将年份、月份和日期拼接成字符串
+        this.commentForm.date = year + '-' + month + '-' + day;
         this.commentForm.comment = this.commentForm.comment.toString();
         // this.commentForm.type = 0;
         this.commentForm.replyId = this.replyId;
 
         console.log(this.commentForm)
-    
 
         axiosInstance.post(this.$httpUrl + 'Comment/addComment', this.commentForm).then(res => res.data).then(res => {
           console.log(res)
