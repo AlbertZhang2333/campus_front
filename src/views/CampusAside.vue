@@ -79,7 +79,7 @@ export default {
         },
         {
           title: 'Venue Appointment',
-          index: '/appointment'
+          index: '/reservation'
         },
         {
           title: 'Shopping',

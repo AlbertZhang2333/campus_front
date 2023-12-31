@@ -15,7 +15,8 @@
         "mockjs": "^1.1.0",
         "vue": "^2.7.15",
         "vue-beautiful-chat": "^2.5.0",
-        "vue-router": "^3.6.5"
+        "vue-router": "^3.6.5",
+        "lodash": "^4.17.21"
     },
     "devDependencies": {
         "@babel/core": "^7.12.16",

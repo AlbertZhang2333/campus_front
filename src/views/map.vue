@@ -1,33 +1,11 @@
 <template>
-  <el-container style="height: 100vh; overflow: hidden;">
-    <el-header style="position: fixed; width: 100%; z-index: 1000;">
-      <Header></Header>
-    </el-header>
-    <el-container style="height: calc(100% - 64px); display: flex;">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246); position: fixed; height: 100vh; overflow-y: auto;">
-        <Aside></Aside>
-      </el-aside>
-      <el-container style="margin-left: 200px; margin-top:100px; height: 100%; overflow-y: auto;">
-        <el-main style="height: 100%;">
-          <Main></Main>
-        </el-main>
-        <el-footer style="height: 10%;">
-          <Foot></Foot>
-        </el-footer>
-      </el-container>
-    </el-container>
-  </el-container>
+  <MapAdmin></MapAdmin>
 </template>
     
 <script>
-    
-  import Main from "@/components/map/MapContainer.vue"
-  import Aside from "@/components/map/MapAside";
-  import Header from "@/components/global/Header.vue"
-  import Foot from "@/components/global/Foot.vue";
-  
+  import MapAdmin from "@/components/map/MapAdmin.vue";
   export default {
-    components: {Foot, Aside, Main, Header},
+    components: {MapAdmin},
     data() {
       return {
         text: '',
@@ -37,7 +15,7 @@
   }
 </script>
     
-<style>
+<style scoped>
   .el-aside {
     color: #333;
   }
