@@ -24,7 +24,6 @@ const axiosInstance = axios.create();
 axiosInstance.interceptors.request.use(
     (config) => {
         const storedToken = localStorage.getItem('passToken');
-        console.log(storedToken)
         if (storedToken) {
             config.headers['passToken'] = `${storedToken}`;
         }

@@ -24,14 +24,15 @@
 </template>
 
 <script>
-// 获取用户邮件地址，这里可能需要根据你的实际情况从后端获取
-const userMail = '3344767250@qq.com';
+import axiosInstance from "@/main";
+const AdminUserMail = '3077161150@qq.com';
 
-// 使用实际的用户邮件地址构建 WebSocket 连接地址
-const socket = new WebSocket(`ws://localhost:8081/ws/${userMail}`);
 export default {
   data() {
     return {
+      userMail: null,
+      // Other data properties...
+      socket: null,
       participants: [
         {
           id: 'user1',
@@ -46,8 +47,8 @@ export default {
       ], // 对话的所有参与者的列表。' name '是用户名，' id '用于建立消息的作者，' imageUrl '应该是用户头像。
       titleImageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png',
       messageList: [
-        {type: 'text', author: `me`, data: {text: `Say yes!`}},
-        {type: 'text', author: `user1`, data: {text: `No.`}}
+        {type: 'text', author: `me`, data: {text: `Say yes!`}, toUserMail: '3344767250@qq.com'},
+        {type: 'text', author: `user1`, data: {text: `No.`}, toUserMail: '3344767250@qq.com'}
       ], // // 要显示的消息列表可以动态地分页和调整
       newMessagesCount: 0,
       isChatOpen: false, // 确定聊天窗口应该打开还是关闭
@@ -90,9 +91,14 @@ export default {
       if (message.data.text.length > 0) {
         this.newMessagesCount = this.isChatOpen ? this.newMessagesCount : this.newMessagesCount + 1
 
-        this.onMessageWasSent(message);
+        const packMessage = {
+          toUserMail: AdminUserMail,
+          content: message.data.text,
+        }
         // 发送消息到后端
-        socket.send(JSON.stringify(message));
+        this.socket.send(JSON.stringify(packMessage))
+
+        this.onMessageWasSent(message);
       }
     },
     onMessageWasSent(message) {
@@ -123,15 +129,35 @@ export default {
       const m = this.messageList.find(m => m.id === message.id);
       m.isEdited = true;
       m.data.text = message.data.text;
-    }
+    },
+    getUserMail() {
+      console.log(666)
+      console.log(localStorage.getItem('passToken'))
+      return axiosInstance.get(this.$httpUrl + 'TheLoginUserInfo/getLoginUserMail')
+          .then(res => res.data)
+          .then(res => {
+            if (res.code === 200) {
+              console.log(res.data)
+              this.userMail = res.data;
+              console.log(this.userMail);
+              return res.data; // 返回用户邮件
+            }
+          });
+    },
   },
   mounted() {
-    // 添加WebSocket事件监听
-    socket.addEventListener('message', this.handleWebSocketMessage);
+    // Adding WebSocket event listener
+    this.getUserMail().then(() => {
+      // 在获取用户邮件后创建 WebSocket 连接
+      console.log(this.userMail)
+      this.socket = new WebSocket(`ws://localhost:8081/ws/${this.userMail}?passToken=${localStorage.getItem('passToken')}`);
+      this.socket.addEventListener('message', this.handleWebSocketMessage);
+    });
+    // this.socket.addEventListener('message', this.handleWebSocketMessage);
   },
   beforeDestroy() {
-    // 移除WebSocket事件监听
-    socket.removeEventListener('message', this.handleWebSocketMessage);
+    // Removing WebSocket event listener
+    this.socket.removeEventListener('message', this.handleWebSocketMessage);
   },
 };
 </script>
