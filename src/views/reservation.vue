@@ -2,7 +2,7 @@
   <div>
     <el-container style="height: 1000px; border: 1px solid #eee">
       <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
-        <el-select v-model="curLocation" placeholder="请选择地点">
+        <el-select v-model="curLocation" @change="loadRoomList" placeholder="请选择地点">
           <el-option
             v-for="location in locations"
             :key="location"
@@ -43,7 +43,9 @@
             v-model="selectedDate"
             align="right"
             type="date"
+            value-format="yyyy-MM-dd"
             placeholder="选择日期"
+            @change="showReservation"
             :picker-options="pickerOptions">
           </el-date-picker>
           <div class="status-text">当前地点:{{ this.selectedRoomName }}</div>
@@ -59,9 +61,6 @@
           </div>
         </div>
 
-        <!-- <button @click="canNotOcc">过时不能选</button>
-        <button @click="tryOc">被占用</button> -->
-
         <el-form-item style="width: 100%;">
           <el-button type="primary" style="width:30% ; background:#505814 ;border:none;"
             v-on:click="showTable">预约</el-button>
@@ -71,32 +70,37 @@
 
     </el-container>
 
-    <el-dialog :visible.sync="seeTable" class="dialog_style">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-dialog :visible.sync="dialog_visible" class="dialog_style">
+      <el-form 
+          ref="reservation"
+          :model="reservation"
+          :rules="reservationRule"
+          label-width="100px"
+          label-position="right"
+          size="small"
+          class="dialog-form">
         <el-form-item label="房间号:">
-          <div>{{ruleForm.location}}  {{ ruleForm.roomName }}</div>
+          <div>{{ this.selectedRoomName }}</div>
         </el-form-item>
         <el-form-item label="活动日期">
-          <div>{{ ruleForm.date }}</div>
+          <div>{{ this.selectedDate }}</div>
         </el-form-item>
         <el-form-item label="活动时间">
-          <el-time-select placeholder="起始时间" v-model="ruleForm.startTime" :picker-options="{
+          <el-time-select placeholder="起始时间" v-model="reservation.startTime" :picker-options="{
             start: '08:00',
             end: '23:00'
           }">
           </el-time-select>
-          <el-time-select placeholder="结束时间" v-model="ruleForm.endTime" :picker-options="{
+          <el-time-select placeholder="结束时间" v-model="reservation.endTime" :picker-options="{
             start: '08:00',
             end: '23:00',
-            minTime: startTime//这里改不能使用的时间
+            minTime: reservation.startTime,
           }">
           </el-time-select>
 
         </el-form-item>
         <el-form-item>
-          <!-- <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button> -->
-          <el-button type="primary" @click="submitForm(ruleForm)">立即创建</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-button type="primary" @click="submitForm()">立即创建</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -110,68 +114,30 @@ export default {
   data() {
     return {
       roomList:[],
-      locations:['一丹讨论间', "琳恩讨论间", "涵泳讨论间"],
+      locations:[],
       curLocation: '一丹讨论间',
       reservationList: [],
       selectedLocation: '',
       selectedRoomName: '',
       selectedDate: '',
       pickerOptions: {
-          disabledDate(time) {
-            const date = new Date();
-            date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
-            return time.getTime() < Date.now() - 8.64e7 || time.getTime() > date.getTime();
-          },
+        disabledDate(time) {
+          const date = new Date();
+          date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
+          return time.getTime() < Date.now() - 8.64e7 || time.getTime() > date.getTime();
         },
-      mintime:'8:00',
-      tempdate1: '1',
-      tempdate2: '2',
-      tempdate3: '3',
-      tempdate4: '4',
-
-      radio1: '',
-
-      // imgUrl: require('../assets/2.png'),
-
-
-      // startTime: '',
-      // endTime: '',
-      seeTable: false,
-
-      ruleForm: {
-        roomName: '',
+      },
+      currentTime: '',
+      currentDate: '',
+      dialog_visible: false,
+      reservation: {
         startTime: '',
         endTime: '',
-        date: '',
-        location: '',
       },
-      rules: {
-        name: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ],
-        region: [
-          { required: true, message: '请选择活动区域', trigger: 'change' }
-        ],
-        date1: [
-          { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-        ],
-        date2: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-        ],
-        type: [
-          { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-        ],
-        resource: [
-          { required: true, message: '请选择活动资源', trigger: 'change' }
-        ],
-        desc: [
-          { required: true, message: '请填写活动形式', trigger: 'blur' }
-        ]
+      reservationRule: {
+        startTime: {required:true, message:"开始时间不能为空", trigger:'blur'},
+        endTime: {required:true, message:"结束时间不能为空", trigger:'blur'},
       },
-
-      curtime: '14:00',
-      currentTime: '',
       // state有三个状态：A：未被占用 未染色，B：已被占用 染成红色，C：已经不能被占用
       dataArray: [
         { value: '08:00', state: 'A' },
@@ -208,130 +174,87 @@ export default {
     }
   },
   mounted() {
-    // 在组件挂载后开始更新时间
-    this.currentTime = this.updateCurrentTime;
-    // 每隔一秒更新一次时间
-    setInterval(() => {
-      this.currentTime = this.updateCurrentTime;
-    }, 1000);
+    this.updateCurrentTime();
     this.loadRoomList();
+    this.loadLocation();
+    this.selectedDate = this.currentDate;
   },
-
-  computed: {
-    updateCurrentTime() {
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-      const seconds = now.getSeconds();
-
-      const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-
-      this.selectedDate = now.toLocaleString('zh-CN', options);
-
-      // 格式化时间，保证小时、分钟、秒数始终是两位数
-      const formattedTime = `${this.padZero(hours)}:${this.padZero(minutes)}:${this.padZero(seconds)}`;
-
-      return formattedTime;
-    }
-  },
-
   methods: {
+    async loadLocation(){
+      const response = await axiosInstance.get(`http://localhost:8081/Room/getAllLocation`);
+      if(response.data.code == 400) alert(response.data.data);
+      else this.locations = response.data.data;
+    },
+    updateCurrentTime() {
+      var date = new Date();
+      var nowMonth = date.getMonth() + 1;
+      var strDate = date.getDate();
+      var seperator = "-";
+      if (nowMonth >= 1 && nowMonth <= 9) {
+        nowMonth = "0" + nowMonth;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      this.currentDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
+      this.currentTime = date.getHours() + ":" + date.getMinutes();
+    },
     async loadRoomList(){
       const response = await axiosInstance.get(`http://localhost:8081/Room/findRoomByLocation?location=${this.curLocation}`);
-      if(response.data.code == 400) alert("查询失败");
+      if(response.data.code == 400) alert(response.data.data);
       else this.roomList = response.data.data;
     },
 
     async showReservation(curRoom){
-      this.selectedRoomName = curRoom.roomName;
-      this.selectedLocation
-      const response = await axiosInstance.get(`http://localhost:8081/Reservation/reservationRecordByRoomNameAndDate?roomName=${curRoom.roomName}&date=${this.selectedDate}`);
+      this.resetArray();
+      if(curRoom != undefined && curRoom.roomName != undefined) this.selectedRoomName = curRoom.roomName;
+      const response = await axiosInstance.get(`http://localhost:8081/Reservation/reservationRecordByRoomNameAndDate?roomName=${this.selectedRoomName}&date=${this.selectedDate}`);
       if(response.data.code == 400) alert("查询失败");
       else this.reservationList = response.data.data;
-    },
-
-    trytryneed() {
-      this.tempdate1 = 11;
-      this.tempdate2 = 22;
-
+      if(this.selectedDate == this.currentDate){
+        for (var m in this.dataArray) {
+          if (this.dataArray[m].value.localeCompare(this.currentTime) <= 0) {
+            this.dataArray[m].state = 'C';
+          }
+        }
+      }
+      for(var i = 0, len = this.reservationList.length; i < len; i++) {
+        if(this.reservationList[i].date != this.selectedDate) continue;
+        var startTime = this.reservationList[i].startTime;
+        var endTime = this.reservationList[i].endTime;
+        var start = startTime.split(":");
+        var end = endTime.split(":");
+        var startHour = parseInt(start[0]);
+        var startMinute = parseInt(start[1]);
+        var endHour = parseInt(end[0]);
+        var endMinute = parseInt(end[1]);
+        var startIndex = (startHour - 8) * 2 + startMinute / 30;
+        var endIndex = (endHour - 8) * 2 + endMinute / 30;
+        for(var j = startIndex; j < endIndex; j++) {
+          this.dataArray[j].state = 'B';
+        }
+      }
     },
 
     showTable() {
-      this.seeTable = true;
+      this.dialog_visible = true;
     },
 
-    submitForm(formName) {
-      //下面是刚才写的 277-306
-      this.tempdate1 = formName.date1;
-      this.tempdate2 = formName.date2;
-
-      // 将时间字符串转换为 Date 对象
-      const time0 = new Date(`2000-01-01 ${this.mintime}`);
-      const time1 = new Date(`2000-01-01 ${this.tempdate1}`);
-      const time2 = new Date(`2000-01-01 ${this.tempdate2}`);
-
-      // 计算时间差
-      const timeDiff1 = time1 - time0;
-      const timeDiff2 = time2 - time0;
-
-      // 将时间差转换为 HH:mm 格式
-      const hours1 = Math.floor(timeDiff1 / (1000 * 60 * 60));
-      const minutes1 = Math.floor((timeDiff1 % (1000 * 60 * 60)) / (1000 * 60));
-
-      const hours2 = Math.floor(timeDiff2 / (1000 * 60 * 60));
-      const minutes2 = Math.floor((timeDiff2 % (1000 * 60 * 60)) / (1000 * 60));
-
-      // 计算,转换为分钟并除以 30,tempdate3,tempdate4分别为dataArray的index
-      this.tempdate3 = Math.floor((hours1 * 60 + minutes1) / 30);
-      this.tempdate4 = Math.floor((hours2 * 60 + minutes2) / 30);
-
-      // this.dataArray[this.tempdate3].state = 'B';
-      // this.dataArray[this.tempdate4].state = 'B';
-
-      for (var m = this.tempdate3; m <= this.tempdate4 ; m++) {
-        this.dataArray[m].state = 'B';
-      }
-
-
-      //下面是提交表
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     alert('submit!');
-      //   } else {
-      //     console.log('error submit!!');
-      //     return false;
-      //   }
-      // });
-    },
-
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    },
-
-    canNotOcc() {
-
+    resetArray() {
       for (var m in this.dataArray) {
-        if (this.dataArray[m].value.localeCompare(this.currentTime) <= 0) {
-          this.dataArray[m].state = 'C';
-        }
+        this.dataArray[m].state = 'A';
       }
-
     },
 
-    tryOc() {
-      this.dataArray[20].state = 'B';
-      this.dataArray[29].state = 'B';
+    async submitForm() {
+      this.dialog_visible = false;
+      const response = await axiosInstance.post(`http://localhost:8081/Reservation/reservationAdd?roomName=${this.selectedRoomName}&date=${this.selectedDate}&startTime=${this.reservation.startTime}:00&endTime=${this.reservation.endTime}:00&location=${this.curLocation}`);
+      if(response.data.code == 400) alert(response.data.data);
+      else {
+        alert("预约成功");
+        this.showReservation();
+      }
     },
-
-    padZero(value) {
-      // 补零函数，确保数值始终是两位数
-      return value < 10 ? `0${value}` : value;
-    },
-  },
-
-  padZero(value) {
-    // 补零函数，确保数值始终是两位数
-    return value < 10 ? `0${value}` : value;
   },
 
 }
