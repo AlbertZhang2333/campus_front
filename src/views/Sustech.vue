@@ -25,7 +25,8 @@
         :model="form"
         :rules="rules"
         @keyup.enter.native="submit()"
-        @submit.native.prevent>
+        @submit.native.prevent
+      >
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入"></el-input>
         </el-form-item>

@@ -1,13 +1,7 @@
 <template>
   <div>
 <!--    <Administrators_Market></Administrators_Market>-->
-    <el-header>
-      <Market_headline/>
-    </el-header>
     <el-container>
-      <el-aside>
-        <Aside></Aside>
-      </el-aside>
       <el-main>
         <Main></Main>
       </el-main>
@@ -17,17 +11,11 @@
 </template>
   
   <script>
-  import Aside from "@/components/shop/Aside.vue";
-  import Market_headline from "@/components/comments/Header"
-  import Foot from "@/components/comments/Foot";
   import Main from "@/components/shop/Market.vue";
   
   
   export default {
     components: {
-        Aside,
-        Market_headline,
-        Foot,
         Main,
     }
   }
