@@ -9,6 +9,7 @@ import Comment from '@/views/comment.vue'
 import CommentAdmin from "@/views/commentAdmin.vue";
 import ReservationAdmin from "@/views/reservationAdmin.vue";
 import Reservation from "@/views/reservation.vue";
+import ReservationRecord from "@/views/reservationRecord.vue";
 import User from "@/components/user/AccountAdmin.vue"
 import Login from "@/components/login/Login.vue"
 import Register from "@/components/login/Register.vue"
@@ -63,8 +64,12 @@ const routes = [
         component: ReservationAdmin
     },
     {
-        path: '/reservation/room/admin',
+        path: '/reservation/admin/room',
         component: RoomAdmin
+    },
+    {
+        path: '/reservation/record',
+        component: ReservationRecord
     },
     {
         path: '/user',

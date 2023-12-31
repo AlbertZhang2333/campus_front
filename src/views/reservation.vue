@@ -2,6 +2,8 @@
   <div>
     <el-container style="height: 1000px; border: 1px solid #eee">
       <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
+        <el-button type="primary" style="width:30% ; background:#505814 ;border:none;"
+          v-on:click="$router.push(`/reservation/record`)">预约记录</el-button>
         <el-select v-model="curLocation" @change="loadRoomList" placeholder="请选择地点">
           <el-option
             v-for="location in locations"
