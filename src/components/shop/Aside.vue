@@ -23,10 +23,6 @@
               </el-menu-item>
             </router-link>
           </el-menu-item>
-          <el-menu-item index="3" @click="feedbackCollectionDialog">
-            <i class="el-icon-edit"></i>
-            <span slot="title">意见收集</span>
-          </el-menu-item>
           <router-link :to="'/shop/admin'">
             <el-menu-item :index="'/shop/admin'" style="width: 100px">
               <i class="el-icon-s-flag"></i>

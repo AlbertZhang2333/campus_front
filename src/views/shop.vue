@@ -2,6 +2,9 @@
   <div>
 <!--    <Administrators_Market></Administrators_Market>-->
     <el-container>
+      <el-aside>
+        <Aside></Aside>
+      </el-aside>
       <el-main>
         <Main></Main>
       </el-main>
@@ -12,10 +15,12 @@
   
   <script>
   import Main from "@/components/shop/Market.vue";
+  import Aside from "@/components/shop/Aside.vue";
   
   
   export default {
     components: {
+      Aside,
         Main,
     }
   }

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Main from '@/components/chat/Main.vue'
+import Main from '@/components/chat/Chat.vue'
 
 export default {
   components: {Main}
