@@ -14,6 +14,10 @@ import axios from 'axios'
 Vue.prototype.$axios = axios;
 Vue.prototype.$httpUrl = 'http://localhost:8081/';
 
+import Chat from 'vue-beautiful-chat'
+Vue.use(Chat)
+
+
 const axiosInstance = axios.create();
 
 // 添加请求拦截器

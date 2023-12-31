@@ -1,5 +1,4 @@
 <template>
-
     <el-row class="center aside">
       <el-col :span="4">
         <el-image :src="url_logo" fit="fill" @click="goSustech"/>
@@ -10,37 +9,18 @@
             active-text-color="#ffd04b"
             text-color="#fff"
             mode="horizontal"
-            default-active="1"
             class="center hundred"
             style="height: 100%"
+            :default-active="activeIndex"
         >
           <el-menu-item
-              index="1"
-              @click="$router.push('/home')"
+              v-for="item in menuList"
+              :index="item.index"
+              :key="item.index"
+              @click="$router.push(item.index)"
               class="menu-item"
           >
-            Home
-          </el-menu-item>
-          <el-menu-item
-              index="2"
-              @click="$router.push('/academics')"
-              class="menu-item"
-          >
-            Academics
-          </el-menu-item>
-          <el-menu-item
-              index="3"
-              @click="$router.push('/research')"
-              class="menu-item"
-          >
-            Research
-          </el-menu-item>
-          <el-menu-item
-              index="4"
-              @click="$router.push('/campus_life')"
-              class="menu-item"
-          >
-            Campus Life
+            {{ item.title }}
           </el-menu-item>
         </el-menu>
       </el-col>
@@ -68,9 +48,7 @@
           class="center"
           style="height: 100%; width: auto; max-width: 100%"
         >
-          <el-image
-
-          />
+          <el-image/>
           <h2 style="align-self: center">
             login!
           </h2>
@@ -89,6 +67,25 @@ export default {
       url_logo: require(`@/assets/logo.png`),
       input: '',
       isLogIn: true,
+      activeIndex: '',
+      menuList: [
+        {
+          title: 'Home',
+          index: '/home',
+        },
+        {
+          title: 'Navigation',
+          index: '/map',
+        },
+        {
+          title: 'Venue Appointment',
+          index: '/appointment'
+        },
+        {
+          title: 'Shopping',
+          index: '/shop'
+        }
+      ],
     }
   },
   methods: {
@@ -96,7 +93,16 @@ export default {
       console.log('111')
       window.location.href = 'https://www.sustech.edu.cn/'
     }
-  }
+  },
+  created() {
+    this.activeIndex = this.$route.path;
+  },
+  watch: {
+    $route(to) {
+      this.activeIndex = to.path;
+      console.log(to.path)
+    },
+  },
 };
 </script>
 
