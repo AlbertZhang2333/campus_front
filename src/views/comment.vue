@@ -1,6 +1,6 @@
 <template>
   <el-container style="display:flex; flex-direction: column;">
-    <CommentBox :reply-id="replyComment?.replyId"/>
+    <CommentBox :reply-id="replyComment?.replyId" :emojiList="emojiList" @commit="loadComment"/>
 
     <el-divider></el-divider>
 
@@ -38,6 +38,7 @@ export default {
   components: {CommentCard, CommentBox},
   data() {
     return {
+      belongDepartment:0,
       comments: [{
         id: 1, // 初始为0，具体情况视需求而定
         userName: "cao",
@@ -68,10 +69,15 @@ export default {
       pageSize: 5,
       total: 40,
       urlList: {
-        commentUrl: '/allCommentsUser',
+        commentUrl: 'Comment/allCommentsUser',
         submitCommentUrl: null,
         deleteCommentUrl: null,
       },
+      emojiList: Array.from({length: 48}, (_, index) => ({
+        id: (index + 1).toString(),
+        url: (index + 1).toString() + ".png"
+      })),
+      
     };
   },
   computed: {
@@ -81,22 +87,23 @@ export default {
     replying() {
       return this.replyComment !== null;
     },
-    requestParams() {
-      return {
+  },
+  methods: {
+    loadComment() {
+      let requestParams={
         belongDepartment: this.belongDepartment,
         type: 0,
         pageSize: this.pageSize,
         currentPage: this.currentPage,
         replyId: this.replyComment?.replyId ?? -1
       }
-    }
-  },
-  methods: {
-    loadComment() {
       axiosInstance.post(this.$httpUrl + this.urlList.commentUrl, null, {
-        params: this.requestParams
+        params: requestParams
       }).then(res => res.data).then(res => {
-        console.log('res: ' + res);
+        console.log('res: ' + res.data);
+        for(let i=0;i<res.data.length;i++){
+          console.log(res.data[i].comment)
+        }
         if (res.code === 200) {
           // 处理评论内容
           this.comments = res.data

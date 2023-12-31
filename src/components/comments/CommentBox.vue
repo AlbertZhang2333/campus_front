@@ -34,7 +34,8 @@ export default {
   name: 'CommentBox',
   components: {},
   props: {
-    replyId: Number
+    replyId: Number,
+    emojiList: Array
   },
   data() {
     return {
@@ -48,13 +49,10 @@ export default {
         time: '', // 如果你需要设置时间，可以在提交时在后端进行处理，或者在前端使用合适的格式
         date: '', // 同样，如果你需要设置日期，可以在提交时在后端进行处理，或者在前端使用合适的格式
         belongDepartment: 0,
-        // type: null,
+        type: 0,
         replyId: -1
       },
-      emojiList: Array.from({length: 48}, (_, index) => ({
-        id: (index + 1).toString(),
-        url: (index + 1).toString() + ".png"
-      })),
+    
     }
   },
   methods: {
@@ -71,17 +69,17 @@ export default {
         // this.commentForm.type = 0;
         this.commentForm.replyId = this.replyId;
 
-        // console.log(this.commentForm.comment)
+        console.log(this.commentForm)
+    
 
-        axiosInstance.post(this.$httpUrl + this.params.urlList.submitCommentUrl, this.commentForm).then(res => res.data).then(res => {
+        axiosInstance.post(this.$httpUrl + 'Comment/addComment', this.commentForm).then(res => res.data).then(res => {
           console.log(res)
           this.$message({
             message: '评论发表成功!',
             type: 'success'
           });
-          this.isReplyMode.push(false);
-          this.commentForm = {};
-          this.$emit('loadComment');
+          this.commentForm.comment = "";
+          this.$emit('commit');
         }).catch(error => {
           console.error('Error adding comment:', error);
           this.$message.error('评论发表失败，请重试!');

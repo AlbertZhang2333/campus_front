@@ -1,10 +1,10 @@
 <template>
   <el-container style="display: flex;flex-direction: column; justify-content: center;align-items: center">
-    <h2> {{ title }} </h2>
+    <h2> {{ building.name }} </h2>
     <el-divider></el-divider>
-    <el-image :src="url" alt=""></el-image>
+    <el-image :src="building.photoPath" alt=""></el-image>
     <span style="font-size: 30px">
-      {{ info }}
+      {{ building.description }}
     </span>
     <el-divider>
     </el-divider>
@@ -16,16 +16,33 @@
 </template>
 
 <script>
-
+import Comment from './comment.vue'
+import axiosInstance from "@/main";
 export default {
-  components: {},
+  components: {Comment},
   data() {
     return {
-      title: '一丹图书馆',
-      url: require(`@/assets/picture1.jpg`),
-      info: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+      building: {
+        name: '',
+        photoPath: '',
+        description: '',
+      }
     }
-  }
+  },
+  mounted() {
+    this.getBuildingInfo()
+  },
+  methods:{
+    async getBuildingInfo() {
+      const response = await axiosInstance.get(`http://localhost:8081/searchBuildingName/一丹图书馆`)
+      if(response.data.code == 400){
+        alert("获取失败")
+      }
+      else{
+        this.building = response.data.data
+      }
+    }
+  },
 }
 </script>
 
