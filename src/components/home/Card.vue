@@ -1,12 +1,13 @@
 <template>
-  <el-card class="card" @click="$router.push(url)">
+  <el-card class="card" @click.native="handleClick">
     <h3>{{ title }}</h3>
-    <el-image :src="image" :alt="title" class="card-image"/>
+    <el-image :src="image" :alt="title" class="card-image" />
     <p>{{ text }}</p>
   </el-card>
 </template>
 
 <script>
+
 export default {
   props: {
     id: String,
@@ -14,6 +15,11 @@ export default {
     image: String,
     text: String,
     url: String
+  },
+  methods:{
+    handleClick(){
+      this.$router.push(this.url)
+    }
   }
 }
 </script>
