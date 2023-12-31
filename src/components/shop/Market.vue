@@ -50,6 +50,7 @@
   </div>
 </template>
 <script>
+import axiosInstance from "@/main";
 export default {
   mounted(){
     this.loadItemList();
@@ -88,7 +89,7 @@ export default {
       this.CanSubmit = this.num <= 0;
     },
     async submit_order(){
-      const response = await this.$axios.post('http://localhost:8081/UserShopping/addItemToTheCart?itemName='+this.currentShoppingItem.name+'&num='+this.num);
+      const response = await axiosInstance.post('http://localhost:8081/UserShopping/addItemToTheCart?itemName='+this.currentShoppingItem.name+'&num='+this.num);
       console.log("addResponse", response);
       if(response.data.code == 400) alert("加入购物车失败");
       this.newShoppingDialog=false;
@@ -98,7 +99,7 @@ export default {
       // this.currentShoppingItem=null;
     },
     async loadItemList(){
-      const response = await this.$axios.get('http://localhost:8081/UserShopping/findAll');
+      const response = await axiosInstance.get('http://localhost:8081/UserShopping/findAll');
       if(response.data.code == 400) alert("加载商品信息失败");
       this.shoppingItemList=response.data.data;
     },
@@ -107,7 +108,7 @@ export default {
       if(this.input == ""){
         this.loadItemList();
       }else{
-        const response = await this.$axios.get(`http://localhost:8081/UserShopping/searchItem?itemName=${this.input}`);
+        const response = await axiosInstance.get(`http://localhost:8081/UserShopping/searchItem?itemName=${this.input}`);
         if(response.data.code == 400) alert("搜索失败");
         this.shoppingItemList= [response.data.data];
       }

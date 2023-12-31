@@ -165,6 +165,7 @@ import Store from "@/utils/store";
 import mapLoader from '@/utils/amap';
 import highAccuracyGeolocation from '@/utils/highAccuracyGeolocation';
 import _ from "lodash";
+import axiosInstance from "@/main";
 export default {
   mounted() {
     this.createMap();
@@ -332,8 +333,8 @@ export default {
       }
     },
     async searchAll(search) {
-      const response = await this.$axios.get(`http://localhost:8081/searchBuildingName/${search}`);
-      const response2 = await this.$axios.get(`http://localhost:8081/searchStopName/${search}`);
+      const response = await axiosInstance.get(`http://localhost:8081/searchBuildingName/${search}`);
+      const response2 = await axiosInstance.get(`http://localhost:8081/searchStopName/${search}`);
       let result = response;
       if(response.data.data == null){
         result = response2;
@@ -341,15 +342,15 @@ export default {
       return result.data.data;
     },
     async searchBusLine(startStop, endStop){
-      const response = await this.$axios.get(`http://localhost:8081/startEndRelation/${startStop}/${endStop}`);
+      const response = await axiosInstance.get(`http://localhost:8081/startEndRelation/${startStop}/${endStop}`);
       return response.data.data;
     },
     async searchLineInfo(){
-      const response = await this.$axios.get(`http://localhost:8081/allLine`);
+      const response = await axiosInstance.get(`http://localhost:8081/allLine`);
       return response.data.data;
     },
     async searchNearStop(lng, lat){
-      const response = await this.$axios({
+      const response = await axiosInstance({
         method: 'get',
         url: `http://localhost:8081/nearbyStop`,
         params: {
@@ -461,8 +462,8 @@ export default {
       }
     }, 300),
     async searchOnServer(startPoint) {
-      const response = await this.$axios.get(`http://localhost:8081/searchingBuilding/${startPoint}`);
-      const response2 = await this.$axios.get(`http://localhost:8081/searchingBusStop/${startPoint}`);
+      const response = await axiosInstance.get(`http://localhost:8081/searchingBuilding/${startPoint}`);
+      const response2 = await axiosInstance.get(`http://localhost:8081/searchingBusStop/${startPoint}`);
       const result = response.data.data.concat(response2.data.data);
       return result;
     },
@@ -475,8 +476,8 @@ export default {
       }
     }, 300),
     async searchOnServer2(endPoint) {
-      const response = await this.$axios.get(`http://localhost:8081/searchingBuilding/${endPoint}`);
-      const response2 = await this.$axios.get(`http://localhost:8081/searchingBusStop/${endPoint}`);
+      const response = await axiosInstance.get(`http://localhost:8081/searchingBuilding/${endPoint}`);
+      const response2 = await axiosInstance.get(`http://localhost:8081/searchingBusStop/${endPoint}`);
       const result = response.data.data.concat(response2.data.data);
       return result;
     },

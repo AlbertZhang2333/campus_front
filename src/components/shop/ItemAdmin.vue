@@ -111,6 +111,7 @@
 </template>
   
 <script>
+import axiosInstance from "@/main";
 export default {
   mounted(){
     this.updateItemList();
@@ -162,7 +163,7 @@ methods: {
         this.addItem_dialog=true;
     },
     async submitAddItem(submitOrUpdate,index){
-      const response = await this.$axios.post(`http://localhost:8081/ManageItems/generateANewItem?name=${this.Item.name}&num=${this.Item.num}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
+      const response = await axiosInstance.post(`http://localhost:8081/ManageItems/generateANewItem?name=${this.Item.name}&num=${this.Item.num}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
       if(response.data.code == 400) alert("添加失败");
       else alert('添加成功');
       this.addItem_dialog=false;
@@ -180,21 +181,21 @@ methods: {
     },
     async updateAddItem(){
       //将弹窗中的信息更新到数据库
-        const response = await this.$axios.put(`http://localhost:8081/ManageItems/updateItem?itemName=${this.Item.name}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
+        const response = await axiosInstance.put(`http://localhost:8081/ManageItems/updateItem?itemName=${this.Item.name}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
         if(response.data.code == 400) alert("更新失败");
         else alert('更新成功');
         this.updateItem_dialog=false;
         this.updateItemList();
     },
     async deleteItem(curItem) {
-      const response = await this.$axios.delete(`http://localhost:8081/ManageItems/deleteItem?name=${curItem.name}`);
+      const response = await axiosInstance.delete(`http://localhost:8081/ManageItems/deleteItem?name=${curItem.name}`);
       if(response.data.code == 400) alert("删除失败");
       else alert('删除成功');
     },
 
     async updateItemList(){
       //模糊查询相关，需要后端有通过 like 查询的接口
-        const response = await this.$axios.get('http://localhost:8081/ManageItems/findAll');
+        const response = await axiosInstance.get('http://localhost:8081/ManageItems/findAll');
         if(response.data.code == 400) alert("加载失败");
         this.ItemList = response.data.data;
     },
@@ -203,7 +204,7 @@ methods: {
       if(this.input == ""){
         this.updateItemList();
       }else{
-        const response = await this.$axios.get(`http://localhost:8081/ManageItems/findByName?name=${this.input}`);
+        const response = await axiosInstance.get(`http://localhost:8081/ManageItems/findByName?name=${this.input}`);
         if(response.data.code == 400) alert("搜索失败");
         this.ItemList = [response.data.data];
       }

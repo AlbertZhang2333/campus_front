@@ -47,7 +47,7 @@ export default {
         localStorage.setItem('passToken', response.data.data)
 
         alert('登录成功!');
-        this.$router.push({path: '/shop'})
+        this.$router.push(`/shop`)
       }
     },
     toForgotPassword() {

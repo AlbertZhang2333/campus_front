@@ -129,6 +129,7 @@
 </template>
   
 <script>
+import axiosInstance from "@/main";
 export default {
   mounted(){
     this.updateBuildingList();
@@ -188,7 +189,7 @@ methods: {
         this.addBuilding_dialog=true;
     },
     async submitAddBuilding(submitOrUpdate,index){
-      const response = await this.$axios.post(`http://localhost:8081/addBuilding?lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
+      const response = await axiosInstance.post(`http://localhost:8081/addBuilding?lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
       if(response.data.code == 400) alert("添加失败");
       else alert('submit!');
       this.addBuilding_dialog=false;
@@ -207,21 +208,21 @@ methods: {
     },
     async updateAddBuilding(){
       //将弹窗中的信息更新到数据库
-        const response = await this.$axios.put(`http://localhost:8081/updateBuilding?id=${this.Building.id}&lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
+        const response = await axiosInstance.put(`http://localhost:8081/updateBuilding?id=${this.Building.id}&lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
         if(response.data.code == 400) alert("更新失败");
         else alert('update!');
         this.updateBuilding_dialog=false;
         this.updateBuildingList();
     },
     async deleteBuilding(curBuilding) {
-      const response = await this.$axios.delete(`http://localhost:8081/deleteBuilding/${curBuilding.id}`);
+      const response = await axiosInstance.delete(`http://localhost:8081/deleteBuilding/${curBuilding.id}`);
       if(response.data.code == 400) alert("删除失败");
       else alert('delete!');
       this.updateBuildingList();
     },
     async updateBuildingList(){
       //模糊查询相关，需要后端有通过 like 查询的接口
-        const response = await this.$axios.get('http://localhost:8081/allBuilding');
+        const response = await axiosInstance.get('http://localhost:8081/allBuilding');
         if(response.data.code == 400) alert("加载失败");
         else this.BuildingList = response.data.data;
     },
@@ -239,7 +240,7 @@ methods: {
       }
     }, 300),
     async searchOnServer(buildingInput) {
-      const response = await this.$axios.get(`http://localhost:8081/searchingBuilding/${buildingInput}`);
+      const response = await axiosInstance.get(`http://localhost:8081/searchingBuilding/${buildingInput}`);
       return response.data.data;
     },
 }

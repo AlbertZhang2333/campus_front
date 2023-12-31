@@ -140,6 +140,7 @@
 </template>
 
 <script>
+import axiosInstance from "@/main";
 export default {
   mounted() {
     this.loadUser()
@@ -172,7 +173,7 @@ export default {
   },
   methods: {
     async createAccount(){
-      const response = await this.$axios.post(`http://localhost:8081/manageAccount/createANewAccount?userName=${this.accountInfoItem.username}&userMail=${this.accountInfoItem.userMail}&password=${this.accountInfoItem.password}&identity=${this.accountInfoItem.identity}`);
+      const response = await axiosInstance.post(`http://localhost:8081/manageAccount/createANewAccount?userName=${this.accountInfoItem.username}&userMail=${this.accountInfoItem.userMail}&password=${this.accountInfoItem.password}&identity=${this.accountInfoItem.identity}`);
       if(response.data.code == 400) alert(response.data.data);
       else alert("已添加");
       this.accountDialogVisible=false;
@@ -195,13 +196,13 @@ export default {
           param.append("file", val.raw);
         }
       );
-      const response = await this.$axios.post("http://localhost:8081/manageAccount/batchAddAccount", param);
+      const response = await axiosInstance.post("http://localhost:8081/manageAccount/batchAddAccount", param);
       if(response.data.code == 400) alert(response.data.data);
       else alert("批量添加用户成功");
       this.loadUser();
     },
     async deleteItem(index){
-      const response = await this.$axios.get(`http://localhost:8081/manageAccount/deleteUserByUserMail?userMail=${this.accountInfoItemList[index].userMail}`);
+      const response = await axiosInstance.get(`http://localhost:8081/manageAccount/deleteUserByUserMail?userMail=${this.accountInfoItemList[index].userMail}`);
       if(response.data.code == 400) alert(response.data.data);
       else alert("删除成功");
       this.loadUser();
@@ -209,13 +210,13 @@ export default {
 
     async addToBackList(index){
       if(this.accountInfoItemList[index].enabled == true){
-        const response = await this.$axios.post(`http://localhost:8081/manageAccount/setBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
+        const response = await axiosInstance.post(`http://localhost:8081/manageAccount/setBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
         if(response.data.code == 400) alert(response.data.data);
         else alert("操作成功");
         this.loadUser();
       }else{
         console.log("releaseFromBlackList")
-        const response = await this.$axios.post(`http://localhost:8081/manageAccount/releaseFromBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
+        const response = await axiosInstance.post(`http://localhost:8081/manageAccount/releaseFromBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
         console.log("response", response);
         if(response.data.code == 400) alert(response.data.data);
         else alert("操作成功");
@@ -233,7 +234,7 @@ export default {
       this.loadUser()
     },
     async loadUser() {
-      this.$axios.get(`http://localhost:8081/manageAccount/checkAllAccount?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
+      axiosInstance.get(`http://localhost:8081/manageAccount/checkAllAccount?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
       .then(res => res.data).then(res => {
             if (res.code === 200) {
               this.accountInfoItemList = res.data

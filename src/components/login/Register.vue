@@ -38,7 +38,7 @@
 </template>
   
 <script>
-
+import axiosInstance from "@/main";
 export default {
   name: 'Register',
   data() {
@@ -91,7 +91,7 @@ export default {
   methods: {
     async submitForm(ruleForm) {
 
-      const response = await this.$axios.post(`http://localhost:8081/login/register?username=${this.ruleForm.username}&password=${this.ruleForm.password}&userMail=${this.ruleForm.userMail}`);
+      const response = await axiosInstance.post(`http://localhost:8081/login/register?username=${this.ruleForm.username}&password=${this.ruleForm.password}&userMail=${this.ruleForm.userMail}`);
       if(response.data.code == 400) {alert("注册失败");}
       else{ 
         alert('注册成功!');

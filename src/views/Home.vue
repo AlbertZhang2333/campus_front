@@ -20,7 +20,7 @@
           :image="stuff.image"
           :text="stuff.text"
           :style="{ marginTop: random[index] +'px'}"
-          @click="$router.push(`/purchase/${stuff.stuff_id}`)"
+          @click="$router.push('/home')"
           style="box-shadow: 0 10px 20px rgba(0, 0, 0, .30), 0 0 10px rgba(0, 0, 0, .20)"
       />
     </el-container>
