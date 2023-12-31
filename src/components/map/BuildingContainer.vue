@@ -130,6 +130,7 @@
   
 <script>
 import axiosInstance from "@/main";
+import _ from 'lodash'
 export default {
   mounted(){
     this.updateBuildingList();

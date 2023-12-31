@@ -250,7 +250,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .FormButtonSize {
   width: 100px; /* 设置按钮宽度 */
   height: 36px; /* 设置按钮高度 */

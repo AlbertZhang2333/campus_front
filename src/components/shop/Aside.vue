@@ -166,7 +166,7 @@ export default {
 
 
 
-<style>
+<style scoped>
 .el-menu-vertical-demo {
   width: 120%;
   height: 150%;

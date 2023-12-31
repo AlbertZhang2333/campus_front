@@ -35,6 +35,11 @@
         </el-table-column>
         <el-table-column label="当前状态" prop="status"
           width="180">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status == 0">未支付</span>
+            <span v-else-if="scope.row.status == 1">已支付</span>
+            <span v-else>退款</span>
+          </template>
         </el-table-column>
         <el-table-column label="日期" prop="date"
           width="180">
