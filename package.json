@@ -11,12 +11,13 @@
         "@amap/amap-jsapi-loader": "^1.0.1",
         "axios": "^1.6.0",
         "core-js": "^3.8.3",
+        "echarts": "^5.4.3",
         "element-ui": "^2.15.14",
+        "lodash": "^4.17.21",
         "mockjs": "^1.1.0",
         "vue": "^2.7.15",
         "vue-beautiful-chat": "^2.5.0",
-        "vue-router": "^3.6.5",
-        "lodash": "^4.17.21"
+        "vue-router": "^3.6.5"
     },
     "devDependencies": {
         "@babel/core": "^7.12.16",

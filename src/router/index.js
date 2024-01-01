@@ -18,6 +18,7 @@ import Sustech from "@/views/Sustech.vue";
 import VenueInfo from "@/views/VenueInfo.vue";
 import UserRecord from "@/views/shopUserRecord.vue";
 import Chat from "@/views/Chat.vue";
+import reservationAnalysis from "@/components/reservation/reservationAnalysis.vue"
 
 Vue.use(VueRouter)
 
@@ -69,6 +70,10 @@ const routes = [
     {
         path: '/reservation/record',
         component: ReservationRecord
+    },
+    {
+        path: '/reservation/admin/analysis',
+        component: reservationAnalysis
     },
     {
         path: '/user',
