@@ -79,13 +79,16 @@ export default {
   },
   computed: {
     processedComments() {
+      console.log('comments:'+this.comments)
+      console.log('map:'+this.comments.map)
+
       return this.comments.map(comment => ({
         ...comment,
         comment: this.replaceEmoji(comment.comment),
       }));
     },
     processedReplyComment(){
-      this.replyComment.comments = this.replaceEmoji(this.replyComment.comment)
+      this.replyComment.comment = this.replaceEmoji(this.replyComment.comment)
       console.log(this.replyComment)
       return this.replyComment
     },
@@ -183,7 +186,7 @@ export default {
       commentForm.time = this.time;
       commentForm.date = this.date;
       commentForm.comment = commentForm.comment.toString();
-      commentForm.replyId = this.replyComment.id;
+      commentForm.replyId = this.replyComment?.id??-1;
       axiosInstance.post(this.$httpUrl + this.urlList.addCommentUrl, commentForm).then(res => res.data).then(res => {
         if(res.code===200){
           this.total = res.total;
