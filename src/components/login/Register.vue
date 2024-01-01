@@ -26,11 +26,15 @@
         <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off" placeholder="请确认密码"
           prefix-icon="el-icon-lock"></el-input>
       </el-form-item>
+      <el-form-item label="" prop="code">
+        <el-input type="code" v-model="ruleForm.code" autocomplete="off" placeholder="请输入验证码"
+          prefix-icon="el-icon-lock"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" style="background: #505458; border: none;"
-          @click="submitForm('ruleForm')">注册</el-button>
+          @click="submitForm()">注册</el-button>
         <el-button type="primary" style="background: #505458; border: none;"
-          @click="sendVcode('ruleForm')">发送验证码</el-button>
+          @click="sendVcode()">发送验证码</el-button>
         <el-button type="primary" style="background: #505458; border: none;" @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -67,6 +71,8 @@ export default {
         userMail: '',
         password: '',
         checkPass: '',
+        code: '',
+        UserIcon: 0,
       },
       rules: {
         username: [
@@ -89,27 +95,28 @@ export default {
     };
   },
   methods: {
-    async submitForm(ruleForm) {
+    async submitForm() {
 
-      const response = await axiosInstance.post(`http://localhost:8081/login/register?username=${this.ruleForm.username}&password=${this.ruleForm.password}&userMail=${this.ruleForm.userMail}`);
-      if(response.data.code == 400) {alert("注册失败");}
+      const response = await axiosInstance.post(`http://localhost:8081/login/register?username=${this.ruleForm.username}&password=${this.ruleForm.password}&userMail=${this.ruleForm.userMail}&code=${this.ruleForm.code}&UserIcon=${this.ruleForm.UserIcon}`);
+      if(response.data.code == 400) {alert(response.data.data);}
       else{ 
-        alert('注册成功!');
-        this.$router.push({ path: '/' })
+        this.$message({
+          message: '注册成功!',
+          type: 'success'
+        });
+        this.$router.push({ path: '/home' })
       }
-      // this.ruleForm= {};
-      // this.$message({
-      //   message: '注册成功，点击去登录按钮登录',
-      //   type: 'success'
-      // });
     },
 
-    sendVcode(ruleForm) {
-      this.ruleForm = {};
-      this.$message({
-        message: '验证码已发送至邮箱',
-        type: 'success'
-      });
+    async sendVcode() {
+      const response = await axiosInstance.get(`http://localhost:8081/login/registerVerifyCode?userMail=${this.ruleForm.userMail}`);
+      if(response.data.code == 400) {alert(response.data.data);}
+      else{ 
+        this.$message({
+          message: '验证码已发送至邮箱',
+          type: 'success'
+        });
+      }
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

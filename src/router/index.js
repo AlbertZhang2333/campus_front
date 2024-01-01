@@ -12,6 +12,8 @@ import ReservationRecord from "@/views/reservationRecord.vue";
 import User from "@/components/user/AccountAdmin.vue"
 import Login from "@/components/login/Login.vue"
 import Register from "@/components/login/Register.vue"
+import Forgot from "@/components/login/ForgotPassword.vue"
+import UserInfo from "@/components/login/UserInfo.vue"
 import RoomAdmin from "@/views/roomAdmin.vue";
 import Home from "@/views/Home.vue";
 import Sustech from "@/views/Sustech.vue";
@@ -87,6 +89,14 @@ const routes = [
         path: '/register',
         component: Register
 
+    },
+    {
+        path: '/forgot',
+        component: Forgot
+    },
+    {
+        path: '/userInfo',
+        component: UserInfo
     },
     {
         path: '/sustech',

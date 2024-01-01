@@ -6,7 +6,7 @@
       <el-button @click="toRegister">点我注册</el-button>
     </h3>
     <el-form-item label="">
-      <el-input type="text" v-model="loginForm.userMail" autocomplete="off" placeholder="账号"></el-input>
+      <el-input type="text" v-model="loginForm.userMail" autocomplete="off" placeholder="邮箱"></el-input>
     </el-form-item>
     <el-form-item label="">
       <el-input type="password" v-model="loginForm.password" autocomplete="off" placeholder="密码"></el-input>
@@ -45,13 +45,12 @@ export default {
         alert("登录失败");
       } else {
         localStorage.setItem('passToken', response.data.data)
-
         alert('登录成功!');
-        this.$router.push(`/shop`)
+        this.$router.push(`/home`)
       }
     },
     toForgotPassword() {
-      this.$router.push({path: '/ForgotPassword'})
+      this.$router.push({path: '/Forgot'})
     },
     toRegister() {
       this.$router.push({path: '/Register'})
