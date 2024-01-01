@@ -82,8 +82,8 @@ export default {
   computed: {
     processedComments() {
       return this.comments.map(comment => ({
-        ...commentArea,
-        comment: this.replaceEmoji(commentArea.comment),
+        ...comment,
+        comment: this.replaceEmoji(comment.comment),
       }));
     },
     hasComments() {
