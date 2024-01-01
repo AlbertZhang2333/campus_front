@@ -2,13 +2,13 @@
   <el-container style="display:flex; flex-direction: column;">
     <CommentBox
         :reply-id="replyComment?.replyId??-1"
-        @commit="commit"
+        @submit="addComment"
     />
 
     <el-divider></el-divider>
     <el-container v-if="replying">
       <comment-card
-          :comment="replyComment"
+          :comment="processedReplyComment"
           :replyable="false"
           :deletable="false"
       ></comment-card>
@@ -17,7 +17,7 @@
     <el-timeline v-if="hasComments">
       <el-timeline-item v-for="(comment, index) in processedComments" :key="index">
         <comment-card
-            :comment="commentArea"
+            :comment="comment"
             :replyable="!replying"
             :deletable="true"
             @reply-comment="reply"
@@ -44,11 +44,9 @@
 import axiosInstance from "@/main";
 import CommentBox from "@/components/comments/CommentBox.vue";
 import CommentCard from "@/components/comments/CommentCard.vue";
-import {image} from "mockjs/src/mock/random/image";
-import {date} from "mockjs/src/mock/random/date";
 
 export default {
-  name: "CommentArea",
+  name: "Main",
   components: {CommentCard, CommentBox},
   props:{
     department:Number
@@ -60,7 +58,7 @@ export default {
         userName: "cao",
         userMail: "1312@qq.com",
         userIcon: 1,
-        comment: "666",
+        comment: "666[1][2]",
         state: 1, // 初始为false，具体情况视需求而定
         time: '20:23', // 如果你需要设置时间，可以在提交时在后端进行处理，或者在前端使用合适的格式
         date: '2023', // 同样，如果你需要设置日期，可以在提交时在后端进行处理，或者在前端使用合适的格式
@@ -82,9 +80,14 @@ export default {
   computed: {
     processedComments() {
       return this.comments.map(comment => ({
-        ...commentArea,
-        comment: this.replaceEmoji(commentArea.comment),
+        ...comment,
+        comment: this.replaceEmoji(comment.comment),
       }));
+    },
+    processedReplyComment(){
+      this.replyComment.comments = this.replaceEmoji(this.replyComment.comment)
+      console.log(this.replyComment)
+      return this.replyComment
     },
     hasComments() {
       return this.comments.length !== 0;
@@ -102,6 +105,7 @@ export default {
       }
     },
     date() {
+      const date = new Date(); // 获取当前时间戳
       // 获取年份
       var year = date.getFullYear();
       // 获取月份，并确保为两位数
@@ -135,7 +139,7 @@ export default {
     },
     replaceEmoji(text) {
       // 遍历 emojiList，将 [emoji.title] 替换为实际表情
-      text = text.replace(/\[(\d+)\]/g, (_, num) => {
+      text = text.replace(/\[(\d+)]/g, (_, num) => {
         const src = require(`@/assets/emoji/512_24x24/${num}.png`);
         return `<img src="${src}" alt="[${num}]" />`;
       });
@@ -153,7 +157,7 @@ export default {
       this.loadComment()
     },
     reply(commentId) {
-      this.replyComment = this.comments.find(comment => commentArea.id === commentId);
+      this.replyComment = this.comments.find(comment => comment.id === commentId);
       this.loadComment()
     },
     deleteComment(comment) {
@@ -170,28 +174,32 @@ export default {
         this.$message.error('评论删除失败，请重试!');
       });
     },
-    commit(commentForm) {
+    addComment(commentForm) {
+      console.log(commentForm)
       if (commentForm.comment === "") {
         this.$message.warning("请输入评论内容");
         return;
       }
       commentForm.time = this.time;
       commentForm.date = this.date;
-      commentForm.comment = this.commentForm.comment.toString();
-      commentForm.replyId = this.replyId;
-      axiosInstance.post(this.$httpUrl + this.urlList.addCommentUrl, this.commentForm).then(res => res.data).then(res => {
-        console.log(res)
-        this.$message({
-          message: '评论发表成功!',
-          type: 'success'
-        });
-        this.commentForm.comment = "";
-        this.$emit('commit');
+      commentForm.comment = commentForm.comment.toString();
+      commentForm.replyId = this.replyComment.id;
+      axiosInstance.post(this.$httpUrl + this.urlList.addCommentUrl, commentForm).then(res => res.data).then(res => {
+        if(res.code===200){
+          this.total = res.total;
+          this.comments = res.data
+          console.log(res)
+          this.$message({
+            message: '评论发表成功!',
+            type: 'success'
+          });
+        }else {
+          this.$message.warning('评论发表失败!');
+        }
       }).catch(error => {
         console.error('Error adding comment:', error);
         this.$message.error('评论发表失败，请重试!');
       });
-      this.loadComment()
     }
   },
   filters: {
