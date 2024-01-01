@@ -24,13 +24,13 @@
           </el-menu-item>
         </el-menu>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="4" style="display: flex; justify-content: center; align-items: center">
         <el-input
             v-model="input"
             placeholder="Search"
             suffix-icon="el-icon-search"
             style="width: 75%;"
-        ></el-input>
+        />
       </el-col>
       <el-col :span="4" style="height: 100%">
         <el-button
@@ -46,19 +46,20 @@
         <el-container
           v-else
           class="center"
-          style="height: 100%; width: auto; max-width: 100%"
+          style="height: 100%; width: auto; max-width: 100%;"
         >
-          <el-image :src="require('@/assets/home_pictures/logo.png')" alt=""/>
-          <h2 style="align-self: center">
-            login!
+          <el-image fit="fill" :src="require(`@/assets/user_icon/${userInfo.userIcon}.jpg`)" alt="" style="height: 80%; width: auto; border: 3px solid orange;border-radius: 5px; margin-right: 20px"/>
+          <h2 style="color:#27004c;">
+            {{userInfo.username}}
           </h2>
         </el-container>
       </el-col>
     </el-row>
-
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: 'CampusAside',
   components: {},
@@ -88,6 +89,9 @@ export default {
       ],
     }
   },
+  computed:{
+    ...mapState(['userInfo'])
+  },
   methods: {
     goSustech() {
       console.log('111')
@@ -100,7 +104,6 @@ export default {
   watch: {
     $route(to) {
       this.activeIndex = to.path;
-      console.log(to.path)
     },
   },
 };

@@ -15,6 +15,7 @@ Vue.prototype.$axios = axios;
 Vue.prototype.$httpUrl = 'http://localhost:8081/';
 
 import Chat from 'vue-beautiful-chat'
+import store from "@/store";
 Vue.use(Chat)
 
 
@@ -38,6 +39,7 @@ axiosInstance.interceptors.request.use(
 export default axiosInstance;
 
 new Vue({
+    store,
     router,
     render: h=>h(App)
 }).$mount('#app')

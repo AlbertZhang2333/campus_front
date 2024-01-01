@@ -57,7 +57,7 @@ export default {
           console.error('Error adding comment:', error);
           this.$message.warning('数据加载失败!');
         });
-        this.$router.push(`/home`)
+        await this.$router.push(`/home`)
       }
     },
     toForgotPassword() {
