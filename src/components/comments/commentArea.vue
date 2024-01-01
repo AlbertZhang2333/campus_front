@@ -161,7 +161,9 @@ export default {
       this.loadComment()
     },
     deleteComment(comment) {
-      axiosInstance.post(this.$httpUrl + this.urlList.deleteCommentUrl, this.commentForm).then(res => res.data).then(res => {
+      comment = this.comments.find(c=>c.id===comment.id)
+      comment.state = 0
+      axiosInstance.put(this.$httpUrl + this.urlList.deleteCommentUrl, comment).then(res => res.data).then(res => {
         if (res.code === 200) {
           // 处理评论内容
           this.$message({
