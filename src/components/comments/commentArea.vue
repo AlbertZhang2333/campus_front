@@ -25,7 +25,7 @@
         />
       </el-timeline-item>
     </el-timeline>
-    <el-container v-else style="display: flex; justify-content: center; align-items: center">
+    <el-container v-if="!replying && !hasComments" style="display: flex; justify-content: center; align-items: center">
       <h3>还没有评论哦，快来评论吧</h3>
     </el-container>
     <el-pagination
@@ -71,7 +71,7 @@ export default {
       pageSize: 5,
       total: 40,
       urlList: {
-        commentUrl: 'Comment/allCommentsUser',
+        commentUrl: 'Comment/allCommentsReplyUser',
         addCommentUrl: 'Comment/addComment',
         deleteCommentUrl: 'Comment/updateComment',
       },
@@ -86,7 +86,6 @@ export default {
     },
     processedReplyComment(){
       this.replyComment.comment = this.replaceEmoji(this.replyComment.comment)
-      console.log(this.replyComment)
       return this.replyComment
     },
     hasComments() {
@@ -96,12 +95,13 @@ export default {
       return this.replyComment !== null;
     },
     requestParams() {
+      console.log(this.replyComment)
       return {
         belongDepartment: this.department,
         type: 0,
         pageSize: this.pageSize,
         currentPage: this.currentPage,
-        replyId: this.replyComment?.replyId ?? -1
+        replyId: this.replyComment?.id ?? -1
       }
     },
     date() {
@@ -122,6 +122,8 @@ export default {
   },
   methods: {
     loadComment() {
+      console.log(this.replyComment)
+      console.log(this.requestParams)
       axiosInstance.post(this.$httpUrl + this.urlList.commentUrl, null, {
         params: this.requestParams
       }).then(res => res.data).then(res => {
