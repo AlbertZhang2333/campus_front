@@ -73,15 +73,12 @@ export default {
       urlList: {
         commentUrl: 'Comment/allCommentsUser',
         addCommentUrl: 'Comment/addComment',
-        deleteCommentUrl: null,
+        deleteCommentUrl: 'Comment/updateComment',
       },
     };
   },
   computed: {
     processedComments() {
-      console.log('comments:'+this.comments)
-      console.log('map:'+this.comments.map)
-
       return this.comments.map(comment => ({
         ...comment,
         comment: this.replaceEmoji(comment.comment),
@@ -167,8 +164,11 @@ export default {
       axiosInstance.post(this.$httpUrl + this.urlList.deleteCommentUrl, this.commentForm).then(res => res.data).then(res => {
         if (res.code === 200) {
           // 处理评论内容
-          this.total = res.total;
-          this.comments = res.data
+          this.$message({
+            message: '评论删除成功!',
+            type: 'success'
+          });
+          this.loadComment()
         } else {
           this.$message.warning('评论删除失败!');
         }
@@ -189,13 +189,11 @@ export default {
       commentForm.replyId = this.replyComment?.id??-1;
       axiosInstance.post(this.$httpUrl + this.urlList.addCommentUrl, commentForm).then(res => res.data).then(res => {
         if(res.code===200){
-          this.total = res.total;
-          this.comments = res.data
-          console.log(res)
           this.$message({
             message: '评论发表成功!',
             type: 'success'
           });
+          this.loadComment()
         }else {
           this.$message.warning('评论发表失败!');
         }
