@@ -44,12 +44,12 @@ export default {
   methods: {
     async Login() {
       console.log("usermail:" + this.loginForm.userMail + "password:" + this.loginForm.password);
-      const response = await axiosInstance.post(`http://localhost:8081/login/loginCheck?userMail=${this.loginForm.userMail}&password=${this.loginForm.password}`);
+      const response = await axiosInstance.post(`${this.$httpUrl}login/loginCheck?userMail=${this.loginForm.userMail}&password=${this.loginForm.password}`);
       if (response.data.code === 400) {
-        alert("登录失败");
+        this.$message.error('登录失败!')
       } else {
         localStorage.setItem('passToken', response.data.data)
-        alert('登录成功!');
+        this.$message.success('登录成功!')
         axiosInstance.get(this.$httpUrl + 'login/getAccountInfo', {params: {}}).then(res => res.data).then(res => {
           console.log(res)
           if (res.code !== 200) {
