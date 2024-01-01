@@ -213,8 +213,8 @@ methods: {
     },
     async submitAddItem(submitOrUpdate,index){
       const response = await axiosInstance.post(`http://localhost:8081/ManageItems/generateANewItem?name=${this.Item.name}&num=${this.Item.num}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
-      if(response.data.code == 400) alert("添加失败");
-      else alert('添加成功');
+      if(response.data.code === 400) alert("添加失败");
+      else this.$message.success('添加成功');
       this.addItem_dialog=false;
       this.updateItemList();
     },
@@ -231,16 +231,16 @@ methods: {
     async updateAddItem(){
       //将弹窗中的信息更新到数据库
         const response = await axiosInstance.put(`http://localhost:8081/ManageItems/updateItem?itemName=${this.Item.name}&price=${this.Item.price}&description=${this.Item.description}&imagePath=${this.Item.imagePath}`);
-        if(response.data.code == 400) alert("更新失败");
-        else alert('更新成功');
+        if(response.data.code === 400) alert("更新失败");
+        else this.$message.success('更新成功');
         this.updateItem_dialog=false;
         this.updateItemList();
     },
     async deleteItem(curItem) {
       const response = await axiosInstance.delete(`http://localhost:8081/ManageItems/deleteItem?name=${curItem.name}`);
-      if(response.data.code == 400) alert("删除失败");
+      if(response.data.code === 400) alert("删除失败");
       else {
-        alert('删除成功');
+        this.$message.success('删除成功');
         this.updateItemList();
       }
     },
@@ -250,28 +250,28 @@ methods: {
     },
     async submitInstant(){
       const response = await axiosInstance.post(`http://localhost:8081/ManageItems/addInstantItem?itemName=${this.instantInfo.itemName}&num=${this.instantInfo.num}&shoppingDays=${this.instantInfo.shoppingDays}`);
-      if(response.data.code == 400) alert(response.data.data);
-      else alert("添加成功");
+      if(response.data.code === 400) alert(response.data.data);
+      else this.$message.success('添加成功');
       this.instant_dialog = false;
     },
     async deleteInstant(curItem){
       const response = await axiosInstance.post(`http://localhost:8081/ManageItems/deleteInstantItem?itemName=${curItem.name}`)
-      if(response.data.code == 400) alert(response.data.data);
-      else alert("删除成功")
+      if(response.data.code === 400) alert(response.data.data);
+      else this.$message.success('删除成功');
     },
     async updateItemList(){
       //模糊查询相关，需要后端有通过 like 查询的接口
         const response = await axiosInstance.get('http://localhost:8081/ManageItems/findAll');
-        if(response.data.code == 400) alert("加载失败");
+        if(response.data.code === 400) alert("加载失败");
         this.ItemList = response.data.data;
     },
     async searchHandler(){
       this.input = this.$refs.input.$el.querySelector('input').value;
-      if(this.input == ""){
+      if(this.input === ""){
         this.updateItemList();
       }else{
         const response = await axiosInstance.get(`http://localhost:8081/ManageItems/findByName?name=${this.input}`);
-        if(response.data.code == 400) alert("搜索失败");
+        if(response.data.code === 400) alert("搜索失败");
         this.ItemList = [response.data.data];
       }
     }
