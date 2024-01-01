@@ -79,8 +79,9 @@ export default {
           message: '修改成功!',
           type: 'success'
         });
-        localStorage.setItem('passToken', response.data.data)
+        localStorage.setItem('passToken', response.data.data);
         this.load();
+        this.$store.commit('updateUserInfo', this.form)
       }
     },
   }

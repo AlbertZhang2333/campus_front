@@ -52,11 +52,13 @@ export default {
           } else {
             console.log('res:')
             console.log(res.data)
+            this.$store.commit('updateUserInfo', res.data)
           }
         }).catch(error => {
           console.error('Error adding comment:', error);
           this.$message.warning('数据加载失败!');
         });
+
         await this.$router.push(`/home`)
       }
     },
