@@ -35,7 +35,7 @@
     <el-col :span="4" style="height: 100%">
       <el-button
           type="primary"
-          v-if="!isLogIn"
+          v-if="(this.userInfo.identity === 0)"
           icon="el-icon-arrow-right"
           class="button"
           style="height: 100%;"
@@ -47,13 +47,15 @@
           v-else
           class="center"
           style="height: 100%; width: auto; max-width: 100%;"
-          @click.native="logOut"
       >
         <el-image fit="fill" :src="require(`@/assets/user_icon/${userInfo.userIcon}.jpg`)" alt=""
+                  @click="$router.push('/userInfo')"
                   style="height: 80%; width: auto; border: 3px solid orange;border-radius: 5px; margin-right: 20px"/>
         <h2 style="color:#27004c;">
           {{ userInfo.username }}
         </h2>
+
+        <el-button type="info" icon="el-icon-switch-button" circle @click="logOut"></el-button>
       </el-container>
     </el-col>
   </el-row>
@@ -93,10 +95,6 @@ export default {
   },
   computed: {
     ...mapState(['userInfo']),
-
-    isLogIn(){
-      return this.userInfo.identity !== 0
-    }
   },
   methods: {
     goSustech() {
@@ -104,12 +102,30 @@ export default {
       window.location.href = 'https://www.sustech.edu.cn/'
     },
     logOut() {
-      localStorage.clear()
-      this.$store.commit('updateUserInfo')
+      this.$confirm('确认登出').then(() => {
+        localStorage.clear()
+        this.$store.commit('updateUserInfo', {
+          username: 'name',
+          userMail: 'mail',
+          userIcon: 0,
+          identity: 0,
+        })
+        this.$message.success('退出成功!')
+          }
+      ).catch()
     }
   },
   created() {
     this.activeIndex = this.$route.path;
+    if (localStorage.getItem('passToken') !== null) {
+      const packInfo = {
+        username: localStorage.getItem('username'),
+        userMail: localStorage.getItem('userMail'),
+        userIcon: localStorage.getItem('userIcon'),
+        identity: localStorage.getItem('identity'),
+      }
+      this.$store.commit('updateUserInfo', packInfo)
+    }
   },
   watch: {
     $route(to) {

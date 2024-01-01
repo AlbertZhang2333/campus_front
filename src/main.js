@@ -18,7 +18,6 @@ import Chat from 'vue-beautiful-chat'
 import store from "@/store";
 Vue.use(Chat)
 
-
 const axiosInstance = axios.create();
 
 // 添加请求拦截器

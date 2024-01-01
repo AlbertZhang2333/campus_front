@@ -72,7 +72,7 @@ export default {
     },
     async save() {
       const response = await axiosInstance.put(`${this.$httpUrl}login/changeUserIconAndUsername?UserIcon=${this.form.userIcon}&username=${this.form.username}`)
-      if(response.data.code == 400){
+      if(response.data.code === 400){
         alert(response.data.date);
       }else{
         this.$message({
@@ -80,7 +80,11 @@ export default {
           type: 'success'
         });
         localStorage.setItem('passToken', response.data.data);
-        this.load();
+        localStorage.setItem('username', this.form.username);
+        localStorage.setItem('userMail', this.form.userMail);
+        localStorage.setItem('userIcon', this.form.userIcon);
+        localStorage.setItem('identity', this.form.identity);
+        await this.load();
         this.$store.commit('updateUserInfo', this.form)
       }
     },

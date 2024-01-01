@@ -38,7 +38,7 @@ export default {
       }
     }
   },
-  computed:{
+  computed: {
     ...mapState(['userInfo'])
   },
   methods: {
@@ -63,6 +63,11 @@ export default {
               userMail: res.data.userMail,
               username: res.data.username,
             }
+            localStorage.setItem('username', res.data.username);
+            localStorage.setItem('userMail', res.data.userMail);
+            localStorage.setItem('userIcon', res.data.userIcon);
+            localStorage.setItem('identity', res.data.identity);
+
             console.log(packInfo)
             this.$store.commit('updateUserInfo', packInfo)
             console.log(this.userInfo)
