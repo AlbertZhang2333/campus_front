@@ -26,6 +26,7 @@
 <script>
 
 import axiosInstance from "@/main";
+import {mapState} from "vuex";
 
 export default {
   name: 'Login',
@@ -37,6 +38,9 @@ export default {
       }
     }
   },
+  computed:{
+    ...mapState(['userInfo'])
+  },
   methods: {
     async Login() {
       console.log("usermail:" + this.loginForm.userMail + "password:" + this.loginForm.password);
@@ -46,13 +50,22 @@ export default {
       } else {
         localStorage.setItem('passToken', response.data.data)
         alert('登录成功!');
-        axiosInstance.get(this.$httpUrl + 'getAccountInfo', {params: {}}).then(res => res.data).then(res => {
+        axiosInstance.get(this.$httpUrl + 'login/getAccountInfo', {params: {}}).then(res => res.data).then(res => {
+          console.log(res)
           if (res.code !== 200) {
             this.$message.warning('数据加载失败!');
           } else {
             console.log('res:')
             console.log(res.data)
-            this.$store.commit('updateUserInfo', res.data)
+            const packInfo = {
+              identity: res.data.identity,
+              userIcon: res.data.userIcon,
+              userMail: res.data.userMail,
+              username: res.data.username,
+            }
+            console.log(packInfo)
+            this.$store.commit('updateUserInfo', packInfo)
+            console.log(this.userInfo)
           }
         }).catch(error => {
           console.error('Error adding comment:', error);
