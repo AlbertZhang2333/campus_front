@@ -33,7 +33,7 @@ export default {
     return {
       loginForm: {
         userMail: '',
-        password: '',
+        password: ''
       }
     }
   },
@@ -47,15 +47,28 @@ export default {
         localStorage.setItem('passToken', response.data.data)
 
         alert('登录成功!');
-        this.$router.push(`/shop`)
+        axiosInstance.get(this.$httpUrl + 'getAccountInfo', {params: {}}).then(res => res.data).then(res => {
+          if (res.code !== 200) {
+            this.$message.warning('数据加载失败!');
+          } else {
+            console.log('res:')
+            console.log(res.data)
+            this.$store.commit('login', res.data)
+          }
+        }).catch(error => {
+          console.error('Error adding comment:', error);
+          this.$message.warning('数据加载失败!');
+        });
       }
-    },
-    toForgotPassword() {
-      this.$router.push({path: '/ForgotPassword'})
-    },
-    toRegister() {
-      this.$router.push({path: '/Register'})
+      this.$store.commit('login', this.loginForm)
+      await this.$router.push(`/home`)
     }
+  },
+  toForgotPassword() {
+    this.$router.push({path: '/ForgotPassword'})
+  },
+  toRegister() {
+    this.$router.push({path: '/Register'})
   }
 }
 </script>
