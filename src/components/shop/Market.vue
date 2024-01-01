@@ -12,10 +12,29 @@
                     <img v-bind:src="item.src" alt="carousel_image" />
                 </el-carousel-item>
             </el-carousel>
-            <h3></h3>
+            <div class="color-mix-container">
+                <p class="large-text">点击就送</p>
+            </div>
+            <el-row style="position: relative">
+                <el-col :span="4" v-for="shoppingItem in instantShoppingItemList" :key="shoppingItem.name" :offset="3">
+                    <el-card class="card_style" shadow="hover">
+                        <el-image :src="shoppingItem.imagePath" style="height: 240px;width: 350px"></el-image>
+                        <div style="padding: 20px;">
+                            <span>{{ shoppingItem.name }}</span>
+                            <span style="color: rgb(255, 42, 0)">免费啦！！！</span>
+                        </div>
+                        <el-button @click="getInstant(shoppingItem)" style="margin-top: 10%">
+                            秒杀
+                        </el-button>
+                    </el-card>
+                </el-col>
+            </el-row>
+            <el-divider></el-divider>
+            <h2 style="text-align: center;"> 本周热卖 </h2>
             <el-input ref="input" v-model="input" placeholder="输入商品名称" @keyup.enter.native="searchHandler" id="input">
                 <el-button slot="append" icon="el-icon-search" id="search" @click="searchHandler"></el-button>
             </el-input>
+            
             <el-row style="position: relative">
                 <el-col :span="4" v-for="shoppingItem in shoppingItemList" :key="shoppingItem.name" :offset="3">
                     <el-dialog :visible.sync="newShoppingDialog" class="dialog_style">
@@ -41,7 +60,6 @@
                         <el-button @click="openShoppingDialog(shoppingItem)" style="margin-top: 10%">
                             购买商品
                         </el-button>
-
                     </el-card>
 
                 </el-col>
@@ -70,6 +88,7 @@ export default {
 
             ],
             shoppingItemList: [],
+            instantShoppingItemList: [],
             currentDate: new Date(),
             newShoppingDialog: false,
             currentShoppingItem: null,
@@ -93,7 +112,7 @@ export default {
         async submit_order() {
             const response = await axiosInstance.post('http://localhost:8081/UserShopping/addItemToTheCart?itemName='+this.currentShoppingItem.name+'&num='+this.num);
             console.log("addResponse", response);
-            if(response.data.code == 400) alert("加入购物车失败");
+            if(response.data.code == 400) alert(response.data.data);
             this.newShoppingDialog=false;
             this.num=0;
             this.currentShoppingItem=null;
@@ -103,8 +122,11 @@ export default {
         },
         async loadItemList() {
             const response = await axiosInstance.get('http://localhost:8081/UserShopping/findAll');
-            if(response.data.code == 400) alert("加载商品信息失败");
-            this.shoppingItemList=response.data.data;
+            if(response.data.code == 400) alert(response.data.data);
+            else this.shoppingItemList=response.data.data;
+            const response2 = await axiosInstance.get('http://localhost:8081/UserShopping/getInstantItems');
+            if(response2.data.code == 400) alert(response2.data.data);
+            else this.instantShoppingItemList=response2.data.data;
         },
         async searchHandler() {
             this.input = this.$refs.input.$el.querySelector('input').value;
@@ -112,9 +134,14 @@ export default {
               this.loadItemList();
             }else{
               const response = await axiosInstance.get(`http://localhost:8081/UserShopping/searchItem?itemName=${this.input}`);
-              if(response.data.code == 400) alert("搜索失败");
+              if(response.data.code == 400) alert(response.data.data);
               this.shoppingItemList= [response.data.data];
             }
+        },
+        async getInstant(shoppingItem) {
+            const response = await axiosInstance.put(`http://localhost:8081/UserShopping/UserCatchInstantItem?itemName=${shoppingItem.name}`);
+            if(response.data.code == 400) alert(response.data.data);
+            else this.loadItemList();
         }
     }
 }
@@ -147,6 +174,7 @@ export default {
 }
 
 .carousel_style {
+    text-align: center;
     color: #eeab64;
     margin: auto;
     line-height: 100px;
@@ -198,6 +226,7 @@ export default {
 
 
 .color-mix-container {
+  text-align: center;
   margin-left: 20px;
   text-align: center;
   background: linear-gradient(to right, #d8b4e2 50%, #ffffff 70%);

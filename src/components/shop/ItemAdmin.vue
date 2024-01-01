@@ -42,6 +42,16 @@
           </el-button>
           </template>
       </el-table-column>
+      <el-table-column>
+          <template #default="scope">
+            <el-button @click="addInstant(scope.row)" type="danger" icon="el-icon-edit">
+                添加秒杀
+            </el-button>
+            <el-button @click="deleteInstant(scope.row)" type="primary" icon="el-icon-delete">
+                移除秒杀
+            </el-button>
+          </template>
+      </el-table-column>
     </el-table>
 
     <el-dialog :visible.sync="addItem_dialog">
@@ -107,6 +117,29 @@
         提交修改
       </el-button>
     </el-dialog>
+
+    <el-dialog :visible.sync="instant_dialog">
+      <h3 class="dialog-title">秒杀信息</h3>
+      <el-form
+        ref="instantInfo"
+        :model="instantInfo"
+        :rules="instantInfoRule"
+        label-width="100px"
+        label-position="right"
+        size="small"
+        class="dialog-form"
+      >
+        <el-form-item label="数量上限" prop="num">
+          <el-input v-model="instantInfo.num"/>
+        </el-form-item>
+        <el-form-item label="秒杀天数" prop="shoppingDays">
+          <el-input v-model="instantInfo.shoppingDays"/>
+        </el-form-item>
+      </el-form>
+      <el-button @click="submitInstant()" class="dialog-button">
+        提交修改
+      </el-button>
+    </el-dialog>
   </div>
 </template>
   
@@ -127,6 +160,11 @@ export default {
           description: "",
           imagePath: ""
         },
+        instantInfo: {
+          itemName: "",
+          num: 0,
+          shoppingDays: 0
+        },
         ItemList:[],
         ItemAddRule:{
             name:[
@@ -144,9 +182,20 @@ export default {
               {required:true, message:"商品描述信息", trigger: 'blur'}
             ]
         },
+        instantInfoRule: {
+          num:[
+            {required:true, message:"库存数量不能为空", trigger: 'blur'},
+            {pattern: /^\d+$/, message: "库存数量应为一个非负整数", trigger:'blur'}
+          ],
+          shoppingDays:[
+            {required:true, message:"秒杀天数不能为空", trigger: 'blur'},
+            {pattern: /^\d+$/, message: "秒杀天数应为一个非负整数", trigger:'blur'}
+          ],
+        },
 
         addItem_dialog:false,
         updateItem_dialog:false,
+        instant_dialog: false,
         input: ""
     }
     },
@@ -190,9 +239,26 @@ methods: {
     async deleteItem(curItem) {
       const response = await axiosInstance.delete(`http://localhost:8081/ManageItems/deleteItem?name=${curItem.name}`);
       if(response.data.code == 400) alert("删除失败");
-      else alert('删除成功');
+      else {
+        alert('删除成功');
+        this.updateItemList();
+      }
     },
-
+    addInstant(curItem){
+      this.instant_dialog = true;
+      this.instantInfo.itemName = curItem.name;
+    },
+    async submitInstant(){
+      const response = await axiosInstance.post(`http://localhost:8081/ManageItems/addInstantItem?itemName=${this.instantInfo.itemName}&num=${this.instantInfo.num}&shoppingDays=${this.instantInfo.shoppingDays}`);
+      if(response.data.code == 400) alert(response.data.data);
+      else alert("添加成功");
+      this.instant_dialog = false;
+    },
+    async deleteInstant(curItem){
+      const response = await axiosInstance.post(`http://localhost:8081/ManageItems/deleteInstantItem?itemName=${curItem.name}`)
+      if(response.data.code == 400) alert(response.data.data);
+      else alert("删除成功")
+    },
     async updateItemList(){
       //模糊查询相关，需要后端有通过 like 查询的接口
         const response = await axiosInstance.get('http://localhost:8081/ManageItems/findAll');
