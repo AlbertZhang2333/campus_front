@@ -69,7 +69,7 @@ export default {
     return {
       url_logo: require(`@/assets/home_pictures/logo.png`),
       input: '',
-      isLogIn: true,
+      isLogIn: false,
       activeIndex: '',
       menuList: [
         {
@@ -101,6 +101,7 @@ export default {
     },
     logOut() {
       this.$store.commit('updateUserInfo', {})
+      this.isLogIn = false
     }
   },
   created() {

@@ -14,9 +14,15 @@ const store = new Vuex.Store({
     },
     mutations: {
         updateUserInfo(state, userInfo) {
-            console.log(333)
-            console.log(userInfo)
-            state.userInfo = userInfo
+            if (userInfo === undefined || userInfo.length === 0)
+                state.userInfo = {
+                    username: 'name',
+                    userMail: 'mail',
+                    userIcon: 0,
+                    identity: 0,
+                }
+            else
+                state.userInfo = userInfo
         }
     }
 })
