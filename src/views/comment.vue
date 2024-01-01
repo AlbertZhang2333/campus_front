@@ -1,6 +1,6 @@
 <template>
   <el-container style="display:flex; flex-direction: column;">
-    <CommentBox :reply-id="replyComment?.replyId" :emojiList="emojiList" @commit="loadComment"/>
+    <CommentBox :reply-id="replyComment?.replyId??-1" :emojiList="emojiList" @commit="loadComment"/>
 
     <el-divider></el-divider>
 

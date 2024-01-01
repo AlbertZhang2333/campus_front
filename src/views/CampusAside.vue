@@ -48,7 +48,7 @@
           class="center"
           style="height: 100%; width: auto; max-width: 100%"
         >
-          <el-image/>
+          <el-image :src="require('@/assets/logo.png')" alt=""/>
           <h2 style="align-self: center">
             login!
           </h2>
