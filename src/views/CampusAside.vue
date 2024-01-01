@@ -61,6 +61,7 @@
 
 <script>
 import {mapState} from "vuex";
+import userInfo from "@/components/login/UserInfo.vue";
 
 export default {
   name: 'CampusAside',
@@ -69,7 +70,6 @@ export default {
     return {
       url_logo: require(`@/assets/home_pictures/logo.png`),
       input: '',
-      isLogIn: false,
       activeIndex: '',
       menuList: [
         {
@@ -92,7 +92,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(['userInfo']),
+
+    isLogIn(){
+      return this.userInfo.identity !== 0
+    }
   },
   methods: {
     goSustech() {
@@ -100,8 +104,8 @@ export default {
       window.location.href = 'https://www.sustech.edu.cn/'
     },
     logOut() {
-      this.$store.commit('updateUserInfo', {})
-      this.isLogIn = false
+      localStorage.clear()
+      this.$store.commit('updateUserInfo')
     }
   },
   created() {
