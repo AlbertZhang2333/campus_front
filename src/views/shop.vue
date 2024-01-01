@@ -12,6 +12,9 @@
     <el-container>
       <Chat></Chat>
     </el-container>
+    <el-container>
+      <comment-area :department="2"></comment-area>
+    </el-container>
   </div>
 </template>
   
@@ -19,6 +22,7 @@
   import Main from "@/components/shop/Market.vue";
   import Aside from "@/components/shop/Aside.vue";
   import Chat from "@/views/Chat.vue";
+  import CommentArea from '@/components/comments/commentArea.vue';
   
   
   export default {
@@ -26,6 +30,8 @@
       Chat,
       Aside,
         Main,
+        Comment,
+        CommentArea,
     }
   }
   </script>

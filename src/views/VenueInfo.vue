@@ -10,16 +10,16 @@
     </el-divider>
     <h2> Comments </h2>
     <el-container style="background-color: #fff3cd; border-color: #003f43">
-      
+      <comment-area :department="1"></comment-area>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import Comment from '../components/comments/commentArea.vue'
+import CommentArea from '../components/comments/commentArea.vue'
 import axiosInstance from "@/main";
 export default {
-  components: {Comment},
+  components: {CommentArea},
   data() {
     return {
       building: {

@@ -63,7 +63,6 @@
 
 <script>
 import {mapState} from "vuex";
-import userInfo from "@/components/login/UserInfo.vue";
 
 export default {
   name: 'CampusAside',

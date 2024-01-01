@@ -41,70 +41,92 @@ export default {
       cards: [
         {
           id: 1,
-          name: 'Card 1',
+          name: '一丹图书馆',
           image: require('@/assets/home_pictures/picture1.jpg'),
-          text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+          text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+          url: '/VenueInfo',
         },
         {
           id: 2,
-          name: 'Card 2',
+          name: '琳恩图书馆',
           image: require('@/assets/home_pictures/picture2.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          url: '/comment',
         },
         {
           id: 3,
-          name: 'Card 3',
+          name: '涵泳图书馆',
           image: require('@/assets/home_pictures/picture3.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          url: '/reservation',
         },
         {
           id: 4,
-          name: 'Card 4',
+          name: '二期学生宿舍',
           image: require('@/assets/home_pictures/picture4.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          url: '',
         },
         {
           id: 5,
-          name: 'Card 5',
+          name: '荔园',
           image: require('@/assets/home_pictures/picture5.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 6,
-          name: 'Card 6',
+          name: '第一教学楼',
           image: require('@/assets/home_pictures/picture6.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 7,
-          name: 'Card 7',
+          name: '理学院',
           image: require('@/assets/home_pictures/picture7.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 8,
-          name: 'Card 8',
+          name: '第三教学楼',
           image: require('@/assets/home_pictures/picture8.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 9,
-          name: 'Card 9',
+          name: '科研楼',
           image: require('@/assets/home_pictures/picture9.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 10,
-          name: 'Card 10',
+          name: '松禾体育场',
           image: require('@/assets/home_pictures/picture10.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 11,
-          name: 'Card 11',
+          name: '商学院',
           image: require('@/assets/home_pictures/picture11.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-        }
+        },
+        {
+          id: 12,
+          name: '工学院',
+          image: require('@/assets/home_pictures/picture11.jpg'),
+          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        },
+        {
+          id: 13,
+          name: '中心食堂',
+          image: require('@/assets/home_pictures/picture11.jpg'),
+          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        },
+        {
+          id: 14,
+          name: '湖畔食堂',
+          image: require('@/assets/home_pictures/picture11.jpg'),
+          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+        },
       ]
     }
   },

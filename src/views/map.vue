@@ -1,11 +1,11 @@
 <template>
-  <MapAdmin></MapAdmin>
+  <Main></Main>
 </template>
     
 <script>
-  import MapAdmin from "@/components/map/MapAdmin.vue";
+  import Main from "@/components/map/MapContainer.vue";
   export default {
-    components: {MapAdmin},
+    components: {Main},
     data() {
       return {
         text: '',
