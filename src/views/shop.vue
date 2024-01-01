@@ -9,17 +9,21 @@
         <Main></Main>
       </el-main>
     </el-container>
-
+    <el-container>
+      <Chat></Chat>
+    </el-container>
   </div>
 </template>
   
   <script>
   import Main from "@/components/shop/Market.vue";
   import Aside from "@/components/shop/Aside.vue";
+  import Chat from "@/views/Chat.vue";
   
   
   export default {
     components: {
+      Chat,
       Aside,
         Main,
     }

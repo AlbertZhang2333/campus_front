@@ -19,7 +19,6 @@ import Home from "@/views/Home.vue";
 import Sustech from "@/views/Sustech.vue";
 import VenueInfo from "@/views/VenueInfo.vue";
 import UserRecord from "@/views/shopUserRecord.vue";
-import Chat from "@/views/Chat.vue";
 import reservationAnalysis from "@/components/reservation/reservationAnalysis.vue"
 import ChatAdmin from "@/components/chat/ChatAdmin.vue";
 
@@ -108,11 +107,7 @@ const routes = [
         component: VenueInfo
     },
     {
-        path: '/chat',
-        component: Chat
-    },
-    {
-        path: '/chat/admin',
+        path: '/shop/chat/admin',
         component: ChatAdmin
     },
     {

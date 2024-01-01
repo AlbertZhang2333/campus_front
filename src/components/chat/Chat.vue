@@ -3,7 +3,6 @@
     <!-- beautiful-chat 组件 -->
     <beautiful-chat
         :participants="participants"
-        :titleImageUrl="titleImageUrl"
         :onMessageWasSent="sendMessage"
         :messageList="messageList"
         :newMessagesCount="newMessagesCount"
@@ -30,6 +29,7 @@
 <script>
 import axiosInstance from "@/main";
 import Chat from "@/views/Chat.vue";
+
 const AdminUserMail = '3077161150@qq.com';
 
 export default {
@@ -47,12 +47,10 @@ export default {
           id: 'staff1',
           name: '客服',
           toUserMail: AdminUserMail,
-          imageUrl: 'https://avatars3.githubusercontent.com/u/1915989?s=230&v=4'
+          imageUrl: 'https://img.ixintu.com/download/jpg/202304/2583018a4fddf7fd5a4889fd304ef122_260_260.jpg!con'
         }
       ], // 对话的所有参与者的列表。' name '是用户名，' id '用于建立消息的作者，' imageUrl '应该是用户头像。
-      titleImageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png',
-      messageList: [
-      ], // // 要显示的消息列表可以动态地分页和调整
+      messageList: [], // // 要显示的消息列表可以动态地分页和调整
       newMessagesCount: 0,
       isChatOpen: false, // 确定聊天窗口应该打开还是关闭
       showTypingIndicator: '',  // 当设置为匹配参与者的值时。它显示特定用户的输入指示
@@ -92,16 +90,13 @@ export default {
         author: 'staff1',
         data: {text: message.content},
       };
-      console.log(newMessage)
       this.onMessageWasSent(newMessage);
     },
     onMessageWasSent(message) {
       // 当用户发送消息时调用
-      // console.log(message)
       this.messageList = [...this.messageList, message]
     },
     sendMessage(message) {
-      // console.log(message.data.text.length)
       if (message.data.text.length > 0) {
         this.newMessagesCount = this.isChatOpen ? this.newMessagesCount : this.newMessagesCount + 1
 
@@ -146,15 +141,11 @@ export default {
       m.data.text = message.data.text;
     },
     getUserMail() {
-      console.log(666)
-      console.log(localStorage.getItem('passToken'))
       return axiosInstance.get(this.$httpUrl + 'TheLoginUserInfo/getLoginUserMail')
           .then(res => res.data)
           .then(res => {
             if (res.code === 200) {
-              console.log(res.data)
               this.userMail = res.data;
-              console.log(this.userMail);
               return res.data; // 返回用户邮件
             }
           });
@@ -162,9 +153,7 @@ export default {
     initSocket() {
       this.getUserMail().then(() => {
         // 在获取用户邮件后创建 WebSocket 连接
-        console.log(this.userMail)
         this.socket = new WebSocket(`ws://localhost:8081/ws/${this.passToken}?passToken=${this.passToken}`);
-        console.log(666)
         this.socket.addEventListener('message', this.handleWebSocketMessage);
       });
     },
