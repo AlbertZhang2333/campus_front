@@ -366,11 +366,11 @@
   .carousel_style {
     color: #eeab64;
     margin: auto;
-    line-height: 100px;
+    line-height: 0px;
     flex: auto;
     width: 100%;
-    height: 300px;
-    border-radius: 4px;
+    height: 330px;
+    border-radius: 0px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
   
@@ -378,7 +378,7 @@
     margin: auto;
     flex: auto;
     width: 100%;
-    height: 300px;
+    height: 280px;
   }
   
   .scaled-image {

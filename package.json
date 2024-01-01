@@ -17,6 +17,7 @@
         "lodash": "^4.17.21",
         "mockjs": "^1.1.0",
         "vue": "^2.7.15",
+        "vue-advanced-chat": "^2.0.10",
         "vue-beautiful-chat": "^2.5.0",
         "vue-router": "^3.6.5"
     },

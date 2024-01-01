@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- beautiful-chat 组件 -->
     <beautiful-chat
         :participants="participants"
         :titleImageUrl="titleImageUrl"
@@ -19,36 +20,38 @@
         :disableUserListToggle="false"
         :messageStyling="messageStyling"
         @onType="handleOnType"
-        @edit="editMessage"/>
+        @edit="editMessage"
+    />
+
+    <!-- 侧边栏 -->
   </div>
 </template>
 
 <script>
 import axiosInstance from "@/main";
+import Chat from "@/views/Chat.vue";
 const AdminUserMail = '3077161150@qq.com';
 
 export default {
+  components: {Chat},
   data() {
     return {
       userMail: null,
-      // Other data properties...
       socket: null,
+      passToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTWFpbCI6IjMzNDQ3NjcyNTBAcXEuY29tIiwidXNlcm5hbWUiOiJjc3dfY2NjIiwiaWRlbnRpdHkiOjEsInVzZXJJY29uIjowLCJleHAiOjE3MDQxODg5OTQsImlhdCI6MTcwNDEwMjU5NH0.35WrlO2lD_9RJGn6arNeAj4nEs3mkZ369qP_-WlhP0k',
+
+      selectedUser: null, // 用于存储用户选择的用户 ID
+
       participants: [
         {
-          id: 'user1',
-          name: 'Matteo',
+          id: 'staff1',
+          name: '客服',
+          toUserMail: AdminUserMail,
           imageUrl: 'https://avatars3.githubusercontent.com/u/1915989?s=230&v=4'
-        },
-        {
-          id: 'user2',
-          name: 'Support',
-          imageUrl: 'https://avatars3.githubusercontent.com/u/37018832?s=200&v=4'
         }
       ], // 对话的所有参与者的列表。' name '是用户名，' id '用于建立消息的作者，' imageUrl '应该是用户头像。
       titleImageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png',
       messageList: [
-        {type: 'text', author: `me`, data: {text: `Say yes!`}, toUserMail: '3344767250@qq.com'},
-        {type: 'text', author: `user1`, data: {text: `No.`}, toUserMail: '3344767250@qq.com'}
       ], // // 要显示的消息列表可以动态地分页和调整
       newMessagesCount: 0,
       isChatOpen: false, // 确定聊天窗口应该打开还是关闭
@@ -84,7 +87,18 @@ export default {
   methods: {
     handleWebSocketMessage(event) {
       const message = JSON.parse(event.data);
-      this.onMessageWasSent(message);
+      const newMessage = {
+        type: 'text',
+        author: 'staff1',
+        data: {text: message.content},
+      };
+      console.log(newMessage)
+      this.onMessageWasSent(newMessage);
+    },
+    onMessageWasSent(message) {
+      // 当用户发送消息时调用
+      // console.log(message)
+      this.messageList = [...this.messageList, message]
     },
     sendMessage(message) {
       // console.log(message.data.text.length)
@@ -100,12 +114,6 @@ export default {
 
         this.onMessageWasSent(message);
       }
-    },
-    onMessageWasSent(message) {
-      console.log(message)
-      // 当用户发送消息时调用
-      // console.log(message)
-      this.messageList = [...this.messageList, message]
     },
     openChat() {
       // 当用户单击fab按钮打开聊天时调用
@@ -155,7 +163,7 @@ export default {
       this.getUserMail().then(() => {
         // 在获取用户邮件后创建 WebSocket 连接
         console.log(this.userMail)
-        this.socket = new WebSocket(`ws://localhost:8081/ws/${this.userMail}?passToken=${localStorage.getItem('passToken')}`);
+        this.socket = new WebSocket(`ws://localhost:8081/ws/${this.passToken}?passToken=${this.passToken}`);
         console.log(666)
         this.socket.addEventListener('message', this.handleWebSocketMessage);
       });
@@ -163,3 +171,20 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+div {
+  display: flex;
+}
+
+/* 调整beautiful-chat的宽度和样式 */
+beautiful-chat {
+  flex: 1;
+}
+
+.sidebar {
+  width: 300px; /* 调整侧边栏的宽度 */
+  background-color: #f0f0f0; /* 设置侧边栏的背景颜色 */
+  /* 可以添加其他样式，根据需要调整 */
+}
+</style>

@@ -21,6 +21,7 @@ import VenueInfo from "@/views/VenueInfo.vue";
 import UserRecord from "@/views/shopUserRecord.vue";
 import Chat from "@/views/Chat.vue";
 import reservationAnalysis from "@/components/reservation/reservationAnalysis.vue"
+import ChatAdmin from "@/components/chat/ChatAdmin.vue";
 
 Vue.use(VueRouter)
 
@@ -107,13 +108,18 @@ const routes = [
         component: VenueInfo
     },
     {
+        path: '/chat',
+        component: Chat
+    },
+    {
+        path: '/chat/admin',
+        component: ChatAdmin
+    },
+    {
         path: '/*',
         redirect: '/home'
     },
-    {
-        path: '/chat',
-        component: Chat
-    }
+
 ]
 
 const router = new VueRouter({
