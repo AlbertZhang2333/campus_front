@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Comment from './comment.vue'
+import Comment from '../components/comments/commentArea.vue'
 import axiosInstance from "@/main";
 export default {
   components: {Comment},

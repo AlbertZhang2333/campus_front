@@ -4,7 +4,7 @@
         src="https://www.sustech.edu.cn/uploads/files/2023/12/13145220_64059.mp4"
         id="campus_video"
         preload="auto"
-        poster="@/assets/sustech_map1.jpg"
+        poster="../assets/home_pictures/sustech_map1.jpg"
         @click="play"
         autoplay
         playsinline
@@ -42,67 +42,67 @@ export default {
         {
           id: 1,
           name: 'Card 1',
-          image: require('@/assets/picture1.jpg'),
+          image: require('@/assets/home_pictures/picture1.jpg'),
           text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
         },
         {
           id: 2,
           name: 'Card 2',
-          image: require('@/assets/picture2.jpg'),
+          image: require('@/assets/home_pictures/picture2.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 3,
           name: 'Card 3',
-          image: require('@/assets/picture3.jpg'),
+          image: require('@/assets/home_pictures/picture3.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 4,
           name: 'Card 4',
-          image: require('@/assets/picture4.jpg'),
+          image: require('@/assets/home_pictures/picture4.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 5,
           name: 'Card 5',
-          image: require('@/assets/picture5.jpg'),
+          image: require('@/assets/home_pictures/picture5.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 6,
           name: 'Card 6',
-          image: require('@/assets/picture6.jpg'),
+          image: require('@/assets/home_pictures/picture6.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 7,
           name: 'Card 7',
-          image: require('@/assets/picture7.jpg'),
+          image: require('@/assets/home_pictures/picture7.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 8,
           name: 'Card 8',
-          image: require('@/assets/picture8.jpg'),
+          image: require('@/assets/home_pictures/picture8.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 9,
           name: 'Card 9',
-          image: require('@/assets/picture9.jpg'),
+          image: require('@/assets/home_pictures/picture9.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 10,
           name: 'Card 10',
-          image: require('@/assets/picture10.jpg'),
+          image: require('@/assets/home_pictures/picture10.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 11,
           name: 'Card 11',
-          image: require('@/assets/picture11.jpg'),
+          image: require('@/assets/home_pictures/picture11.jpg'),
           text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         }
       ]

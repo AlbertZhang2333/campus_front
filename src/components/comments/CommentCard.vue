@@ -9,8 +9,11 @@
 
     <p class="comment-time"> 评论时间：{{ comment.date + ' ' + comment.time }} </p>
 
-    <el-button @click="this.$emit('delete-comment')" type="danger" size="mini" class="comment-action">删除</el-button>
-    <el-button v-if="replyable" @click="$emit('reply', comment)" type="primary" size="mini" class="comment-action">
+    <el-button v-if="deletable" @click="this.$emit('delete-comment', comment)" type="danger" size="mini"
+               class="comment-action">删除
+    </el-button>
+    <el-button v-if="replyable" @click="$emit('reply-comment', comment.id)" type="primary" size="mini"
+               class="comment-action">
       回复
     </el-button>
   </el-card>
@@ -24,6 +27,7 @@ export default {
   name: 'CommentCard',
   props: {
     replyable: Boolean,
+    deletable: Boolean,
     comment: {
       id: Number, // 初始为0，具体情况视需求而定
       userName: String,

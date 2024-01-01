@@ -4,7 +4,7 @@
     <img
       v-for="(position, index) in positions"
       :key="index"
-      src="../assets/post.png"
+      src="../assets/home_pictures/post.png"
       :style="{
         float: 'left',
         position: 'absolute',
@@ -15,7 +15,7 @@
       }"
       @click="editPost(position)" alt="">
     <!--背景图片-->
-    <img src="@/assets/sustech_map1.jpg" alt="" class="sustech" @click="viewMark" @dblclick="addMark">
+    <img src="../assets/home_pictures/sustech_map1.jpg" alt="" class="sustech" @click="viewMark" @dblclick="addMark">
     <!--表单弹出框-->
     <el-dialog
       :title="position.title"
