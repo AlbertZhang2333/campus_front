@@ -5,6 +5,7 @@
     <vue-advanced-chat
         :current-user-id="currentUserId"
         :rooms="JSON.stringify(rooms)"
+        :show-add-room="false"
         :rooms-loaded="true"
         :messages="JSON.stringify(messages)"
         @send-message="sendMessage($event.detail[0])"
@@ -51,7 +52,9 @@ export default {
   methods: {
     fetchMessages(roomInfo) {
       // console.log(roomInfo)
-      this.handleRoomChange(roomInfo)
+      setTimeout(() => {
+        this.handleRoomChange(roomInfo)
+      })
     },
     loadMessage() {
       this.messages = this.allMessages[this.selectedRoomIndex]
