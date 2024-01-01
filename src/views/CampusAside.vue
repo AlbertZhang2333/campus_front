@@ -48,7 +48,7 @@
           class="center"
           style="height: 100%; width: auto; max-width: 100%"
         >
-          <el-image :src="require('@/assets/logo.png')" alt=""/>
+          <el-image :src="require('@/assets/home_pictures/logo.png')" alt=""/>
           <h2 style="align-self: center">
             login!
           </h2>
@@ -64,7 +64,7 @@ export default {
   components: {},
   data() {
     return {
-      url_logo: require(`@/assets/logo.png`),
+      url_logo: require(`@/assets/home_pictures/logo.png`),
       input: '',
       isLogIn: true,
       activeIndex: '',

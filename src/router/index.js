@@ -4,7 +4,7 @@ import Map from '@/views/map'
 import MapAdmin from '@/views/mapAdmin.vue'
 import Shop from "@/views/shop"
 import ShopAdmin from "@/views/shopAdmin"
-import Comment from '@/views/comment.vue'
+import Comment from '@/views/Comment.vue'
 import CommentAdmin from "@/views/commentAdmin.vue";
 import ReservationAdmin from "@/views/reservationAdmin.vue";
 import Reservation from "@/views/reservation.vue";
