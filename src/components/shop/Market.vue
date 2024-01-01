@@ -110,9 +110,9 @@ export default {
             this.CanSubmit = this.num <= 0;
         },
         async submit_order() {
-            const response = await axiosInstance.post('http://localhost:8081/UserShopping/addItemToTheCart?itemName='+this.currentShoppingItem.name+'&num='+this.num);
+            const response = await axiosInstance.post('${this.$httpUrl}UserShopping/addItemToTheCart?itemName='+this.currentShoppingItem.name+'&num='+this.num);
             console.log("addResponse", response);
-            if(response.data.code == 400) alert(response.data.data);
+            if(response.data.code === 400) alert(response.data.data);
             this.newShoppingDialog=false;
             this.num=0;
             this.currentShoppingItem=null;
@@ -121,27 +121,30 @@ export default {
             // this.currentShoppingItem=null;
         },
         async loadItemList() {
-            const response = await axiosInstance.get('http://localhost:8081/UserShopping/findAll');
-            if(response.data.code == 400) alert(response.data.data);
+            const response = await axiosInstance.get('${this.$httpUrl}UserShopping/findAll');
+            if(response.data.code === 400) alert(response.data.data);
             else this.shoppingItemList=response.data.data;
-            const response2 = await axiosInstance.get('http://localhost:8081/UserShopping/getInstantItems');
-            if(response2.data.code == 400) alert(response2.data.data);
+            const response2 = await axiosInstance.get('${this.$httpUrl}UserShopping/getInstantItems');
+            if(response2.data.code === 400) alert(response2.data.data);
             else this.instantShoppingItemList=response2.data.data;
         },
         async searchHandler() {
             this.input = this.$refs.input.$el.querySelector('input').value;
-            if(this.input == ""){
+            if(this.input === ""){
               this.loadItemList();
             }else{
-              const response = await axiosInstance.get(`http://localhost:8081/UserShopping/searchItem?itemName=${this.input}`);
-              if(response.data.code == 400) alert(response.data.data);
+              const response = await axiosInstance.get(`${this.$httpUrl}UserShopping/searchItem?itemName=${this.input}`);
+              if(response.data.code === 400) alert(response.data.data);
               this.shoppingItemList= [response.data.data];
             }
         },
         async getInstant(shoppingItem) {
-            const response = await axiosInstance.put(`http://localhost:8081/UserShopping/UserCatchInstantItem?itemName=${shoppingItem.name}`);
-            if(response.data.code == 400) alert(response.data.data);
-            else this.loadItemList();
+            const response = await axiosInstance.put(`${this.$httpUrl}UserShopping/UserCatchInstantItem?itemName=${shoppingItem.name}`);
+            if(response.data.code === 400) alert(response.data.data);
+            else {
+              this.$message.success('秒杀成功')
+              this.loadItemList();
+            }
         }
     }
 }

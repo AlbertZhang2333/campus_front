@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     async load() {
-      const response = await axiosInstance.get(`http://localhost:8081/login/getAccountInfo`);
+      const response = await axiosInstance.get(`${this.$httpUrl}login/getAccountInfo`);
       if(response.data.code === 400){
         alert(response.data.data);
       }else{
@@ -71,7 +71,7 @@ export default {
       console.log("url", this.url);
     },
     async save() {
-      const response = await axiosInstance.put(`http://localhost:8081/login/changeUserIconAndUsername?UserIcon=${this.form.userIcon}&username=${this.form.username}`)
+      const response = await axiosInstance.put(`${this.$httpUrl}login/changeUserIconAndUsername?UserIcon=${this.form.userIcon}&username=${this.form.username}`)
       if(response.data.code == 400){
         alert(response.data.date);
       }else{

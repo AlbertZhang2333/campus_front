@@ -200,7 +200,7 @@
           this.addBusRelation_dialog=true;
       },
       async submitAddBusRelation(submitOrUpdate,index){
-        const response = await axiosInstance.post(`http://localhost:8081/addRelation?lineId=${this.BusRelation.lineId}&direction=${this.BusRelation.direction}&startStop=${this.BusRelation.startStop}&endStop=${this.BusRelation.endStop}&time=${this.BusRelation.time}&stopNum=${this.BusRelation.stopNum}`);
+        const response = await axiosInstance.post(`${this.$httpUrl}addRelation?lineId=${this.BusRelation.lineId}&direction=${this.BusRelation.direction}&startStop=${this.BusRelation.startStop}&endStop=${this.BusRelation.endStop}&time=${this.BusRelation.time}&stopNum=${this.BusRelation.stopNum}`);
         if(response.data.code == 400) alert("添加失败");
         else alert('submit!');
         this.addBusRelation_dialog=false;
@@ -219,20 +219,20 @@
       },
       async updateAddBusRelation(){
         //将弹窗中的信息更新到数据库
-          const response = await axiosInstance.put(`http://localhost:8081/updateRelation?id=${this.BusRelation.id}&lineId=${this.BusRelation.lineId}&direction=${this.BusRelation.direction}&startStop=${this.BusRelation.startStop}&endStop=${this.BusRelation.endStop}&time=${this.BusRelation.time}&stopNum=${this.BusRelation.stopNum}`);
+          const response = await axiosInstance.put(`${this.$httpUrl}updateRelation?id=${this.BusRelation.id}&lineId=${this.BusRelation.lineId}&direction=${this.BusRelation.direction}&startStop=${this.BusRelation.startStop}&endStop=${this.BusRelation.endStop}&time=${this.BusRelation.time}&stopNum=${this.BusRelation.stopNum}`);
           if(response.data.code == 400) alert("更新失败");
           else alert('update!');
           this.updateBusRelation_dialog=false;
           this.updateBusRelationList();
       },
       async deleteBusRelation(curBusRelation) {
-        const response = await axiosInstance.delete(`http://localhost:8081/deleteRelation/${curBusRelation.id}`);
+        const response = await axiosInstance.delete(`${this.$httpUrl}deleteRelation/${curBusRelation.id}`);
         if(response.data.code == 400) alert("删除失败");
         else alert('delete!');
         this.updateBusRelationList();
       },
       async updateBusRelationList(){
-          const response = await axiosInstance.get('http://localhost:8081/allRelation');
+          const response = await axiosInstance.get('${this.$httpUrl}allRelation');
           if(response.data.code == 400) alert("查询失败");
           else this.BusRelationList = response.data.data;
       },
@@ -251,7 +251,7 @@
       }, 300),
       async searchOnServer(busRelationInput) {
         //模糊查询相关，需要后端有通过 like 查询的接口
-        const response = await axiosInstance.get(`http://localhost:8081/searchByStartOrEnd/${busRelationInput}`);
+        const response = await axiosInstance.get(`${this.$httpUrl}searchByStartOrEnd/${busRelationInput}`);
         return response.data.data;
       },
   }

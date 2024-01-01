@@ -158,7 +158,7 @@
           this.addBusStop_dialog=true;
       },
       async submitAddBusStop(submitOrUpdate,index){
-        const response = await axiosInstance.post(`http://localhost:8081/addStop?lat=${this.BusStop.lat}&lng=${this.BusStop.lng}&name=${this.BusStop.name}`);
+        const response = await axiosInstance.post(`${this.$httpUrl}addStop?lat=${this.BusStop.lat}&lng=${this.BusStop.lng}&name=${this.BusStop.name}`);
         if(response.data.code == 400) alert("添加失败");
         else alert('submit!');
         this.addBusStop_dialog=false;
@@ -174,21 +174,21 @@
       },
       async updateAddBusStop(){
         //将弹窗中的信息更新到数据库
-          const response = await axiosInstance.put(`http://localhost:8081/updateStop?id=${this.BusStop.id}&lat=${this.BusStop.lat}&lng=${this.BusStop.lng}&name=${this.BusStop.name}`);
+          const response = await axiosInstance.put(`${this.$httpUrl}updateStop?id=${this.BusStop.id}&lat=${this.BusStop.lat}&lng=${this.BusStop.lng}&name=${this.BusStop.name}`);
           if(response.data.code == 400) alert("修改失败");
           else alert('update!');
           this.updateBusStop_dialog=false;
           this.updateBusStopList();
       },
       async deleteBusStop(curBusStop) {
-        const response = await axiosInstance.delete(`http://localhost:8081/deleteStop/${curBusStop.id}`);
+        const response = await axiosInstance.delete(`${this.$httpUrl}deleteStop/${curBusStop.id}`);
         if(response.data.code == 400) alert("删除失败");
         else alert('delete!');
         this.updateBusStopList();
       },
       async updateBusStopList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
-          const response = await axiosInstance.get('http://localhost:8081/allStop');
+          const response = await axiosInstance.get('${this.$httpUrl}allStop');
           if(response.data.code == 400){
             alert("查询失败");
           }else{
@@ -209,7 +209,7 @@
         }
       }, 300),
       async searchOnServer(busStopInput) {
-        const response = await axiosInstance.get(`http://localhost:8081/searchingBusStop/${busStopInput}`);
+        const response = await axiosInstance.get(`${this.$httpUrl}searchingBusStop/${busStopInput}`);
         return response.data.data;
       },
   }

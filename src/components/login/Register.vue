@@ -97,7 +97,7 @@ export default {
   methods: {
     async submitForm() {
 
-      const response = await axiosInstance.post(`http://localhost:8081/login/register?username=${this.ruleForm.username}&password=${this.ruleForm.password}&userMail=${this.ruleForm.userMail}&code=${this.ruleForm.code}&UserIcon=${this.ruleForm.UserIcon}`);
+      const response = await axiosInstance.post(`${this.$httpUrl}login/register?username=${this.ruleForm.username}&password=${this.ruleForm.password}&userMail=${this.ruleForm.userMail}&code=${this.ruleForm.code}&UserIcon=${this.ruleForm.UserIcon}`);
       if(response.data.code == 400) {alert(response.data.data);}
       else{ 
         this.$message({
@@ -109,7 +109,7 @@ export default {
     },
 
     async sendVcode() {
-      const response = await axiosInstance.get(`http://localhost:8081/login/registerVerifyCode?userMail=${this.ruleForm.userMail}`);
+      const response = await axiosInstance.get(`${this.$httpUrl}login/registerVerifyCode?userMail=${this.ruleForm.userMail}`);
       if(response.data.code == 400) {alert(response.data.data);}
       else{ 
         this.$message({

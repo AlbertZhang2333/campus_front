@@ -5,8 +5,8 @@
     </h2>
     <el-tabs v-model="activateName" type="card">
       <el-tab-pane label="用户信息记录" name="Current_accounts">用户管理
-        <el-row  class="headRowStyle">
-<!--          调整button和switch的位置-->
+        <el-row class="headRowStyle">
+          <!--          调整button和switch的位置-->
           <el-button @click="createAccountDialog" class="RowButtonSize">
             新增用户
           </el-button>
@@ -31,9 +31,9 @@
         </el-row>
         <div class="g-table-content">
           <el-table
-            :data="accountInfoItemList"
-            style="width: 100%">
-<!--            :row-class-name="tableRowClassName">-->
+              :data="accountInfoItemList"
+              style="width: 100%">
+            <!--            :row-class-name="tableRowClassName">-->
             <el-table-column
                 prop="username"
                 label="用户名"
@@ -58,9 +58,9 @@
             </el-table-column>
             <el-table-column>
               <template #default="scope">
-  <!--              <el-button @click="editItem(scope.$index)">-->
-  <!--                编辑-->
-  <!--              </el-button>-->
+                <!--              <el-button @click="editItem(scope.$index)">-->
+                <!--                编辑-->
+                <!--              </el-button>-->
                 <el-button v-if="toDeleteAccount" class="FormButtonSize" @click="deleteItem(scope.$index)">
                   移除
                 </el-button>
@@ -75,8 +75,9 @@
             </el-table-column>
           </el-table>
         </div>
-        
-      ``<div class="g-table-page clearfix">
+
+        ``
+        <div class="g-table-page clearfix">
           <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -86,12 +87,12 @@
               layout="total, sizes, prev, pager, next, jumper"
               :total="total">
           </el-pagination>
-        </div>   
+        </div>
       </el-tab-pane>
     </el-tabs>
 
 
-    <el-dialog :visible.sync = "accountDialogVisible">
+    <el-dialog :visible.sync="accountDialogVisible">
       <el-row style="margin: auto">新增用户</el-row>
       <el-form
           ref="accountInfoItem"
@@ -121,12 +122,12 @@
         </el-form-item>
       </el-form>
       <el-button @click="createAccount()">
-          创建新用户
+        创建新用户
       </el-button>
     </el-dialog>
     <el-dialog title="上传" :visible.sync="fileUploadDialogVisible" width="35%" style="text-align: center;">
       <el-upload class="upload-demo" action="#" drag multiple :headers="headers" :auto-upload="false"
-        :file-list="fileList" :on-change="handleChange">
+                 :file-list="fileList" :on-change="handleChange">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <div class="el-upload__tip" slot="tip">上传Excel格式文件</div>
@@ -141,26 +142,27 @@
 
 <script>
 import axiosInstance from "@/main";
+
 export default {
   mounted() {
     this.loadUser()
   },
   data() {
     return {
-      accountInfoItem:{
-        username:"",
-        userMail:"",
-        identity:1,
-        password:"",
-        enabled:true,
+      accountInfoItem: {
+        username: "",
+        userMail: "",
+        identity: 1,
+        password: "",
+        enabled: true,
       },
       //-----------------------------
-      accountInfoItemList:[],
-      accountDialogVisible:false,
-      fileUploadDialogVisible:false,
-      activateName:"Current_accounts",
-      toDeleteAccount:false,
-      toSetBlackList:false,
+      accountInfoItemList: [],
+      accountDialogVisible: false,
+      fileUploadDialogVisible: false,
+      activateName: "Current_accounts",
+      toDeleteAccount: false,
+      toSetBlackList: false,
       fileList: [],
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -172,18 +174,18 @@ export default {
     }
   },
   methods: {
-    async createAccount(){
-      const response = await axiosInstance.post(`http://localhost:8081/manageAccount/createANewAccount?userName=${this.accountInfoItem.username}&userMail=${this.accountInfoItem.userMail}&password=${this.accountInfoItem.password}&identity=${this.accountInfoItem.identity}`);
-      if(response.data.code == 400) alert(response.data.data);
+    async createAccount() {
+      const response = await axiosInstance.post(this.$httpUrl + `manageAccount/createANewAccount?userName=${this.accountInfoItem.username}&userMail=${this.accountInfoItem.userMail}&password=${this.accountInfoItem.password}&identity=${this.accountInfoItem.identity}`);
+      if (response.data.code === 400) alert(response.data.data);
       else alert("已添加");
-      this.accountDialogVisible=false;
+      this.accountDialogVisible = false;
       this.loadUser();
     },
-    createAccountDialog(){
-      this.accountDialogVisible=true;
+    createAccountDialog() {
+      this.accountDialogVisible = true;
     },
-    fileUploadDialog(){
-      this.fileUploadDialogVisible=true;
+    fileUploadDialog() {
+      this.fileUploadDialogVisible = true;
     },
     handleChange(file, fileList) { //文件数量改变
       this.fileList = fileList;
@@ -192,38 +194,38 @@ export default {
     async confirmUpload() { //确认上传
       var param = new FormData();
       this.fileList.forEach(
-        (val, index) => {
-          param.append("file", val.raw);
-        }
+          (val, index) => {
+            param.append("file", val.raw);
+          }
       );
-      const response = await axiosInstance.post("http://localhost:8081/manageAccount/batchAddAccount", param);
-      if(response.data.code == 400) alert(response.data.data);
+      const response = await axiosInstance.post(this.$httpUrl + 'manageAccount/batchAddAccount', param);
+      if (response.data.code === 400) alert(response.data.data);
       else alert("批量添加用户成功");
       this.loadUser();
     },
-    async deleteItem(index){
-      const response = await axiosInstance.get(`http://localhost:8081/manageAccount/deleteUserByUserMail?userMail=${this.accountInfoItemList[index].userMail}`);
-      if(response.data.code == 400) alert(response.data.data);
+    async deleteItem(index) {
+      const response = await axiosInstance.get(this.$httpUrl + `manageAccount/deleteUserByUserMail?userMail=${this.accountInfoItemList[index].userMail}`);
+      if (response.data.code === 400) alert(response.data.data);
       else alert("删除成功");
       this.loadUser();
     },
 
-    async addToBackList(index){
-      if(this.accountInfoItemList[index].enabled == true){
-        const response = await axiosInstance.post(`http://localhost:8081/manageAccount/setBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
-        if(response.data.code == 400) alert(response.data.data);
+    async addToBackList(index) {
+      if (this.accountInfoItemList[index].enabled === true) {
+        const response = await axiosInstance.post(this.$httpUrl + `manageAccount/setBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
+        if (response.data.code === 400) alert(response.data.data);
         else alert("操作成功");
         this.loadUser();
-      }else{
+      } else {
         console.log("releaseFromBlackList")
-        const response = await axiosInstance.post(`http://localhost:8081/manageAccount/releaseFromBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
+        const response = await axiosInstance.post(this.$httpUrl + `manageAccount/releaseFromBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
         console.log("response", response);
-        if(response.data.code == 400) alert(response.data.data);
+        if (response.data.code === 400) alert(response.data.data);
         else alert("操作成功");
         this.loadUser();
       }
     },
-    
+
     handleSizeChange(val) {
       this.pageSize = val
       this.currentPage = 1
@@ -234,8 +236,8 @@ export default {
       this.loadUser()
     },
     async loadUser() {
-      axiosInstance.get(`http://localhost:8081/manageAccount/checkAllAccount?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
-      .then(res => res.data).then(res => {
+      axiosInstance.get(this.$httpUrl + `manageAccount/checkAllAccount?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
+          .then(res => res.data).then(res => {
             if (res.code === 200) {
               this.accountInfoItemList = res.data
               this.total = res.total
@@ -286,6 +288,7 @@ export default {
 .el-table .success-row {
   background: #d4edda; /* 调整成功行的背景颜色 */
 }
+
 .el-table-column {
   margin-right: 10px; /* 设置列之间的右侧间距 */
 }

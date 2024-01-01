@@ -74,7 +74,7 @@ export default {
     },
     methods: {
       async sendVcode() {
-        const response = await axiosInstance.post(`http://localhost:8081/login/forgetPassword?userMail=${this.ruleForm.userMail}`);
+        const response = await axiosInstance.post(`${this.$httpUrl}login/forgetPassword?userMail=${this.ruleForm.userMail}`);
         if(response.data.code === 400){
             alert(response.data.data);
         }else{
@@ -91,7 +91,7 @@ export default {
         this.$router.push({path:'/login'})
       },
       async validate(){
-        const response = await axiosInstance.post(`http://localhost:8081/login/verificationEmail?userMail=${this.ruleForm.userMail}&password=${this.ruleForm.password}&code=${this.ruleForm.code}`);
+        const response = await axiosInstance.post(`${this.$httpUrl}login/verificationEmail?userMail=${this.ruleForm.userMail}&password=${this.ruleForm.password}&code=${this.ruleForm.code}`);
         if(response.data.code === 400){
             alert(response.data.data);
         }else{

@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     async loadShoppingCart(){
-      const response = await axiosInstance.get(`http://localhost:8081/UserShopping/checkItemCart`);
+      const response = await axiosInstance.get(`${this.$httpUrl}UserShopping/checkItemCart`);
       if(response.data.code == 400) alert("加载购物车信息失败");
       this.shoppingCart = response.data.data;
       console.log("loadResponse", response);
@@ -98,7 +98,7 @@ export default {
       this.loadShoppingCart();
     },
     async deleteShoppingCartItem(index){
-      const response = await axiosInstance.delete(`http://localhost:8081/UserShopping/deleteItemFromTheCart?cartFormTime=${this.shoppingCart[index].time}`);
+      const response = await axiosInstance.delete(`${this.$httpUrl}UserShopping/deleteItemFromTheCart?cartFormTime=${this.shoppingCart[index].time}`);
       if(response.data.code == 400) alert("删除失败");
       else this.loadShoppingCart();
       console.log("deleteResponse", response);
@@ -108,7 +108,7 @@ export default {
     },
     async pay(item){
       console.log("item", item);
-      const response = await axiosInstance.put(`http://localhost:8081/UserShopping/purchase?itemName=${item.itemName}&num=${item.num}`);
+      const response = await axiosInstance.put(`${this.$httpUrl}UserShopping/purchase?itemName=${item.itemName}&num=${item.num}`);
       if(response.data.code == 400){
         alert("购买失败");
       }else if(response.data.code == 200){
@@ -132,7 +132,7 @@ export default {
           alert("支付失败");
           return;
         }else {
-          const response = await axiosInstance.get('http://localhost:8081/UserShopping/checkIfUserHasPay?itemShoppingRecordId=' + this.curRecordId);
+          const response = await axiosInstance.get('${this.$httpUrl}UserShopping/checkIfUserHasPay?itemShoppingRecordId=' + this.curRecordId);
           if(response.data.code == 400){
             console.log('停止发送请求，因为后端响应中包含 code 为 400');
             this.shouldContinue = false;

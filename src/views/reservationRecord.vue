@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     async showReservation(){
-      const response = await axiosInstance.get(`http://localhost:8081/Reservation/UserCheckDateSelfReservation?date=${this.selectedDate}`);
+      const response = await axiosInstance.get(`${this.$httpUrl}Reservation/UserCheckDateSelfReservation?date=${this.selectedDate}`);
       if(response.data.code == 400) alert(response.data.data);
       else{
         this.reservationRecordList = response.data.data;
@@ -98,7 +98,7 @@ export default {
       }
     },
     async cancelReservation(curReservation){
-      const response = await axiosInstance.put(`http://localhost:8081/Reservation/reservationCancel?id=${curReservation.id}`);
+      const response = await axiosInstance.put(`${this.$httpUrl}Reservation/reservationCancel?id=${curReservation.id}`);
       if(response.data.code == 400) alert(response.data.data);
       else alert("删除成功");
       this.loadReservation();
@@ -114,7 +114,7 @@ export default {
       this.loadReservation()
     },
     async loadReservation() {
-      axiosInstance.get(`http://localhost:8081/Reservation/UserCheckSelfHistoryReservation?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
+      axiosInstance.get(`${this.$httpUrl}Reservation/UserCheckSelfHistoryReservation?pageSize=${this.pageSize}&currentPage=${this.currentPage}`)
       .then(res => res.data).then(res => {
             if (res.code === 200) {
               this.reservationRecordList = res.data

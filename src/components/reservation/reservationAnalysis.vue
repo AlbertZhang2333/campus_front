@@ -32,7 +32,7 @@ export default {
     },
     methods: {
     async loadUserCnt() {
-        const response = await this.$axios.get(`http://localhost:8081/ManageDataAnalysis/usersNumber`);
+        const response = await this.$axios.get(`${this.$httpUrl}ManageDataAnalysis/usersNumber`);
         if(response.data.code == 400){
             alert(response.data.data);
         } else{
@@ -40,7 +40,7 @@ export default {
         }
     },
     async loadRoomCnt() {
-        const response = await this.$axios.get(`http://localhost:8081/ManageDataAnalysis/roomsNumber`);
+        const response = await this.$axios.get(`${this.$httpUrl}ManageDataAnalysis/roomsNumber`);
         if(response.data.code == 400){
             alert(response.data.data);
         } else{
@@ -48,7 +48,7 @@ export default {
         }
     },
     async loadResverationMostInWeek() {
-        const response = await this.$axios.get('http://localhost:8081/ManageDataAnalysis/getTheseDaysRoomReservationNum');
+        const response = await this.$axios.get('${this.$httpUrl}ManageDataAnalysis/getTheseDaysRoomReservationNum');
         const dataList = response.data.data;
         this.mostInWeek.categories = [];
         this.mostInWeek.data = [];

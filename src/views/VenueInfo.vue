@@ -34,7 +34,7 @@ export default {
   },
   methods:{
     async getBuildingInfo() {
-      const response = await axiosInstance.get(`http://localhost:8081/searchBuildingName/一丹图书馆`)
+      const response = await axiosInstance.get(`${this.$httpUrl}searchBuildingName/一丹图书馆`)
       if(response.data.code == 400){
         alert("获取失败")
       }
