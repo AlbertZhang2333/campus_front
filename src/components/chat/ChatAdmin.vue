@@ -13,8 +13,6 @@
         show-audio="false"
         show-files="false"
     />
-    <el-button @click="addButton">添加</el-button>
-    <!--    <el-button @click="add">添加房间</el-button>-->
   </div>
 </template>
 
@@ -54,21 +52,6 @@ export default {
     fetchMessages(roomInfo) {
       // console.log(roomInfo)
       this.handleRoomChange(roomInfo)
-    },
-    addButton() {
-      this.messages = [...this.messages, ...this.addMessages()]
-    },
-    addMessages() {
-      const messages = []
-      messages.push({
-        _id: this.messages.length,
-        content: '666',
-        senderId: 'User 1',
-        username: 'User 1',
-        date: '13 November',
-        timestamp: '10:20'
-      })
-      return messages
     },
     loadMessage() {
       this.messages = this.allMessages[this.selectedRoomIndex]
