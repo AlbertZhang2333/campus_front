@@ -105,7 +105,7 @@
       },
       async updateRecordList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
-          const response = await axiosInstance.get('${this.$httpUrl}ManageShoppingRecord/findAll');
+          const response = await axiosInstance.get(`${this.$httpUrl}ManageShoppingRecord/findAll`);
           this.RecordList = response.data.data;
       },
       async searchHandler(){

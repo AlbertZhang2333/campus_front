@@ -232,7 +232,7 @@
         this.updateBusRelationList();
       },
       async updateBusRelationList(){
-          const response = await axiosInstance.get('${this.$httpUrl}allRelation');
+          const response = await axiosInstance.get(`${this.$httpUrl}allRelation`);
           if(response.data.code == 400) alert("查询失败");
           else this.BusRelationList = response.data.data;
       },

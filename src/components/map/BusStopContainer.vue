@@ -188,7 +188,7 @@
       },
       async updateBusStopList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
-          const response = await axiosInstance.get('${this.$httpUrl}allStop');
+          const response = await axiosInstance.get(`${this.$httpUrl}allStop`);
           if(response.data.code == 400){
             alert("查询失败");
           }else{

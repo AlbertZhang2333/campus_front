@@ -261,7 +261,7 @@ methods: {
     },
     async updateItemList(){
       //模糊查询相关，需要后端有通过 like 查询的接口
-        const response = await axiosInstance.get('${this.$httpUrl}ManageItems/findAll');
+        const response = await axiosInstance.get(`${this.$httpUrl}ManageItems/findAll`);
         if(response.data.code === 400) alert("加载失败");
         this.ItemList = response.data.data;
     },

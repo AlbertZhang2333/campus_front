@@ -48,7 +48,7 @@ export default {
         }
     },
     async loadResverationMostInWeek() {
-        const response = await this.$axios.get('${this.$httpUrl}ManageDataAnalysis/getTheseDaysRoomReservationNum');
+        const response = await this.$axios.get(`${this.$httpUrl}ManageDataAnalysis/getTheseDaysRoomReservationNum`);
         const dataList = response.data.data;
         this.mostInWeek.categories = [];
         this.mostInWeek.data = [];

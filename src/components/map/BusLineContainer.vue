@@ -188,7 +188,7 @@
       },
       async updateBusLineList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
-          const response = await axiosInstance.get('${this.$httpUrl}allLine');
+          const response = await axiosInstance.get(`${this.$httpUrl}allLine`);
           if(response.data.code == 400) alert("查询失败");
           else this.BusLineList = response.data.data;
       },

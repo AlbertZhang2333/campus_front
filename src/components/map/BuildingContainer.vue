@@ -223,7 +223,7 @@ methods: {
     },
     async updateBuildingList(){
       //模糊查询相关，需要后端有通过 like 查询的接口
-        const response = await axiosInstance.get('${this.$httpUrl}allBuilding');
+        const response = await axiosInstance.get(`${this.$httpUrl}allBuilding`);
         if(response.data.code == 400) alert("加载失败");
         else this.BuildingList = response.data.data;
     },

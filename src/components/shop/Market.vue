@@ -110,7 +110,7 @@ export default {
             this.CanSubmit = this.num <= 0;
         },
         async submit_order() {
-            const response = await axiosInstance.post('${this.$httpUrl}UserShopping/addItemToTheCart?itemName='+this.currentShoppingItem.name+'&num='+this.num);
+            const response = await axiosInstance.post(`${this.$httpUrl}UserShopping/addItemToTheCart?itemName=`+this.currentShoppingItem.name+'&num='+this.num);
             console.log("addResponse", response);
             if(response.data.code === 400) alert(response.data.data);
             this.newShoppingDialog=false;
@@ -121,10 +121,10 @@ export default {
             // this.currentShoppingItem=null;
         },
         async loadItemList() {
-            const response = await axiosInstance.get('${this.$httpUrl}UserShopping/findAll');
+            const response = await axiosInstance.get(`${this.$httpUrl}UserShopping/findAll`);
             if(response.data.code === 400) alert(response.data.data);
             else this.shoppingItemList=response.data.data;
-            const response2 = await axiosInstance.get('${this.$httpUrl}UserShopping/getInstantItems');
+            const response2 = await axiosInstance.get(`${this.$httpUrl}UserShopping/getInstantItems`);
             if(response2.data.code === 400) alert(response2.data.data);
             else this.instantShoppingItemList=response2.data.data;
         },

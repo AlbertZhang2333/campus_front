@@ -94,7 +94,7 @@ export default {
     },
     async updateRecordList() {
       //模糊查询相关，需要后端有通过 like 查询的接口
-      const response = await axiosInstance.get('${this.$httpUrl}UserCheckShoppingRecord/UserCheckSelfShoppingRecord');
+      const response = await axiosInstance.get(`${this.$httpUrl}UserCheckShoppingRecord/UserCheckSelfShoppingRecord`);
       this.RecordList = response.data.data;
     },
     async searchHandler() {
