@@ -10,7 +10,7 @@
       </el-main>
     </el-container>
     <el-container>
-      <Chat></Chat>
+      <Chat style="z-index: 9999"></Chat>
     </el-container>
     <el-container>
       <comment-area :department="2"></comment-area>
