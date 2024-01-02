@@ -20,7 +20,7 @@
         <comment-card
             :comment="comment"
             :replyable="!replying"
-            :deletable="true"
+            :deletable="comment.userMail === userInfo.userMail"
             @reply-comment="reply(index)"
             @delete-comment="deleteComment(index)"
         />
@@ -45,6 +45,8 @@
 import axiosInstance from "@/main";
 import CommentBox from "@/components/comments/CommentBox.vue";
 import CommentCard from "@/components/comments/CommentCard.vue";
+import {mapState} from "vuex";
+import userInfo from "@/components/login/UserInfo.vue";
 
 export default {
   name: "Main",
@@ -80,6 +82,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['userInfo']),
     processedComments() {
       return this.comments.map(comment => ({
         ...comment,
@@ -136,7 +139,7 @@ export default {
           // 处理评论内容
           this.total = res.total;
           this.comments = res.data
-          // console.log(this.comments)
+          console.log(this.comments)
         } else {
           this.$message.warning('数据加载失败!');
         }
