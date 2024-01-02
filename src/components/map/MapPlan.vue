@@ -1,21 +1,21 @@
 <template>
-  <div class="sustech">
+  <div class="map-plan">
     <!--停放图-->
     <img
       v-for="(position, index) in positions"
       :key="index"
-      src="../assets/home_pictures/post.png"
+      src="../../assets/home_pictures/mark.jpg"
       :style="{
         float: 'left',
         position: 'absolute',
-        width: '25px',
-        height: '30px',
+        width: '40px',
+        height: '50px',
         left: position.xRange[0] + 'px',
         top: position.yRange[0] + 'px',
       }"
       @click="editPost(position)" alt="">
     <!--背景图片-->
-    <img src="../assets/home_pictures/sustech_map1.jpg" alt="" class="sustech" @click="viewMark" @dblclick="addMark">
+    <img src="@/assets/home_pictures/sustech_map1.jpg" alt="" class="map-plan" @click="viewMark" @dblclick="addMark">
     <!--表单弹出框-->
     <el-dialog
       :title="position.title"
@@ -47,7 +47,7 @@
 
 <script>
 export default {
-  name: 'Sustech',
+  name: 'MapPlan',
   data () {
     return {
       // 各种标点位置
@@ -151,7 +151,7 @@ export default {
 </script>
 
 <style scoped>
-.sustech{
+.map-plan {
   width: 100%;
   height: 100%;
 }

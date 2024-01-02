@@ -4,7 +4,7 @@
         src="https://www.sustech.edu.cn/uploads/files/2023/12/13145220_64059.mp4"
         id="campus_video"
         preload="auto"
-        poster="../assets/home_pictures/sustech_map1.jpg"
+        poster="../assets/home_pictures/logo.png"
         @click="play"
         autoplay
         playsinline
@@ -42,7 +42,7 @@ export default {
         {
           id: 1,
           name: '一丹图书馆',
-          image: require('@/assets/home_pictures/picture1.jpg'),
+          image: require('@/assets/VenuePicture/1.jpg'),
           text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
           url: '/VenueInfo',
         },

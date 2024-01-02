@@ -39,7 +39,7 @@
       <el-timeline-item v-for="(comment, index) in processedComments" :key="index">
         <el-card class="comment-card">
           <p class="comment-header">{{ comment.userName }}：</p>
-          <el-card class="comment-content">
+          <el-card style="margin: 10px">
             <p v-html="comment.comment"></p>
           </el-card>
           <p class="comment-time">评论时间：{{ comment.date + ' ' + comment.time }}</p>

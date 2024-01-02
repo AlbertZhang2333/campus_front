@@ -16,7 +16,6 @@ import Forgot from "@/components/login/ForgotPassword.vue"
 import UserInfo from "@/components/login/UserInfo.vue"
 import RoomAdmin from "@/views/roomAdmin.vue";
 import Home from "@/views/Home.vue";
-import Sustech from "@/views/Sustech.vue";
 import VenueInfo from "@/views/VenueInfo.vue";
 import UserRecord from "@/views/shopUserRecord.vue";
 import reservationAnalysis from "@/components/reservation/reservationAnalysis.vue"
@@ -97,10 +96,6 @@ const routes = [
     {
         path: '/userInfo',
         component: UserInfo
-    },
-    {
-        path: '/sustech',
-        component: Sustech
     },
     {
         path: '/venue_info',

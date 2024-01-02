@@ -1,11 +1,16 @@
 <template>
   <el-card class="comment-card">
-    <el-image :src="require('@/assets/user_icon/1.jpg')" :alt="comment.userIcon" style="height: 160px; width: 120px"/>
-    <p class="comment-user-name"> {{ comment.userName }}：</p>
+    <el-row style="display: flex; flex-direction: row; justify-content: space-around">
+      <el-col span="6">
+        <el-image :src="require('@/assets/user_icon/1.jpg')" :alt="comment.userIcon"
+                  style="height: 40px; width: 40px; margin: 10px"/>
+      </el-col>
+      <el-col span="6">
+        <p style="font-weight: bold;font-size: 20px;margin: 10px;"> {{ comment.userName }}：</p>
+      </el-col>
+    </el-row>
+    <p v-html="comment.comment" style="margin-left: 30px"></p>
 
-    <el-card class="comment-content">
-      <p v-html="comment.comment"></p>
-    </el-card>
 
     <p class="comment-time"> 评论时间：{{ comment.date + ' ' + comment.time }} </p>
 
@@ -57,7 +62,7 @@ export default {
 .comment-user-name {
   font-weight: bold;
   font-size: 20px;
-  margin-bottom: 10px;
+  margin: 10px;
 }
 
 .comment-content {
