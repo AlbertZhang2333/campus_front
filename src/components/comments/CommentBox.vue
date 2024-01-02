@@ -1,10 +1,10 @@
 <template>
-  <el-container style="max-width: 600px; margin: 0 auto;">
+  <el-container style="max-width: 600px; margin: 20px auto;">
     <el-form :model="commentForm" ref="commentForm" size="large">
-      <el-form-item label="评论内容" prop="content">
-        <el-input type="textarea" v-model="commentForm.comment"></el-input>
+      <el-form-item label="评论内容" prop="content" style="width: 500px; height: 150px">
+        <el-input type="textarea" v-model="commentForm.comment" :autosize="{minRows:5}" maxlength="200" show-word-limit></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item style="display: flex; align-items: center; justify-items: center">
         <el-button type="primary" @click="$emit('submit', commentForm)">发表评论</el-button>
         <el-button type="primary" @click="showEmoji=!showEmoji"><i class="el-icon-smile"></i> Emoji</el-button>
         <el-popover
