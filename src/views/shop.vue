@@ -13,7 +13,7 @@
       <Chat></Chat>
     </el-container>
     <el-container>
-      <comment-area :department="2"></comment-area>
+      <comment-area :department="2" :stuff-id="-1"></comment-area>
     </el-container>
   </div>
 </template>
