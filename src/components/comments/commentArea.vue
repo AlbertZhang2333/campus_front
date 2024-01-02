@@ -12,6 +12,7 @@
           :replyable="false"
           :deletable="false"
       ></comment-card>
+      <el-button icon="el-icon-close" @click="closeReply"></el-button>
     </el-container>
 
     <el-timeline v-if="hasComments">
@@ -20,8 +21,8 @@
             :comment="comment"
             :replyable="!replying"
             :deletable="true"
-            @reply-comment="reply"
-            @delete-comment="deleteComment"
+            @reply-comment="reply(index)"
+            @delete-comment="deleteComment(index)"
         />
       </el-timeline-item>
     </el-timeline>
@@ -48,8 +49,9 @@ import CommentCard from "@/components/comments/CommentCard.vue";
 export default {
   name: "Main",
   components: {CommentCard, CommentBox},
-  props:{
-    department:Number
+  props: {
+    department: Number,
+    stuffId: 0,
   },
   data() {
     return {
@@ -71,20 +73,24 @@ export default {
       pageSize: 5,
       total: 40,
       urlList: {
-        commentUrl: 'Comment/allCommentsReplyUser',
+        requireCommentUrl: 'Comment/allCommentsReplyUser',
         addCommentUrl: 'Comment/addComment',
         deleteCommentUrl: 'Comment/updateComment',
       },
     };
   },
   computed: {
+    closeReply() {
+      this.replyComment = null
+      this.loadComment()
+    },
     processedComments() {
       return this.comments.map(comment => ({
         ...comment,
         comment: this.replaceEmoji(comment.comment),
       }));
     },
-    processedReplyComment(){
+    processedReplyComment() {
       this.replyComment.comment = this.replaceEmoji(this.replyComment.comment)
       return this.replyComment
     },
@@ -95,13 +101,12 @@ export default {
       return this.replyComment !== null;
     },
     requestParams() {
-      console.log(this.replyComment)
       return {
         belongDepartment: this.department,
-        type: 0,
+        type: this.replyComment === null ? 0 : 1,
+        replyId: this.replyComment?.id ?? this.stuffId,
         pageSize: this.pageSize,
         currentPage: this.currentPage,
-        replyId: this.replyComment?.id ?? -1
       }
     },
     date() {
@@ -122,9 +127,7 @@ export default {
   },
   methods: {
     loadComment() {
-      console.log(this.replyComment)
-      console.log(this.requestParams)
-      axiosInstance.post(this.$httpUrl + this.urlList.commentUrl, null, {
+      axiosInstance.post(this.$httpUrl + this.urlList.requireCommentUrl, null, {
         params: this.requestParams
       }).then(res => res.data).then(res => {
         if (res.code === 200) {
@@ -158,21 +161,18 @@ export default {
       this.currentPage = val
       this.loadComment()
     },
-    reply(commentId) {
-      this.replyComment = this.comments.find(comment => comment.id === commentId);
+    reply(index) {
+      this.replyComment = this.comments[index];
       this.loadComment()
     },
-    deleteComment(comment) {
-      comment = this.comments.find(c=>c.id===comment.id)
-      comment.state = 0
-      axiosInstance.put(this.$httpUrl + this.urlList.deleteCommentUrl, comment).then(res => res.data).then(res => {
+    deleteComment(index) {
+      axiosInstance.put(this.$httpUrl + this.urlList.deleteCommentUrl, this.comments[index]).then(res => res.data).then(res => {
         if (res.code === 200) {
           // 处理评论内容
           this.$message({
             message: '评论删除成功!',
             type: 'success'
           });
-          this.loadComment()
         } else {
           this.$message.warning('评论删除失败!');
         }
@@ -180,6 +180,7 @@ export default {
         console.error('Error adding comment:', error);
         this.$message.error('评论删除失败，请重试!');
       });
+      this.loadComment()
     },
     addComment(commentForm) {
       console.log(commentForm)
@@ -190,21 +191,21 @@ export default {
       commentForm.time = this.time;
       commentForm.date = this.date;
       commentForm.comment = commentForm.comment.toString();
-      commentForm.replyId = this.replyComment?.id??-1;
+      commentForm.replyId = this.replyComment?.id ?? this.stuffId;
       axiosInstance.post(this.$httpUrl + this.urlList.addCommentUrl, commentForm).then(res => res.data).then(res => {
-        if(res.code===200){
+        if (res.code === 200) {
           this.$message({
             message: '评论发表成功!',
             type: 'success'
           });
-          this.loadComment()
-        }else {
+        } else {
           this.$message.warning('评论发表失败!');
         }
       }).catch(error => {
         console.error('Error adding comment:', error);
         this.$message.error('评论发表失败，请重试!');
       });
+      this.loadComment()
     }
   },
   filters: {
