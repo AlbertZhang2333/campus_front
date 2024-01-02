@@ -13,7 +13,7 @@
       </el-divider>
       <h2> Comments </h2>
       <el-container style="background-color: #fff3cd; border-color: #003f43">
-        <comment-area :department="1"></comment-area>
+        <comment-area :department="1" :stuff-id="building.id"></comment-area>
       </el-container>
     </el-container>
 
@@ -33,17 +33,26 @@ export default {
         name: '',
         photoPath: '',
         description: '',
-      }
+        id: 1,
+      },
+      venueName: '',
     }
   },
   mounted() {
-    // this.getBuildingInfo()
+    this.getBuildingInfo()
   },
   methods: {
     async getBuildingInfo() {
-      const response = await axiosInstance.get(`${this.$httpUrl}searchBuildingName/一丹图书馆`)
-      if (response.data.code == 400) {
-        alert("获取失败")
+      const venueName = this.$route.query.venueName
+      if (venueName === undefined || venueName === '') {
+        this.$message.warning('获取失败')
+        // alert("获取失败")
+      }
+      console.log(venueName)
+      const response = await axiosInstance.get(`${this.$httpUrl}searchBuildingName/${venueName === undefined ? '一丹图书馆' : venueName}`)
+      if (response.data.code === 400) {
+        // alert("获取失败")
+        this.$message.warning('获取失败')
       } else {
         this.building = response.data.data
       }

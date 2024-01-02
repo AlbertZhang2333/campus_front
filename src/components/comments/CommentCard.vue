@@ -1,13 +1,14 @@
 <template>
   <el-card class="comment-card">
     <el-row style="display: flex; flex-direction: row; justify-content: space-around">
-      <el-col span="6">
+      <el-col :span="6">
         <el-image :src="require('@/assets/user_icon/1.jpg')" :alt="comment.userIcon"
                   style="height: 40px; width: 40px; margin: 10px"/>
       </el-col>
-      <el-col span="6">
+      <el-col :span="6">
         <p style="font-weight: bold;font-size: 20px;margin: 10px;"> {{ comment.userName }}：</p>
       </el-col>
+      <el-button icon="el-icon-close" v-if="closeable" @click="$emit('close')" style="width: 10px; height: 10px; background-color: transparent; border-color: transparent"></el-button>
     </el-row>
     <p v-html="comment.comment" style="margin-left: 30px"></p>
 
@@ -33,6 +34,7 @@ export default {
   props: {
     replyable: Boolean,
     deletable: Boolean,
+    closeable: Boolean,
     comment: {
       id: Number, // 初始为0，具体情况视需求而定
       userName: String,
