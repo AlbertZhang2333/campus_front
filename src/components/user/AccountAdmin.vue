@@ -13,6 +13,9 @@
           <el-button @click="fileUploadDialog" class="150px">
             批量新增用户
           </el-button>
+          <el-button @click="fileUploadDialog2" class="150px">
+            批量拉黑用户
+          </el-button>
           <el-switch
               v-model="toDeleteAccount"
               active-color="#ff4949"
@@ -133,8 +136,20 @@
         <div class="el-upload__tip" slot="tip">上传Excel格式文件</div>
       </el-upload>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogOfUpload = false">取 消</el-button>
+        <el-button @click="fileUploadDialogVisible = false; fileList = []">取 消</el-button>
         <el-button type="primary" @click="confirmUpload()">上 传</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="上传" :visible.sync="fileUploadDialogVisible2" width="35%" style="text-align: center;">
+      <el-upload class="upload-demo" action="#" drag multiple :headers="headers" :auto-upload="false"
+                 :file-list="fileList" :on-change="handleChange">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">上传Excel格式文件</div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="fileUploadDialogVisible2 = false; fileList = []">取 消</el-button>
+        <el-button type="primary" @click="confirmUpload2()">上 传</el-button>
       </div>
     </el-dialog>
   </div>
@@ -160,6 +175,7 @@ export default {
       accountInfoItemList: [],
       accountDialogVisible: false,
       fileUploadDialogVisible: false,
+      fileUploadDialogVisible2: false,
       activateName: "Current_accounts",
       toDeleteAccount: false,
       toSetBlackList: false,
@@ -187,6 +203,9 @@ export default {
     fileUploadDialog() {
       this.fileUploadDialogVisible = true;
     },
+    fileUploadDialog2() {
+      this.fileUploadDialogVisible2 = true;
+    },
     handleChange(file, fileList) { //文件数量改变
       this.fileList = fileList;
     },
@@ -200,13 +219,33 @@ export default {
       );
       const response = await axiosInstance.post(this.$httpUrl + 'manageAccount/batchAddAccount', param);
       if (response.data.code === 400) alert(response.data.data);
-      else alert("批量添加用户成功");
+      else {
+        this.$message.success('批量添加用户成功');
+      }
+      this.fileUploadDialogVisible = false;
+      this.fileList = [];
+      this.loadUser();
+    },
+    async confirmUpload2() { //确认上传
+      var param = new FormData();
+      this.fileList.forEach(
+          (val, index) => {
+            param.append("file", val.raw);
+          }
+      );
+      const response = await axiosInstance.post(this.$httpUrl + 'manageAccount/batchSetAccountToBlackList', param);
+      if (response.data.code === 400) alert(response.data.data);
+      else {
+        this.$message.success('批量拉黑用户成功');
+      }
+      this.fileUploadDialogVisible2 = false;
+      this.fileList = [];
       this.loadUser();
     },
     async deleteItem(index) {
       const response = await axiosInstance.get(this.$httpUrl + `manageAccount/deleteUserByUserMail?userMail=${this.accountInfoItemList[index].userMail}`);
       if (response.data.code === 400) alert(response.data.data);
-      else alert("删除成功");
+      else this.$message.success('删除成功');
       this.loadUser();
     },
 
@@ -214,14 +253,14 @@ export default {
       if (this.accountInfoItemList[index].enabled === true) {
         const response = await axiosInstance.post(this.$httpUrl + `manageAccount/setBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
         if (response.data.code === 400) alert(response.data.data);
-        else alert("操作成功");
+        else this.$message.success("操作成功");
         this.loadUser();
       } else {
         console.log("releaseFromBlackList")
         const response = await axiosInstance.post(this.$httpUrl + `manageAccount/releaseFromBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
         console.log("response", response);
         if (response.data.code === 400) alert(response.data.data);
-        else alert("操作成功");
+        else this.$message.success("操作成功");
         this.loadUser();
       }
     },
