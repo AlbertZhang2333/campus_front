@@ -73,7 +73,7 @@ export default {
       replyComment: undefined,
       currentPage: 1,
       pageSize: 5,
-      total: 40,
+      total: 0,
       urlList: {
         requireCommentUrl: 'Comment/allCommentsReplyUser',
         addCommentUrl: 'Comment/addComment',
@@ -86,11 +86,11 @@ export default {
     processedComments() {
       return this.comments.map(comment => ({
         ...comment,
-        comment: this.replaceEmoji(comment.comment),
+        comment: this.replacePic(this.replaceEmoji(comment.comment)),
       }));
     },
     processedReplyComment() {
-      this.replyComment.comment = this.replaceEmoji(this.replyComment.comment)
+      this.replyComment.comment = this.replacePic(this.replaceEmoji(this.replyComment.comment))
       return this.replyComment
     },
     hasComments() {
@@ -154,6 +154,22 @@ export default {
         const src = require(`@/assets/emoji/512_24x24/${num}.png`);
         return `<img src="${src}" alt="[${num}]" />`;
       });
+      return text;
+    },
+    replacePic(text) {
+      // 匹配带引号的文件路径
+      const regex = /'([^']+)'/g;
+
+      console.log(text)
+      // 使用 replace 方法替换匹配到的文件路径
+      text = text.replace(regex, (match, filePath) => {
+        // 这里可以根据你的逻辑生成图片的URL，比如拼接服务器地址等
+        console.log(666)
+        console.log(filePath)
+        const imageUrl = require(`@/assets/comments/pic/${filePath}`);
+        return `<img src="${imageUrl}" alt="${filePath}" />`;
+      });
+
       return text;
     },
     handleSizeChange(val) {
