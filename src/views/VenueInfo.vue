@@ -57,7 +57,7 @@ export default {
     }
   },
   mounted() {
-    // this.getBuildingInfo()
+    this.getBuildingInfo()
     if (this.$route.query.building === undefined) {
       this.building = this.buildings[0]
     } else {
