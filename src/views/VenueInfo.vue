@@ -5,7 +5,8 @@
       <el-image :src="building.photoPath" alt=""></el-image>
       <span style="font-size: 30px">
       {{ building.description }}
-    </span>
+      </span>
+      <el-button @click="$router.push({path:'map', query:{destination:building.name}})"></el-button>
       <el-divider>
       </el-divider>
       <h2> Comments </h2>
@@ -22,7 +23,7 @@ import CommentArea from '../components/comments/commentArea.vue'
 import axiosInstance from "@/main";
 
 export default {
-  components: {CommentArea, },
+  components: {CommentArea,},
   data() {
     return {
       building: {
@@ -31,7 +32,7 @@ export default {
         description: '',
         id: 1,
       },
-      buildings:[{
+      buildings: [{
         name: '',
         photoPath: '',
         description: '',
@@ -41,9 +42,9 @@ export default {
   },
   mounted() {
     // this.getBuildingInfo()
-    if(this.$route.query.building===undefined){
+    if (this.$route.query.building === undefined) {
       this.building = this.buildings[0]
-    }else {
+    } else {
       this.building = this.$route.query.building
     }
   },
