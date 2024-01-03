@@ -284,7 +284,7 @@ export default {
       const response = await axiosInstance.post(`${this.$httpUrl}Reservation/reservationAdd?roomName=${this.selectedRoomName}&date=${this.selectedDate}&startTime=${this.reservation.startTime}:00&endTime=${this.reservation.endTime}:00&location=${this.curLocation}`);
       if (response.data.code == 400) alert(response.data.data);
       else {
-        alert("预约成功");
+        this.$message.success("预约成功");
         this.showReservation();
       }
     },

@@ -130,8 +130,6 @@ export default {
       this.loadComment()
     },
     loadComment() {
-      console.log("requestParams:")
-      console.log(this.requestParams)
       axiosInstance.post(this.$httpUrl + this.urlList.requireCommentUrl, null, {
         params: this.requestParams
       }).then(res => res.data).then(res => {
@@ -139,7 +137,6 @@ export default {
           // 处理评论内容
           this.total = res.total;
           this.comments = res.data
-          console.log(this.comments)
         } else {
           this.$message.warning('数据加载失败!');
         }
@@ -159,13 +156,9 @@ export default {
     replacePic(text) {
       // 匹配带引号的文件路径
       const regex = /'([^']+)'/g;
-
-      console.log(text)
       // 使用 replace 方法替换匹配到的文件路径
       text = text.replace(regex, (match, filePath) => {
         // 这里可以根据你的逻辑生成图片的URL，比如拼接服务器地址等
-        console.log(666)
-        console.log(filePath)
         const imageUrl = require(`@/assets/comments/pic/${filePath}`);
         return `<img src="${imageUrl}" alt="${filePath}" />`;
       });
@@ -173,22 +166,17 @@ export default {
       return text;
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
       this.pageSize = val
       this.currentPage = 1
       this.loadComment()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
       this.currentPage = val
       this.loadComment()
     },
     reply(index) {
-      // console.log('index:' + index)
       this.replyComment = this.comments[index];
-      // console.log(this.replyComment)
       this.loadComment()
-      // console.log(this.replyComment)
     },
     deleteComment(index) {
       this.comments[index].state = 0
@@ -210,7 +198,6 @@ export default {
 
     },
     addComment(commentForm) {
-      // console.log(commentForm)
       if (commentForm.comment === "") {
         this.$message.warning("请输入评论内容");
         return;
@@ -229,7 +216,6 @@ export default {
           });
           commentForm.comment = ''
           this.loadComment()
-          console.log(this.comments)
         } else {
           this.$message.warning('评论发表失败!');
         }

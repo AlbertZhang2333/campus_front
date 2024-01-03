@@ -23,12 +23,6 @@
               </el-menu-item>
             </router-link>
           </el-menu-item>
-          <router-link :to="'/shop/admin'">
-            <el-menu-item :index="'/shop/admin'" style="width: 100px">
-              <i class="el-icon-s-flag"></i>
-              <span slot="title" style="text-align: center">商城管理</span>
-            </el-menu-item>
-          </router-link>
         </el-menu>
       </el-col>
     </el-row>
@@ -91,7 +85,6 @@ export default {
       const response = await axiosInstance.get(`${this.$httpUrl}UserShopping/checkItemCart`);
       if(response.data.code == 400) alert("加载购物车信息失败");
       this.shoppingCart = response.data.data;
-      console.log("loadResponse", response);
     },
     openShoppingCartDialog() {
       this.shoppingCart_dialog=true;
@@ -101,13 +94,11 @@ export default {
       const response = await axiosInstance.delete(`${this.$httpUrl}UserShopping/deleteItemFromTheCart?cartFormTime=${this.shoppingCart[index].time}`);
       if(response.data.code == 400) alert("删除失败");
       else this.loadShoppingCart();
-      console.log("deleteResponse", response);
     },
     feedbackCollectionDialog(){
       this.feedback_dialog=true;
     },
     async pay(item){
-      console.log("item", item);
       const response = await axiosInstance.put(`${this.$httpUrl}UserShopping/purchase?itemName=${item.itemName}&num=${item.num}`);
       if(response.data.code == 400){
         alert("购买失败");
@@ -119,46 +110,6 @@ export default {
         this.intervalId = setInterval(this.fetchData, 3000); */
       }
     },
-    /* async fetchData() {
-      try {
-        if (!this.shouldContinue) {
-          console.log('停止发送请求，因为 shouldContinue 为 false');
-          clearInterval(this.intervalId); // 停止定时器
-          return;
-        }
-        if(this.curRecordId == 0){
-          console.log('停止发送请求，因为 curRecordId 为 0');
-          clearInterval(this.intervalId); // 停止定时器
-          alert("支付失败");
-          return;
-        }else {
-          const response = await axiosInstance.get('${this.$httpUrl}UserShopping/checkIfUserHasPay?itemShoppingRecordId=' + this.curRecordId);
-          if(response.data.code == 400){
-            console.log('停止发送请求，因为后端响应中包含 code 为 400');
-            this.shouldContinue = false;
-            clearInterval(this.intervalId); // 停止定时器
-            alert("支付失败");
-            return;
-          }else if(response.data.data == '支付成功！'){
-            console.log('停止发送请求，因为后端响应中包含 stopRequest 为 true');
-            this.shouldContinue = false;
-            clearInterval(this.intervalId); // 停止定时器
-            alert("支付成功");
-            return;
-          }
-          console.log('成功获取数据：', response.data);
-        }
-      } catch (error) {
-        console.error('获取数据时出错：', error);
-      }
-    },
-    sleep(millisecond) {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve()
-            }, millisecond)
-        })
-    }, */
   },
 }
 

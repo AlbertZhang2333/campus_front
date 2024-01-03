@@ -43,7 +43,6 @@ export default {
   },
   methods: {
     async Login() {
-      console.log("usermail:" + this.loginForm.userMail + "password:" + this.loginForm.password);
       const response = await axiosInstance.post(`${this.$httpUrl}login/loginCheck?userMail=${this.loginForm.userMail}&password=${this.loginForm.password}`);
       if (response.data.code === 400) {
         this.$message.error('登录失败!')
@@ -51,12 +50,9 @@ export default {
         localStorage.setItem('passToken', response.data.data)
         this.$message.success('登录成功!')
         axiosInstance.get(this.$httpUrl + 'login/getAccountInfo', {params: {}}).then(res => res.data).then(res => {
-          console.log(res)
           if (res.code !== 200) {
             this.$message.warning('数据加载失败!');
           } else {
-            console.log('res:')
-            console.log(res.data)
             const packInfo = {
               identity: res.data.identity,
               userIcon: res.data.userIcon,
@@ -67,10 +63,7 @@ export default {
             localStorage.setItem('userMail', res.data.userMail);
             localStorage.setItem('userIcon', res.data.userIcon);
             localStorage.setItem('identity', res.data.identity);
-
-            console.log(packInfo)
             this.$store.commit('updateUserInfo', packInfo)
-            console.log(this.userInfo)
           }
         }).catch(error => {
           console.error('Error adding comment:', error);

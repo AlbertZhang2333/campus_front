@@ -97,7 +97,6 @@ export default {
   },
   methods: {
     goSustech() {
-      console.log('111')
       window.location.href = 'https://www.sustech.edu.cn/'
     },
     logOut() {

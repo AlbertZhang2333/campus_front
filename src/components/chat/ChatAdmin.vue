@@ -51,7 +51,6 @@ export default {
 
   methods: {
     fetchMessages(roomInfo) {
-      // console.log(roomInfo)
       setTimeout(() => {
         this.handleRoomChange(roomInfo)
       })
@@ -66,11 +65,6 @@ export default {
       this.loadMessage()
     },
     sendMessage(message) {
-      // console.log(message)
-      // console.log(this.selectedRoomIndex)
-      // console.log(foundRoom)
-
-      // console.log(this.rooms[this.selectedRoomIndex].userMail)
 
       const packageMessage = {
         toUserMail: this.rooms[this.selectedRoomIndex].userMail,
@@ -98,13 +92,8 @@ export default {
     handleWebSocketMessage(event) {
       const receiveMessage = JSON.parse(event.data);
 
-      // console.log(receiveMessage)
-
       const foundRoom = this.rooms.find(room => room.userMail === receiveMessage.fromUserMail);
       const foundRoomIndex = this.rooms.indexOf(foundRoom);
-
-      // console.log(foundRoomIndex)
-      // console.log(foundRoom)
 
       if (foundRoomIndex === -1) {
         const index = this.rooms.length + 1

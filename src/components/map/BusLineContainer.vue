@@ -157,8 +157,8 @@
       },
       async submitAddBusLine(submitOrUpdate,index){
         const response = await axiosInstance.post(`${this.$httpUrl}addLine?lineId=${this.BusLine.lineId}&direction=${this.BusLine.direction}&startTime=${this.BusLine.startTime}&endTime=${this.BusLine.endTime}&inService=true&startStopId=-1&endStopId=-1`);
-        if(response.data.code == 400) alert("添加失败");
-        else alert('submit!');
+        if(response.data.code == 400) this.$message.error("添加失败");
+        else this.$message.success("添加失败");
         this.addBusLine_dialog=false;
         this.updateBusLineList();
       },
@@ -170,26 +170,25 @@
           this.BusLine.direction = curBusLine.direction;
           this.BusLine.startTime = curBusLine.startTime;
           this.BusLine.endTime = curBusLine.endTime;
-          console.log("editBusLine",this.BusLine);
       },
       async updateAddBusLine(){
         //将弹窗中的信息更新到数据库
           const response = await axiosInstance.put(`${this.$httpUrl}updateLine?id=${this.BusLine.id}&LineId=${this.BusLine.lineId}&startTime=${this.BusLine.startTime}&endTime=${this.BusLine.endTime}&direction=${this.BusLine.direction}&inService=true&startStopId=-1&endStopId=-1`);
-          if(response.data.code == 400) alert("更新失败");
-          else alert('update!');
+          if(response.data.code == 400) this.$message.error("更新失败");
+          else this.$message.success("更新成功");
           this.updateBusLine_dialog=false;
           this.updateBusLineList();
       },
       async deleteBusLine(curBusLine) {
         const response = await axiosInstance.delete(`${this.$httpUrl}deleteLine/${curBusLine.id}`);
-        if(response.data.code == 400) alert("删除失败");
-        else alert('delete!');
+        if(response.data.code == 400) this.$message.error("删除失败");
+        else this.$message.success("删除成功");
         this.updateBusLineList();
       },
       async updateBusLineList(){
         //模糊查询相关，需要后端有通过 like 查询的接口
           const response = await axiosInstance.get(`${this.$httpUrl}allLine`);
-          if(response.data.code == 400) alert("查询失败");
+          if(response.data.code == 400) this.$message.error("查询失败");
           else this.BusLineList = response.data.data;
       },
   }

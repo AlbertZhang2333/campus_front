@@ -202,7 +202,7 @@
       async submitAddBusRelation(submitOrUpdate,index){
         const response = await axiosInstance.post(`${this.$httpUrl}addRelation?lineId=${this.BusRelation.lineId}&direction=${this.BusRelation.direction}&startStop=${this.BusRelation.startStop}&endStop=${this.BusRelation.endStop}&time=${this.BusRelation.time}&stopNum=${this.BusRelation.stopNum}`);
         if(response.data.code == 400) alert("添加失败");
-        else alert('submit!');
+        else this.$message.success('添加成功');
         this.addBusRelation_dialog=false;
         this.updateBusRelationList();
       },
@@ -221,14 +221,14 @@
         //将弹窗中的信息更新到数据库
           const response = await axiosInstance.put(`${this.$httpUrl}updateRelation?id=${this.BusRelation.id}&lineId=${this.BusRelation.lineId}&direction=${this.BusRelation.direction}&startStop=${this.BusRelation.startStop}&endStop=${this.BusRelation.endStop}&time=${this.BusRelation.time}&stopNum=${this.BusRelation.stopNum}`);
           if(response.data.code == 400) alert("更新失败");
-          else alert('update!');
+          else this.$message.success('更新成功');
           this.updateBusRelation_dialog=false;
           this.updateBusRelationList();
       },
       async deleteBusRelation(curBusRelation) {
         const response = await axiosInstance.delete(`${this.$httpUrl}deleteRelation/${curBusRelation.id}`);
         if(response.data.code == 400) alert("删除失败");
-        else alert('delete!');
+        else this.$message.success('删除成功');
         this.updateBusRelationList();
       },
       async updateBusRelationList(){

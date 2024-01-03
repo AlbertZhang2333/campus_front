@@ -191,8 +191,8 @@ methods: {
     },
     async submitAddBuilding(submitOrUpdate,index){
       const response = await axiosInstance.post(`${this.$httpUrl}addBuilding?lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
-      if(response.data.code == 400) alert("添加失败");
-      else alert('submit!');
+      if(response.data.code == 400) this.$message.error("添加失败");
+      else this.$message.success("添加成功");
       this.addBuilding_dialog=false;
       this.updateBuildingList();
     },
@@ -210,21 +210,21 @@ methods: {
     async updateAddBuilding(){
       //将弹窗中的信息更新到数据库
         const response = await axiosInstance.put(`${this.$httpUrl}updateBuilding?id=${this.Building.id}&lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
-        if(response.data.code == 400) alert("更新失败");
-        else alert('update!');
+        if(response.data.code == 400) this.$message.error("修改失败");
+        else this.$message.success("修改成功");
         this.updateBuilding_dialog=false;
         this.updateBuildingList();
     },
     async deleteBuilding(curBuilding) {
       const response = await axiosInstance.delete(`${this.$httpUrl}deleteBuilding/${curBuilding.id}`);
-      if(response.data.code == 400) alert("删除失败");
-      else alert('delete!');
+      if(response.data.code == 400) this.$message.error("删除失败");
+      else this.$message.success("删除成功");
       this.updateBuildingList();
     },
     async updateBuildingList(){
       //模糊查询相关，需要后端有通过 like 查询的接口
         const response = await axiosInstance.get(`${this.$httpUrl}allBuilding`);
-        if(response.data.code == 400) alert("加载失败");
+        if(response.data.code == 400) this.$message.error("获取建筑列表失败");
         else this.BuildingList = response.data.data;
     },
     handleInputChange: _.debounce(async function() {

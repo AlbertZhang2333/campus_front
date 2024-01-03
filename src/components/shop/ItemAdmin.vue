@@ -226,7 +226,6 @@ methods: {
         this.Item.price = curItem.price;
         this.Item.description = curItem.description;
         this.Item.imagePath = curItem.imagePath;
-        console.log("editItem",this.Item);
     },
     async updateAddItem(){
       //将弹窗中的信息更新到数据库

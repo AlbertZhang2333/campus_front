@@ -53,12 +53,9 @@ export default {
       const venueName = this.$route.query.venueName
       if (venueName === undefined || venueName === '') {
         this.$message.warning('获取失败')
-        // alert("获取失败")
       }
-      console.log(venueName)
       const response = await axiosInstance.get(`${this.$httpUrl}searchBuildingName/${venueName === undefined ? '一丹图书馆' : venueName}`)
       if (response.data.code === 400) {
-        // alert("获取失败")
         this.$message.warning('获取失败')
       } else {
         this.building = response.data.data

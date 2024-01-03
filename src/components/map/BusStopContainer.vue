@@ -160,7 +160,7 @@
       async submitAddBusStop(submitOrUpdate,index){
         const response = await axiosInstance.post(`${this.$httpUrl}addStop?lat=${this.BusStop.lat}&lng=${this.BusStop.lng}&name=${this.BusStop.name}`);
         if(response.data.code == 400) alert("添加失败");
-        else alert('submit!');
+        else this.$message.success('添加成功');
         this.addBusStop_dialog=false;
         this.updateBusStopList();
       },
@@ -176,14 +176,14 @@
         //将弹窗中的信息更新到数据库
           const response = await axiosInstance.put(`${this.$httpUrl}updateStop?id=${this.BusStop.id}&lat=${this.BusStop.lat}&lng=${this.BusStop.lng}&name=${this.BusStop.name}`);
           if(response.data.code == 400) alert("修改失败");
-          else alert('update!');
+          else this.$message.success('修改成功');
           this.updateBusStop_dialog=false;
           this.updateBusStopList();
       },
       async deleteBusStop(curBusStop) {
         const response = await axiosInstance.delete(`${this.$httpUrl}deleteStop/${curBusStop.id}`);
         if(response.data.code == 400) alert("删除失败");
-        else alert('delete!');
+        else this.$message.success('删除成功');
         this.updateBusStopList();
       },
       async updateBusStopList(){
