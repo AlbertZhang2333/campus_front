@@ -5,7 +5,7 @@
         id="campus_video"
         preload="auto"
         poster="../assets/home_pictures/logo.png"
-        @click="play"
+        @click=""
         autoplay
         playsinline
         loop
@@ -14,14 +14,12 @@
     />
     <el-container class="card-container">
       <Card
-          v-for="(stuff, index) in cards"
+          v-for="(building, index) in buildings"
           :key="index"
-          :title="stuff.name"
-          :image="stuff.image"
-          :text="stuff.text"
-          :url="stuff.url"
+          :name="building.name"
+          :photoPath="building.photoPath"
+          :description="building.description"
           :style="{ marginTop: random[index] +'px'}"
-          @click="$router.push('/home')"
           style="box-shadow: 0 10px 20px rgba(0, 0, 0, .30), 0 0 10px rgba(0, 0, 0, .20)"
       />
     </el-container>
@@ -38,107 +36,97 @@ export default {
   data() {
     return {
       random:[92, 57, 84, 91, 52, 69, 17, 70, 37, 86, 51, 13, 61, 29, 58, 42, 98, 32, 48, 61, 62, 63, 40, 48, 69, 74, 69],
-      cards: [
+      buildings: [
         {
           id: 1,
           name: '一丹图书馆',
-          image: require('@/assets/VenuePicture/1.jpg'),
-          text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-          url: '/VenueInfo',
+          photoPath: '1',
+          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         },
         {
           id: 2,
           name: '琳恩图书馆',
-          image: require('@/assets/home_pictures/picture2.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          url: '/comment',
+          photoPath: '2',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         },
         {
           id: 3,
           name: '涵泳图书馆',
-          image: require('@/assets/home_pictures/picture3.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          url: '/reservation',
+          photoPath: '3',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         },
         {
           id: 4,
           name: '二期学生宿舍',
-          image: require('@/assets/home_pictures/picture4.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          url: '',
+          photoPath: '4',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         },
         {
           id: 5,
           name: '荔园',
-          image: require('@/assets/home_pictures/picture5.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          photoPath: '5',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 6,
           name: '第一教学楼',
-          image: require('@/assets/home_pictures/picture6.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          photoPath: '6',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 7,
           name: '理学院',
-          image: require('@/assets/home_pictures/picture7.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          photoPath: '8',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 8,
           name: '第三教学楼',
-          image: require('@/assets/home_pictures/picture8.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          photoPath: '9',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 9,
           name: '科研楼',
-          image: require('@/assets/home_pictures/picture9.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          photoPath: '10',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 10,
           name: '松禾体育场',
-          image: require('@/assets/home_pictures/picture10.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          photoPath: '11',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 11,
           name: '商学院',
-          image: require('@/assets/home_pictures/picture11.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          photoPath: '12',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 12,
           name: '工学院',
-          image: require('@/assets/home_pictures/picture11.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          photoPath: '13',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 13,
           name: '中心食堂',
-          image: require('@/assets/home_pictures/picture11.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          photoPath: '14',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
         {
           id: 14,
           name: '湖畔食堂',
-          image: require('@/assets/home_pictures/picture11.jpg'),
-          text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+          photoPath: '15',
+          description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
         },
       ]
     }
   },
   methods: {
-    play() {
-    }
   },
   mounted() {
-    // window.addEventListener('scroll', () => {
-    //   const video = document.getElementById('campus_video');
-    //   video.play();
-    // })
   }
 };
 </script>

@@ -1,10 +1,7 @@
 <template>
   <el-container style="display: flex; flex-direction: column">
-    <map-plan style="width: 70%; height: auto; align-self: center; margin-bottom: 20px"></map-plan>
-    <el-divider></el-divider>
     <el-container style="display: flex;flex-direction: column; justify-content: center;align-items: center">
       <h2> {{ building.name }} </h2>
-      <el-divider></el-divider>
       <el-image :src="building.photoPath" alt=""></el-image>
       <span style="font-size: 30px">
       {{ building.description }}
@@ -23,10 +20,9 @@
 <script>
 import CommentArea from '../components/comments/commentArea.vue'
 import axiosInstance from "@/main";
-import MapPlan from "@/components/map/MapPlan.vue";
 
 export default {
-  components: {CommentArea, MapPlan},
+  components: {CommentArea, },
   data() {
     return {
       building: {
@@ -35,11 +31,21 @@ export default {
         description: '',
         id: 1,
       },
-      venueName: '',
+      buildings:[{
+        name: '',
+        photoPath: '',
+        description: '',
+        id: 1,
+      }]
     }
   },
   mounted() {
-    this.getBuildingInfo()
+    // this.getBuildingInfo()
+    if(this.$route.query.building===undefined){
+      this.building = this.buildings[0]
+    }else {
+      this.building = this.$route.query.building
+    }
   },
   methods: {
     async getBuildingInfo() {

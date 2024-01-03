@@ -1,8 +1,9 @@
 <template>
   <el-card class="card" @click.native="handleClick">
-    <h3>{{ title }}</h3>
-    <el-image :src="image" :alt="title" class="card-image" />
-    <p>{{ text }}</p>
+    <h3>{{ name }}</h3>
+    <p v-html="code"></p>
+<!--    <img :src="code" :alt="name" class="card-image"/>-->
+    <p>{{ description }}</p>
   </el-card>
 </template>
 
@@ -11,14 +12,19 @@
 export default {
   props: {
     id: String,
-    title: String,
-    image: String,
-    text: String,
-    url: String
+    name: String,
+    photoPath: String,
+    description: String,
   },
-  methods:{
-    handleClick(){
-      this.$router.push(this.url)
+  computed: {
+    code() {
+      const imageUrl = require(`@/assets/VenuePicture/${this.photoPath}.jpg`)
+      return `<img src="${imageUrl}" alt="" width="80%"/>`
+    }
+  },
+  methods: {
+    handleClick() {
+      this.$router.push({path: `/venue_info`, query: {name: this.name}})
     }
   }
 }
