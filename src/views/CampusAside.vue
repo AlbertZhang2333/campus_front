@@ -3,7 +3,7 @@
     <el-col :span="4" style="height: 100%; width: auto; display: flex; justify-content:space-around">
       <el-image :src="url_logo" fit="contain" @click="goSustech" style="width: 100%; height: 100%; border:5px #ffe6f1; align-self: center"/>
     </el-col>
-    <el-col :span="12" style="height: 100%">
+    <el-col :span="16" style="height: 100%">
       <el-menu
           background-color="#9400d3"
           active-text-color="#ffd04b"
@@ -24,14 +24,7 @@
         </el-menu-item>
       </el-menu>
     </el-col>
-    <el-col :span="4" style="display: flex; justify-content: center; align-items: center">
-      <el-input
-          v-model="input"
-          placeholder="Search"
-          suffix-icon="el-icon-search"
-          style="width: 75%;"
-      />
-    </el-col>
+
     <el-col :span="4" style="height: 100%">
       <el-button
           type="primary"
