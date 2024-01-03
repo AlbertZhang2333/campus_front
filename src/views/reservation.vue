@@ -291,7 +291,7 @@ export default {
   computed: {
     ...mapState(['userInfo']),
     admin() {
-      return this.userInfo.identity === 1
+      return this.userInfo.identity === '2'
     }
   }
 }

@@ -98,6 +98,7 @@ export default {
       }
     },
     async cancelReservation(curReservation){
+      console.log("reservationId",curReservation.id)
       const response = await axiosInstance.put(`${this.$httpUrl}Reservation/reservationCancel?id=${curReservation.id}`);
       if(response.data.code == 400) alert(response.data.data);
       else alert("删除成功");

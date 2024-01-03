@@ -33,10 +33,6 @@ const routes = [
         component: Map
     },
     {
-        path: '/map/admin',
-        component: MapAdmin
-    },
-    {
         path: '/shop',
         component: Shop
     },
