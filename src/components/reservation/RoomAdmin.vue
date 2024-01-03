@@ -162,7 +162,7 @@
       async submitAddRoom(submitOrUpdate,index){
         const response = await axiosInstance.post(`${this.$httpUrl}ManageRoom/createRoom?roomName=${this.Room.roomName}&location=${this.Room.location}&capacity=${this.Room.capacity}`);
         if(response.data.code === 400) alert(response.data.data);
-        else alert('submit!');
+        else this.$message.success('添加成功');
         this.addRoom_dialog=false;
         this.handleInputChange();
       },
@@ -177,14 +177,14 @@
         //将弹窗中的信息更新到数据库
           const response = await axiosInstance.put(`${this.$httpUrl}ManageRoom/updateRoom?roomName=${this.Room.roomName}&location=${this.Room.location}&capacity=${this.Room.capacity}`);
           if(response.data.code === 400) alert(response.data.data);
-          else alert('update!');
+          else this.$message.success('更新成功');
           this.updateRoom_dialog=false;
           this.handleInputChange();
       },
       async deleteRoom(curRoom) {
         const response = await axiosInstance.delete(`${this.$httpUrl}ManageRoom/deleteRoomByRoomName?roomName=${curRoom.roomName}`);
         if(response.data.code === 400) alert(response.data.data);
-        else alert('delete!');
+        else this.$message.success('删除成功');
         this.handleInputChange();
       },
       handleInputChange: _.debounce(async function() {
@@ -201,7 +201,6 @@
             return response.data.data;
         }else {
             const response = await axiosInstance.get(`${this.$httpUrl}ManageRoom/searchByRoomAndLocation?roomName=${roomInput}&location=${location}`);
-            console.log("response", response);
             return response.data.data;
         }
       },

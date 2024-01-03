@@ -218,9 +218,6 @@ export default {
       }
     },
     searchReservation() {
-
-      // console.log(this.filterOptions)
-      // console.log(this.filterOptions)
       if (this.checkFilter()) {
         this.currentPage = 1
         this.pageSize = 50
@@ -249,7 +246,6 @@ export default {
             }
           })
           .catch(error => {
-            // console.log(error)
             this.$message.error('删除失败!');
           })
     },
@@ -261,7 +257,6 @@ export default {
       })
           .then(res => res.data)
           .then(res => {
-            console.log(res)
             if (res.code === 200) {
               this.$message.success('取消成功!');
               this.loadReservation()
@@ -270,7 +265,6 @@ export default {
             }
           })
           .catch(error => {
-            // console.log(error)
             this.$message.error('取消失败!');
           })
     },
@@ -313,14 +307,9 @@ export default {
       }
       const url = this.$httpUrl + 'ManageReservationRecord/' + route;
 
-      console.log(param)
-      console.log(this.showFilter)
-
       axiosInstance.get(url, {
         params: param
       }).then(res => res.data).then(res => {
-        console.log(res)
-        // console.log([res.data])
         if (res.code === 200) {
           this.reservation = res.data
           this.total = res.total
@@ -351,13 +340,11 @@ export default {
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
       this.pageSize = val
       this.currentPage = 1
       this.loadReservation()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
       this.currentPage = val
       this.loadReservation()
     },

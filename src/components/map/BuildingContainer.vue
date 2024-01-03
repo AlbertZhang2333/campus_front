@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <el-row>
@@ -78,9 +79,9 @@
         <el-form-item label="校巴站点" prop="busStop">
           <el-input v-model="Building.busStop" prefix-icon="el-icon-building"/>
         </el-form-item>
-        <!--        <el-form-item label="图片路径" prop="photo_path">-->
-        <!--          <el-input v-model="Building.photo_path" prefix-icon="el-icon-building"/>-->
-        <!--        </el-form-item>-->
+<!--        <el-form-item label="图片路径" prop="photo_path">-->
+<!--          <el-input v-model="Building.photo_path" prefix-icon="el-icon-building"/>-->
+<!--        </el-form-item>-->
         <el-form-item label="图片上传">
           <el-upload
               class="upload"
@@ -132,26 +133,28 @@
         <el-form-item label="校巴站点" prop="busStop">
           <el-input v-model="Building.busStop" prefix-icon="el-icon-building"/>
         </el-form-item>
-        <!--        <el-form-item label="图片路径" prop="photo_path">-->
-        <!--          <el-input v-model="Building.photo_path" prefix-icon="el-icon-building"/>-->
-        <!--        </el-form-item>-->
-        <el-upload
-            class="upload"
-            ref="upload"
-            accept=".jpg, .png"
-            action="http://localhost:8081/uploadImage/image"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :on-change="handleChange"
-            :file-list="fileList"
-            :limit="1"
-            :auto-upload="false"
-        >
-          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器
-          </el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
+<!--        <el-form-item label="图片路径" prop="photo_path">-->
+<!--          <el-input v-model="Building.photo_path" prefix-icon="el-icon-building"/>-->
+<!--        </el-form-item>-->
+        <el-form-item label="图片上传">
+          <el-upload
+              class="upload"
+              ref="upload"
+              accept=".jpg, .png"
+              action="http://localhost:8081/uploadImage/image"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :on-change="handleChange"
+              :file-list="fileList"
+              :limit="1"
+              :auto-upload="false"
+          >
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器
+            </el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </el-form-item>
         <el-form-item label="建筑描述" prop="description">
           <el-input v-model="Building.description" prefix-icon="el-icon-building"/>
         </el-form-item>
@@ -166,16 +169,16 @@
 <script>
 import axiosInstance from "@/main";
 import _ from 'lodash'
-
 export default {
-  mounted() {
+  mounted(){
     this.updateBuildingList();
   },
   data() {
     return {
       buildingInput: '',
+      fileList: [],
       Building: {
-        id: 0,
+        id:0,
         name: "",
         lng: 114.001343,
         lat: 22.596590,
@@ -183,36 +186,31 @@ export default {
         busStop: "",
         photo_path: ""
       },
-      BuildingList: [],
-      fileList: [],
-      buildingAddRule: {
-        name: [
-          {required: true, message: "建筑名不能为空", trigger: 'blur'}
+      BuildingList:[],
+      buildingAddRule:{
+        name:[
+          {required:true,message: "建筑名不能为空", trigger:'blur'}
         ],
-        lat: [
-          {required: true, message: "纬度不能为空", trigger: 'blur'},
-          {
-            pattern: /^2[1-3]\.\d{0,7}$/,
+        lat:[
+          {required:true, message: "纬度不能为空", trigger:'blur'},
+          {pattern: /^2[1-3]\.\d{0,7}$/,
             message: "纬度超出学校范围啦",
-            trigger: "blur"
-          }
+            trigger: "blur"}
         ],
-        lng: [
-          {required: true, message: "经度不能为空", trigger: 'blur'},
-          {
-            pattern: /^11[2-4]\.\d{0,7}$/,
+        lng:[
+          {required:true, message:"经度不能为空", trigger:'blur'},
+          {pattern: /^11[2-4]\.\d{0,7}$/,
             message: "经度超出学校范围啦",
-            trigger: "blur"
-          }
+            trigger: "blur"}
         ],
-        description: [
-          {required: true, message: "建筑描述不能为空", trigger: 'blur'}
+        description:[
+          {required:true, message:"建筑描述不能为空", trigger: 'blur'}
         ]
 
       },
 
-      addBuilding_dialog: false,
-      updateBuilding_dialog: false,
+      addBuilding_dialog:false,
+      updateBuilding_dialog:false,
     }
   },
   methods: {
@@ -267,19 +265,19 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
-    openAddBuildingDialog() {
-      this.addBuilding_dialog = true;
+    openAddBuildingDialog(){
+      this.addBuilding_dialog=true;
     },
-    async submitAddBuilding(submitOrUpdate, index) {
+    async submitAddBuilding(submitOrUpdate,index){
       const response = await axiosInstance.post(`${this.$httpUrl}addBuilding?lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
-      if (response.data.code == 400) alert("添加失败");
-      else alert('submit!');
-      this.addBuilding_dialog = false;
+      if(response.data.code == 400) this.$message.error("添加失败");
+      else this.$message.success("添加成功");
+      this.addBuilding_dialog=false;
       this.updateBuildingList();
     },
-    async editBuilding(curBuilding) {
+    async editBuilding(curBuilding){
       //将当前建筑信息填入弹窗
-      this.updateBuilding_dialog = true;
+      this.updateBuilding_dialog=true;
       this.Building.id = curBuilding.id;
       this.Building.name = curBuilding.name;
       this.Building.lng = curBuilding.lng;
@@ -288,32 +286,32 @@ export default {
       this.Building.busStop = curBuilding.busStop;
       this.Building.photo_path = curBuilding.photo_path;
     },
-    async updateAddBuilding() {
+    async updateAddBuilding(){
       //将弹窗中的信息更新到数据库
       const response = await axiosInstance.put(`${this.$httpUrl}updateBuilding?id=${this.Building.id}&lat=${this.Building.lat}&lng=${this.Building.lng}&name=${this.Building.name}&description=${this.Building.description}&photoPath=${this.Building.photo_path}&busStop=${this.Building.busStop}`);
-      if (response.data.code == 400) alert("更新失败");
-      else alert('update!');
-      this.updateBuilding_dialog = false;
+      if(response.data.code == 400) this.$message.error("修改失败");
+      else this.$message.success("修改成功");
+      this.updateBuilding_dialog=false;
       this.updateBuildingList();
     },
     async deleteBuilding(curBuilding) {
       const response = await axiosInstance.delete(`${this.$httpUrl}deleteBuilding/${curBuilding.id}`);
-      if (response.data.code == 400) alert("删除失败");
-      else alert('delete!');
+      if(response.data.code == 400) this.$message.error("删除失败");
+      else this.$message.success("删除成功");
       this.updateBuildingList();
     },
-    async updateBuildingList() {
+    async updateBuildingList(){
       //模糊查询相关，需要后端有通过 like 查询的接口
       const response = await axiosInstance.get(`${this.$httpUrl}allBuilding`);
-      if (response.data.code == 400) alert("加载失败");
+      if(response.data.code == 400) this.$message.error("获取建筑列表失败");
       else this.BuildingList = response.data.data;
     },
-    handleInputChange: _.debounce(async function () {
+    handleInputChange: _.debounce(async function() {
       try {
-        if (this.buildingInput === '') {
+        if(this.buildingInput === '') {
           this.updateBuildingList();
           return;
-        } else {
+        }else {
           const response = await this.searchOnServer(this.buildingInput);
           this.BuildingList = response;
         }

@@ -95,7 +95,7 @@ export default {
         if(response.data.code === 400){
             alert(response.data.data);
         }else{
-            alert('修改成功!');
+            this.$message.success('修改成功!');
             this.$router.push({path:'/login'})
         }
       }

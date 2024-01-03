@@ -111,7 +111,6 @@ export default {
         },
         async submit_order() {
             const response = await axiosInstance.post(`${this.$httpUrl}UserShopping/addItemToTheCart?itemName=`+this.currentShoppingItem.name+'&num='+this.num);
-            console.log("addResponse", response);
             if(response.data.code === 400) alert(response.data.data);
             this.newShoppingDialog=false;
             this.num=0;

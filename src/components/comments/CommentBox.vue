@@ -101,12 +101,10 @@ export default {
               console.error(error);
             });
       } else {
-        // 如果没有选取到文件
-        console.log('No file selected');
+        this.$message.warning('请先选取图片！');
       }
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
 
       this.fileList = fileList
     },

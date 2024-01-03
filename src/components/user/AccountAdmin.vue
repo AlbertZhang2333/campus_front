@@ -193,7 +193,7 @@ export default {
     async createAccount() {
       const response = await axiosInstance.post(this.$httpUrl + `manageAccount/createANewAccount?userName=${this.accountInfoItem.username}&userMail=${this.accountInfoItem.userMail}&password=${this.accountInfoItem.password}&identity=${this.accountInfoItem.identity}`);
       if (response.data.code === 400) alert(response.data.data);
-      else alert("已添加");
+      else this.$message.success("已添加");
       this.accountDialogVisible = false;
       this.loadUser();
     },
@@ -256,9 +256,7 @@ export default {
         else this.$message.success("操作成功");
         this.loadUser();
       } else {
-        console.log("releaseFromBlackList")
         const response = await axiosInstance.post(this.$httpUrl + `manageAccount/releaseFromBlackList?userMail=${this.accountInfoItemList[index].userMail}`);
-        console.log("response", response);
         if (response.data.code === 400) alert(response.data.data);
         else this.$message.success("操作成功");
         this.loadUser();

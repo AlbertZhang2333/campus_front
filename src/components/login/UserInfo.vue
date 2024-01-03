@@ -68,12 +68,11 @@ export default {
     },
     loadIcon(){
       this.url = require(`@/assets/user_icon/${this.form.userIcon}.jpg`);
-      console.log("url", this.url);
     },
     async save() {
       const response = await axiosInstance.put(`${this.$httpUrl}login/changeUserIconAndUsername?UserIcon=${this.form.userIcon}&username=${this.form.username}`)
       if(response.data.code === 400){
-        alert(response.data.date);
+        alert(response.data.data);
       }else{
         this.$message({
           message: '修改成功!',

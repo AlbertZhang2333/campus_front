@@ -1,9 +1,6 @@
 <template>
 <div>
 <!--    <Administrators_Market></Administrators_Market>-->
-    <el-header>
-      <Header></Header>
-    </el-header>
     <el-container>
       <el-aside>
         <Aside></Aside>

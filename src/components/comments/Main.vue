@@ -228,8 +228,6 @@ export default {
       return text;
     },
     openReplyDialog(index) {
-      console.log(index)
-      console.log(this.comments[index])
       this.isReplyMode[index] = true;
 
       if (this.isReplyMode[index]) {
@@ -253,16 +251,12 @@ export default {
           currentPage: this.currentPageRep,
         }
       }).then(res => res.data).then(res => {
-            console.log(res)
-            // console.log([res.data])
             if (res.code === 200) {
               this.replyComments = res.data
               this.processedReplyComments = res.data.map(comment => ({
                 ...comment,
                 comment: this.replaceEmoji(comment.comment),
               }));
-              console.log(this.processedReplyComments)
-              // console.log(this.comments)
               this.totalRep = res.total
             } else {
               this.$message.warning('数据加载失败!');
@@ -286,7 +280,6 @@ export default {
       axiosInstance.post(this.$httpUrl + this.params.urlList.commentUrl, null, {
         params: requestParams
       }).then(res => res.data).then(res => {
-        console.log(res);
         if (res.code === 200) {
           // 处理评论内容
           this.comments = res.data
@@ -341,12 +334,8 @@ export default {
         this.replyCommentForm.replyId = this.comments[index].id;
         this.replyCommentForm.belongDepartment = this.params.belongDepartment;
         this.replyCommentForm.type = 1;
-        console.log(index)
-        console.log(this.comments[index])
-        console.log(this.replyCommentForm)
 
         axiosInstance.post(this.$httpUrl + this.params.urlList.submitReplyCommentUrl, this.replyCommentForm).then(res => res.data).then(res => {
-          console.log(res)
           this.$message({
             message: '回复成功!',
             type: 'success'
@@ -367,10 +356,7 @@ export default {
         this.commentForm.type = 0;
         this.commentForm.replyId = null;
 
-        // console.log(this.commentForm.comment)
-
         axiosInstance.post(this.$httpUrl + this.params.urlList.submitCommentUrl, this.commentForm).then(res => res.data).then(res => {
-          console.log(res)
           this.$message({
             message: '评论发表成功!',
             type: 'success'
@@ -394,7 +380,6 @@ export default {
       axiosInstance.put(this.$httpUrl + this.params.urlList.deleteReplyCommentUrl, this.replyComments[index])
           .then(res => res.data)
           .then(res => {
-            console.log(res);
             this.$message({
               message: '删除成功!',
               type: 'success'
@@ -411,7 +396,6 @@ export default {
       axiosInstance.put(this.$httpUrl + this.params.urlList.deleteCommentUrl, this.comments[index])
           .then(res => res.data)
           .then(res => {
-            console.log(res);
             this.$message({
               message: '删除成功!',
               type: 'success'
@@ -424,24 +408,21 @@ export default {
           });
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
       this.pageSize = val
       this.currentPage = 1
       this.loadComment()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
       this.currentPage = val
       this.loadComment()
     },
     handleSizeRepChange(val) {
-      console.log(`回复每页 ${val} 条`);
       this.pageSizeRep = val
       this.currentPageRep = 1
       this.loadReplyComments(this.replyDialogIndex)
     },
     handleCurrentRepChange(val) {
-      console.log(`恢复当前页: ${val}`);
+
       this.currentPageRep = val
       this.loadReplyComments(this.replyDialogIndex)
     },

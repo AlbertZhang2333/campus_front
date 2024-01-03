@@ -1,18 +1,18 @@
 <template>
-  <div>
 
+  <div>
     <div>
       <el-carousel class="carousel_style" indicator-position="outside">
         <el-carousel-item class="carousel_Item_style" v-for="item in carouselImageList" :key="item.src">
-          <img :src="item.src" alt="carousel_image" class="scaled-image" />
+          <img :src="item.src" alt="carousel_image" class="scaled-image"/>
         </el-carousel-item>
       </el-carousel>
     </div>
-
     <el-container style="height: 1000px; border: 1px solid #eee">
       <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
         <el-button type="primary" style="width:30% ; background:#505814 ;border:none;"
-                   v-on:click="$router.push(`/reservation/record`)">预约记录</el-button>
+                   v-on:click="$router.push(`/reservation/record`)">预约记录
+        </el-button>
         <el-select v-model="curLocation" @change="loadRoomList" placeholder="请选择地点">
           <el-option
               v-for="location in locations"
@@ -33,54 +33,59 @@
           <el-table-column>
             <template #default="scope">
               <el-button @click="showReservation(scope.row)" type="primary">
-              预约
+                预约
               </el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-aside>
-      <el-form class="login-container" label-width="0px">
-        <div class="square-container">
+      <el-container style="display: flex; flex-direction: column">
+        <el-switch v-if="admin" active-text="管理员模式" inactive-text="普通模式"
+                   @change="$router.push('reservation/admin')"
+                   style="margin: 20px; align-self: end; justify-self: center"></el-switch>
+        <el-form class="login-container" label-width="0px" style="margin: 0">
+          <div class="square-container">
 
-          <div class="gray-square"></div>
-          <div class="status-text">不可预约</div>
-          <div class="interval"></div>
-          <div class="red-square"></div>
-          <div class="status-text">已有预约</div>
-          <div class="interval"></div>
+            <div class="gray-square"></div>
+            <div class="status-text">不可预约</div>
+            <div class="interval"></div>
+            <div class="red-square"></div>
+            <div class="status-text">已有预约</div>
+            <div class="interval"></div>
 
-          <div class="demonstration">选择日期:</div>
-          <el-date-picker
-              v-model="selectedDate"
-              align="right"
-              type="date"
-              value-format="yyyy-MM-dd"
-              placeholder="选择日期"
-              @change="showReservation"
-              :picker-options="pickerOptions">
-          </el-date-picker>
-          <div class="status-text">当前地点:{{ this.selectedRoomName }}</div>
+            <div class="demonstration">选择日期:</div>
+            <el-date-picker
+                v-model="selectedDate"
+                align="right"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"
+                @change="showReservation"
+                :picker-options="pickerOptions">
+            </el-date-picker>
+            <div class="status-text">当前地点:{{ this.selectedRoomName }}</div>
 
-        </div>
+          </div>
 
-        <div class="array-container">
-          <div v-for="(item, index) in dataArray" :key="index"
-               :class="{ 'occupied': item.state == 'B', 'notAvailable': item.state == 'C' }" class="array-item">
-            <div class="item-wrapper">
-              {{ item.value }}
+          <div class="array-container">
+            <div v-for="(item, index) in dataArray" :key="index"
+                 :class="{ 'occupied': item.state == 'B', 'notAvailable': item.state == 'C' }" class="array-item">
+              <div class="item-wrapper">
+                {{ item.value }}
+              </div>
             </div>
           </div>
-        </div>
 
-        <el-form-item style="width: 100%;">
-          <el-button type="primary" style="width:30% ; background:#505814 ;border:none;"
-                     v-on:click="showTable">预约</el-button>
-        </el-form-item>
+          <el-form-item style="width: 100%;">
+            <el-button type="primary" style="width:30% ; background:#505814 ;border:none;"
+                       v-on:click="showTable">预约
+            </el-button>
+          </el-form-item>
 
-      </el-form>
+        </el-form>
+      </el-container>
 
     </el-container>
-
     <el-dialog :visible.sync="dialog_visible" class="dialog_style">
       <el-form
           ref="reservation"
@@ -115,23 +120,28 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-
   </div>
 </template>
 
 <script>
 import axiosInstance from "@/main";
+import Main from "@/components/map/MapContainer.vue";
+import MapAdmin from "@/components/map/MapAdmin.vue";
+import ReservationAdmin from "@/views/reservationAdmin.vue";
+import {mapState} from "vuex";
+
 export default {
+  components: {ReservationAdmin, MapAdmin, Main},
   data() {
     return {
       carouselImageList: [
-        { src: "https://booking.lib.sustech.edu.cn/ic-web/upload/roomPhotos/82762638791c46dfbdb9ad41ea11bc74-banner3.99435347.jpg" },
-        { src: "https://booking.lib.sustech.edu.cn/ic-web/upload/roomPhotos/0f0a0ac89915495ba25d916d43d0e4b1-banner2.0e62e187.jpg" },
-        { src: "https://booking.lib.sustech.edu.cn/ic-web/upload/roomPhotos/86204a2ec4e94d7caabeb63be4c8c989-banner1.18666e27(1).jpg"},
+        {src: "https://booking.lib.sustech.edu.cn/ic-web/upload/roomPhotos/82762638791c46dfbdb9ad41ea11bc74-banner3.99435347.jpg"},
+        {src: "https://booking.lib.sustech.edu.cn/ic-web/upload/roomPhotos/0f0a0ac89915495ba25d916d43d0e4b1-banner2.0e62e187.jpg"},
+        {src: "https://booking.lib.sustech.edu.cn/ic-web/upload/roomPhotos/86204a2ec4e94d7caabeb63be4c8c989-banner1.18666e27(1).jpg"},
       ],
 
-      roomList:[],
-      locations:[],
+      roomList: [],
+      locations: [],
       curLocation: '一丹讨论间',
       reservationList: [],
       selectedLocation: '',
@@ -152,41 +162,41 @@ export default {
         endTime: '',
       },
       reservationRule: {
-        startTime: {required:true, message:"开始时间不能为空", trigger:'blur'},
-        endTime: {required:true, message:"结束时间不能为空", trigger:'blur'},
+        startTime: {required: true, message: "开始时间不能为空", trigger: 'blur'},
+        endTime: {required: true, message: "结束时间不能为空", trigger: 'blur'},
       },
       // state有三个状态：A：未被占用 未染色，B：已被占用 染成红色，C：已经不能被占用
       dataArray: [
-        { value: '08:00', state: 'A' },
-        { value: '08:30', state: 'A' },
-        { value: '09:00', state: 'A' },
-        { value: '09:30', state: 'A' },
-        { value: '10:00', state: 'A' },
-        { value: '10:30', state: 'A' },
-        { value: '11:00', state: 'A' },
-        { value: '11:30', state: 'A' },
-        { value: '12:00', state: 'A' },
-        { value: '12:30', state: 'A' },
-        { value: '13:00', state: 'A' },
-        { value: '13:30', state: 'A' },
-        { value: '14:00', state: 'A' },
-        { value: '14:30', state: 'A' },
-        { value: '15:00', state: 'A' },
-        { value: '15:30', state: 'A' },
-        { value: '16:00', state: 'A' },
-        { value: '16:30', state: 'A' },
-        { value: '17:00', state: 'A' },
-        { value: '17:30', state: 'A' },
-        { value: '18:00', state: 'A' },
-        { value: '18:30', state: 'A' },
-        { value: '19:00', state: 'A' },
-        { value: '19:30', state: 'A' },
-        { value: '20:00', state: 'A' },
-        { value: '20:30', state: 'A' },
-        { value: '21:00', state: 'A' },
-        { value: '21:30', state: 'A' },
-        { value: '22:00', state: 'A' },
-        { value: '22:30', state: 'A' },
+        {value: '08:00', state: 'C'},
+        {value: '08:30', state: 'C'},
+        {value: '09:00', state: 'C'},
+        {value: '09:30', state: 'C'},
+        {value: '10:00', state: 'C'},
+        {value: '10:30', state: 'C'},
+        {value: '11:00', state: 'C'},
+        {value: '11:30', state: 'C'},
+        {value: '12:00', state: 'C'},
+        {value: '12:30', state: 'C'},
+        {value: '13:00', state: 'C'},
+        {value: '13:30', state: 'C'},
+        {value: '14:00', state: 'C'},
+        {value: '14:30', state: 'C'},
+        {value: '15:00', state: 'C'},
+        {value: '15:30', state: 'C'},
+        {value: '16:00', state: 'C'},
+        {value: '16:30', state: 'C'},
+        {value: '17:00', state: 'C'},
+        {value: '17:30', state: 'C'},
+        {value: '18:00', state: 'C'},
+        {value: '18:30', state: 'C'},
+        {value: '19:00', state: 'C'},
+        {value: '19:30', state: 'C'},
+        {value: '20:00', state: 'C'},
+        {value: '20:30', state: 'C'},
+        {value: '21:00', state: 'C'},
+        {value: '21:30', state: 'C'},
+        {value: '22:00', state: 'C'},
+        {value: '22:30', state: 'C'},
       ]
     }
   },
@@ -197,9 +207,9 @@ export default {
     this.selectedDate = this.currentDate;
   },
   methods: {
-    async loadLocation(){
+    async loadLocation() {
       const response = await axiosInstance.get(`${this.$httpUrl}Room/getAllLocation`);
-      if(response.data.code == 400) alert(response.data.data);
+      if (response.data.code == 400) alert(response.data.data);
       else this.locations = response.data.data;
     },
     updateCurrentTime() {
@@ -216,27 +226,27 @@ export default {
       this.currentDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
       this.currentTime = date.getHours() + ":" + date.getMinutes();
     },
-    async loadRoomList(){
+    async loadRoomList() {
       const response = await axiosInstance.get(`${this.$httpUrl}Room/findRoomByLocation?location=${this.curLocation}`);
-      if(response.data.code == 400) alert(response.data.data);
+      if (response.data.code == 400) alert(response.data.data);
       else this.roomList = response.data.data;
     },
 
-    async showReservation(curRoom){
+    async showReservation(curRoom) {
       this.resetArray();
-      if(curRoom != undefined && curRoom.roomName != undefined) this.selectedRoomName = curRoom.roomName;
+      if (curRoom != undefined && curRoom.roomName != undefined) this.selectedRoomName = curRoom.roomName;
       const response = await axiosInstance.get(`${this.$httpUrl}Reservation/reservationRecordByRoomNameAndDate?roomName=${this.selectedRoomName}&date=${this.selectedDate}`);
-      if(response.data.code == 400) alert("查询失败");
+      if (response.data.code == 400) alert("查询失败");
       else this.reservationList = response.data.data;
-      if(this.selectedDate == this.currentDate){
+      if (this.selectedDate == this.currentDate) {
         for (var m in this.dataArray) {
           if (this.dataArray[m].value.localeCompare(this.currentTime) <= 0) {
             this.dataArray[m].state = 'C';
           }
         }
       }
-      for(var i = 0, len = this.reservationList.length; i < len; i++) {
-        if(this.reservationList[i].date != this.selectedDate) continue;
+      for (var i = 0, len = this.reservationList.length; i < len; i++) {
+        if (this.reservationList[i].date != this.selectedDate) continue;
         var startTime = this.reservationList[i].startTime;
         var endTime = this.reservationList[i].endTime;
         var start = startTime.split(":");
@@ -247,14 +257,15 @@ export default {
         var endMinute = parseInt(end[1]);
         var startIndex = (startHour - 8) * 2 + startMinute / 30;
         var endIndex = (endHour - 8) * 2 + endMinute / 30;
-        for(var j = startIndex; j < endIndex; j++) {
+        for (var j = startIndex; j < endIndex; j++) {
           this.dataArray[j].state = 'B';
         }
       }
     },
 
     showTable() {
-      this.dialog_visible = true;
+      if(this.selectedRoomName != "") this.dialog_visible = true;
+      else alert("请先选择房间");
     },
 
     resetArray() {
@@ -266,14 +277,19 @@ export default {
     async submitForm() {
       this.dialog_visible = false;
       const response = await axiosInstance.post(`${this.$httpUrl}Reservation/reservationAdd?roomName=${this.selectedRoomName}&date=${this.selectedDate}&startTime=${this.reservation.startTime}:00&endTime=${this.reservation.endTime}:00&location=${this.curLocation}`);
-      if(response.data.code == 400) alert(response.data.data);
+      if (response.data.code == 400) alert(response.data.data);
       else {
-        alert("预约成功");
+        this.$message.success("预约成功");
         this.showReservation();
       }
     },
   },
-
+  computed: {
+    ...mapState(['userInfo']),
+    admin() {
+      return this.userInfo.identity === '2'
+    }
+  }
 }
 
 </script>

@@ -307,8 +307,6 @@ export default {
       this.pageSize = 50
       this.clearShowFilter()
       this.initialShow();
-      console.log(this.filterOptions)
-      // console.log(this.filterOptions)
       this.loadSearch()
       this.showSearchDialog = false;
     },
@@ -324,7 +322,6 @@ export default {
       axiosInstance.put(`${this.$httpUrl}Comment/updateComment`, comment)
           .then(res => res.data)
           .then(res => {
-            console.log(res);
             this.$message({
               message: state === 1 ? '审核通过!' : '拉黑成功',
               type: 'success'
@@ -346,7 +343,6 @@ export default {
       axiosInstance.put(`${this.$httpUrl}Comment/updateComment`, comment)
           .then(res => res.data)
           .then(res => {
-            console.log(res);
             this.$message({
               message: state === 1 ? '审核通过!' : '拉黑成功',
               type: 'success'
@@ -368,8 +364,6 @@ export default {
           currentPage: this.currentPage,
         }
       }).then(res => res.data).then(res => {
-        console.log(res)
-        // console.log([res.data])
         if (res.code === 200) {
           this.comments = res.data
           this.total = res.total
@@ -391,11 +385,8 @@ export default {
           currentPage: this.currentPageRep,
         }
       }).then(res => res.data).then(res => {
-            console.log(res)
-            // console.log([res.data])
             if (res.code === 200) {
               this.replyComments = res.data
-              // console.log(this.comments)
               this.totalRep = res.total
             } else {
               this.$message.warning('数据加载失败!');
@@ -410,11 +401,8 @@ export default {
           currentPage: this.currentPage
         }
       }).then(res => res.data).then(res => {
-            console.log(res)
-            // console.log([res.data])
             if (res.code === 200) {
               this.comments = res.data
-              // console.log(this.comments)
               this.total = res.total
             } else {
               this.$message.warning('数据加载失败!');
@@ -423,24 +411,20 @@ export default {
       )
     },
     handleSizeRepChange(val) {
-      console.log(`回复每页 ${val} 条`);
       this.pageSizeRep = val
       this.currentPageRep = 1
       this.loadReply(this.nowReplyId, this.currentDepartment)
     },
     handleCurrentRepChange(val) {
-      console.log(`回复当前页: ${val}`);
       this.currentPageRep = val
       this.loadReply(this.nowReplyId, this.currentDepartment)
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
       this.pageSize = val
       this.currentPage = 1
       this.loadChoose();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
       this.currentPage = val
       this.loadChoose();
     },
