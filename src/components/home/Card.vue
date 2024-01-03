@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     code() {
-      const imageUrl = require(`@/assets/VenuePicture/${this.photoPath}.jpg`)
+      const imageUrl = require(`@/assets/VenuePicture/${this.name}.jpg`)
       return `<img src="${imageUrl}" alt="" width="80%"/>`
     }
   },
