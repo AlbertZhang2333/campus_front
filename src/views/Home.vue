@@ -16,9 +16,7 @@
       <Card
           v-for="(building, index) in buildings"
           :key="index"
-          :name="building.name"
-          :photoPath="building.photoPath"
-          :description="building.description"
+          :building="building"
           :style="{ marginTop: random[index] +'px'}"
           style="box-shadow: 0 10px 20px rgba(0, 0, 0, .30), 0 0 10px rgba(0, 0, 0, .20)"
       />

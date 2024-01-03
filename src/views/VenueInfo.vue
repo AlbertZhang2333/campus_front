@@ -2,11 +2,11 @@
   <el-container style="display: flex; flex-direction: column">
     <el-container style="display: flex;flex-direction: column; justify-content: center;align-items: center">
       <h2> {{ building.name }} </h2>
-      <el-image :src="building.photoPath" alt=""></el-image>
+      <el-image :src="require(`@/assets/VenuePicture/${building.name}.jpg`)" alt=""></el-image>
       <span style="font-size: 30px">
       {{ building.description }}
       </span>
-      <el-button @click="$router.push({path:'map', query:{destination:building.name}})"></el-button>
+      <el-button @click="$router.push({path:'map', query:{destination:building.name}})">到这去</el-button>
       <el-divider>
       </el-divider>
       <h2> Comments </h2>

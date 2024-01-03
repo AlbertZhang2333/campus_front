@@ -13,7 +13,7 @@
         destination:''
       }
     },
-    mounted() {
+    created() {
       this.destination = this.$route.query.destination;
     }
   }

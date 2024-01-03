@@ -240,9 +240,8 @@ export default {
             alert("目的地不存在");
           }else{
             const desBuilding = response.data.data;
-            this.$refs.endPointInput = desBuilding.name;
+            this.$refs.endPointInput.model = desBuilding.name;
             this.endPoint = desBuilding.name;
-            this.loadEndMarker(desBuilding.lat, desBuilding.lng);
           }
         }
     },
@@ -297,13 +296,13 @@ export default {
           if(selectedLocation == '目的地'){
             document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat();
             document.getElementById("endPoint").value = e.lnglat.getLng() + ',' + e.lnglat.getLat();
-            startPointInput.model = e.lnglat.getLng() + ',' + e.lnglat.getLat();
+            endPointInput.model = e.lnglat.getLng() + ',' + e.lnglat.getLat();
             endPlace.lng = e.lnglat.getLng();
             endPlace.lat = e.lnglat.getLat();
           }else{
             document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat();
             document.getElementById("startPoint").value = e.lnglat.getLng() + ',' + e.lnglat.getLat();
-            endPointInput.model = e.lnglat.getLng() + ',' + e.lnglat.getLat();
+            startPointInput.model = e.lnglat.getLng() + ',' + e.lnglat.getLat();
             startPlace.lng = e.lnglat.getLng();
             startPlace.lat = e.lnglat.getLat();
           }
