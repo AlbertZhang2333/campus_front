@@ -74,20 +74,24 @@ export default {
       activeIndex: '',
       menuList: [
         {
-          title: 'Home',
+          title: '主页',
           index: '/home',
         },
         {
-          title: 'Navigation',
+          title: '导航',
           index: '/map',
         },
         {
-          title: 'Venue Appointment',
+          title: '场地预约',
           index: '/reservation'
         },
         {
-          title: 'Shopping',
+          title: '商城',
           index: '/shop'
+        },
+        {
+          title: '场馆介绍',
+          index: '/venue_info'
         }
       ],
     }
@@ -97,7 +101,6 @@ export default {
   },
   methods: {
     goSustech() {
-      console.log('111')
       window.location.href = 'https://www.sustech.edu.cn/'
     },
     logOut() {

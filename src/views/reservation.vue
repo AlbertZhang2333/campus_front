@@ -1,130 +1,126 @@
 <template>
-  <el-container style="display: flex; flex-direction: column; align-items: center;">
-    <el-container style="width: 100%; height: auto">
-      <div v-if="!managing">
-        <div>
-          <el-carousel class="carousel_style" indicator-position="outside">
-            <el-carousel-item class="carousel_Item_style" v-for="item in carouselImageList" :key="item.src">
-              <img :src="item.src" alt="carousel_image" class="scaled-image"/>
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-        <el-container style="height: 1000px; border: 1px solid #eee">
-          <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
+
+  <div>
+    <div>
+      <el-carousel class="carousel_style" indicator-position="outside">
+        <el-carousel-item class="carousel_Item_style" v-for="item in carouselImageList" :key="item.src">
+          <img :src="item.src" alt="carousel_image" class="scaled-image"/>
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+    <el-container style="height: 1000px; border: 1px solid #eee">
+      <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
+        <el-button type="primary" style="width:30% ; background:#505814 ;border:none;"
+                   v-on:click="$router.push(`/reservation/record`)">预约记录
+        </el-button>
+        <el-select v-model="curLocation" @change="loadRoomList" placeholder="请选择地点">
+          <el-option
+              v-for="location in locations"
+              :key="location"
+              :label="location"
+              :value="location">
+          </el-option>
+        </el-select>
+        <el-table
+            :data="roomList"
+            stripe
+            style="width: 100%">
+          <el-table-column
+              prop="roomName"
+              label="房间号"
+              width="180">
+          </el-table-column>
+          <el-table-column>
+            <template #default="scope">
+              <el-button @click="showReservation(scope.row)" type="primary">
+                预约
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-aside>
+      <el-container style="display: flex; flex-direction: column">
+        <el-switch v-if="admin" active-text="管理员模式" inactive-text="普通模式"
+                   @change="$router.push('reservation/admin')"
+                   style="margin: 20px; align-self: end; justify-self: center"></el-switch>
+        <el-form class="login-container" label-width="0px" style="margin: 0">
+          <div class="square-container">
+
+            <div class="gray-square"></div>
+            <div class="status-text">不可预约</div>
+            <div class="interval"></div>
+            <div class="red-square"></div>
+            <div class="status-text">已有预约</div>
+            <div class="interval"></div>
+
+            <div class="demonstration">选择日期:</div>
+            <el-date-picker
+                v-model="selectedDate"
+                align="right"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="选择日期"
+                @change="showReservation"
+                :picker-options="pickerOptions">
+            </el-date-picker>
+            <div class="status-text">当前地点:{{ this.selectedRoomName }}</div>
+
+          </div>
+
+          <div class="array-container">
+            <div v-for="(item, index) in dataArray" :key="index"
+                 :class="{ 'occupied': item.state == 'B', 'notAvailable': item.state == 'C' }" class="array-item">
+              <div class="item-wrapper">
+                {{ item.value }}
+              </div>
+            </div>
+          </div>
+
+          <el-form-item style="width: 100%;">
             <el-button type="primary" style="width:30% ; background:#505814 ;border:none;"
-                       v-on:click="$router.push(`/reservation/record`)">预约记录
+                       v-on:click="showTable">预约
             </el-button>
-            <el-select v-model="curLocation" @change="loadRoomList" placeholder="请选择地点">
-              <el-option
-                  v-for="location in locations"
-                  :key="location"
-                  :label="location"
-                  :value="location">
-              </el-option>
-            </el-select>
-            <el-table
-                :data="roomList"
-                stripe
-                style="width: 100%">
-              <el-table-column
-                  prop="roomName"
-                  label="房间号"
-                  width="180">
-              </el-table-column>
-              <el-table-column>
-                <template #default="scope">
-                  <el-button @click="showReservation(scope.row)" type="primary">
-                    预约
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-aside>
-          <el-container style="display: flex; flex-direction: column">
-            <el-switch v-if="admin" v-model="managing" active-text="管理员模式" inactive-text="普通模式"
-                       style="margin: 20px; align-self: end; justify-self: center"></el-switch>
-            <el-form class="login-container" label-width="0px" style="margin: 0">
-              <div class="square-container">
+          </el-form-item>
 
-                <div class="gray-square"></div>
-                <div class="status-text">不可预约</div>
-                <div class="interval"></div>
-                <div class="red-square"></div>
-                <div class="status-text">已有预约</div>
-                <div class="interval"></div>
+        </el-form>
+      </el-container>
 
-                <div class="demonstration">选择日期:</div>
-                <el-date-picker
-                    v-model="selectedDate"
-                    align="right"
-                    type="date"
-                    value-format="yyyy-MM-dd"
-                    placeholder="选择日期"
-                    @change="showReservation"
-                    :picker-options="pickerOptions">
-                </el-date-picker>
-                <div class="status-text">当前地点:{{ this.selectedRoomName }}</div>
-
-              </div>
-
-              <div class="array-container">
-                <div v-for="(item, index) in dataArray" :key="index"
-                     :class="{ 'occupied': item.state == 'B', 'notAvailable': item.state == 'C' }" class="array-item">
-                  <div class="item-wrapper">
-                    {{ item.value }}
-                  </div>
-                </div>
-              </div>
-
-              <el-form-item style="width: 100%;">
-                <el-button type="primary" style="width:30% ; background:#505814 ;border:none;"
-                           v-on:click="showTable">预约
-                </el-button>
-              </el-form-item>
-
-            </el-form>
-          </el-container>
-
-        </el-container>
-        <el-dialog :visible.sync="dialog_visible" class="dialog_style">
-          <el-form
-              ref="reservation"
-              :model="reservation"
-              :rules="reservationRule"
-              label-width="100px"
-              label-position="right"
-              size="small"
-              class="dialog-form">
-            <el-form-item label="房间号:">
-              <div>{{ this.selectedRoomName }}</div>
-            </el-form-item>
-            <el-form-item label="活动日期">
-              <div>{{ this.selectedDate }}</div>
-            </el-form-item>
-            <el-form-item label="活动时间">
-              <el-time-select placeholder="起始时间" v-model="reservation.startTime" :picker-options="{
+    </el-container>
+    <el-dialog :visible.sync="dialog_visible" class="dialog_style">
+      <el-form
+          ref="reservation"
+          :model="reservation"
+          :rules="reservationRule"
+          label-width="100px"
+          label-position="right"
+          size="small"
+          class="dialog-form">
+        <el-form-item label="房间号:">
+          <div>{{ this.selectedRoomName }}</div>
+        </el-form-item>
+        <el-form-item label="活动日期">
+          <div>{{ this.selectedDate }}</div>
+        </el-form-item>
+        <el-form-item label="活动时间">
+          <el-time-select placeholder="起始时间" v-model="reservation.startTime" :picker-options="{
               start: '08:00',
               end: '23:00'
             }">
-              </el-time-select>
-              <el-time-select placeholder="结束时间" v-model="reservation.endTime" :picker-options="{
+          </el-time-select>
+          <el-time-select placeholder="结束时间" v-model="reservation.endTime" :picker-options="{
               start: '08:00',
               end: '23:00',
               minTime: reservation.startTime,
             }">
-              </el-time-select>
+          </el-time-select>
 
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitForm()">立即创建</el-button>
-            </el-form-item>
-          </el-form>
-        </el-dialog>
-      </div>
-      <reservation-admin v-else style="width: 100%; height:auto"></reservation-admin>
-    </el-container>
-  </el-container>
-
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm()">立即创建</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -138,7 +134,6 @@ export default {
   components: {ReservationAdmin, MapAdmin, Main},
   data() {
     return {
-      managing: false,
       carouselImageList: [
         {src: "https://booking.lib.sustech.edu.cn/ic-web/upload/roomPhotos/82762638791c46dfbdb9ad41ea11bc74-banner3.99435347.jpg"},
         {src: "https://booking.lib.sustech.edu.cn/ic-web/upload/roomPhotos/0f0a0ac89915495ba25d916d43d0e4b1-banner2.0e62e187.jpg"},
