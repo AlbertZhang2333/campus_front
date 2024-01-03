@@ -36,12 +36,12 @@
         label="结束时间">
     </el-table-column>
     <el-table-column
-        prop="status"
+        prop="state"
         label="状态">
         <template slot-scope="scope">
-            <span v-if="scope.row.state == 0">未签到</span>
-            <span v-else-if="scope.row.state == 1">已取消</span>
-            <span v-else-if="scope.row.state == 2">迟到</span>
+            <span v-if="scope.row.state == 'NotChecked'">未签到</span>
+            <span v-else-if="scope.row.state == 'Canceled'">已取消</span>
+            <span v-else-if="scope.row.state == 'ArriveLate'">迟到</span>
             <span v-else>已签到</span>
         </template>
     </el-table-column>
@@ -79,7 +79,7 @@ export default {
         date:"",
         startTime:"",
         endTime:"",
-        status:0,
+        state:0,
       },
       reservationRecordList:[],
       pageSize: 5,
@@ -95,6 +95,7 @@ export default {
       else{
         this.reservationRecordList = response.data.data;
         this.total = response.data.total;
+        console.log(this.reservationRecordList)
       }
     },
     async cancelReservation(curReservation){
