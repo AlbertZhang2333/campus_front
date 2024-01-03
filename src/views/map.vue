@@ -1,5 +1,5 @@
 <template>
-  <Main></Main>
+  <Main :destination="destination"></Main>
 </template>
     
 <script>
@@ -9,8 +9,12 @@
     data() {
       return {
         text: '',
-        textarea: ''
+        textarea: '',
+        destination:''
       }
+    },
+    mounted() {
+      this.destination = this.$route.query.destination;
     }
   }
 </script>

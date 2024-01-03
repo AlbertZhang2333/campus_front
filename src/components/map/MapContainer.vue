@@ -169,6 +169,10 @@ import axiosInstance from "@/main";
 export default {
   mounted() {
     this.createMap();
+    this.loadDestination();
+  },
+  props: {
+    destination: String,
   },
   data() {
     return {
@@ -211,7 +215,9 @@ export default {
         center: [114.001343, 22.596590], // 初始化地图中心点位置
         zoom: 16, //地图显示的缩放级别
         mapStyle: 'amap://styles/normal', //设置地图的显示样式
-      } // 地图配置项
+      }, // 地图配置项
+      startIcon : "",
+      endIcon: "",
     };
   },
   methods: {
@@ -226,6 +232,55 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    async loadDestination(){
+        if(this.destination !== undefined){
+          const response = await axiosInstance.get(`${this.$httpUrl}searchBuildingName/${this.destination}`);
+          if(response.data.code == 400){
+            alert("目的地不存在");
+          }else{
+            const desBuilding = response.data.data;
+            this.$refs.endPointInput = desBuilding.name;
+            this.endPoint = desBuilding.name;
+            this.loadEndMarker(desBuilding.lat, desBuilding.lng);
+          }
+        }
+    },
+    async loadStartMarker(lat, lng) {
+      this.startIcon = this.AMap.Icon({
+        // 图标尺寸
+        size: new AMap.Size(25, 34),
+        // 图标的取图地址
+        image: '//a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',
+        // 图标所用图片大小
+        imageSize: new AMap.Size(135, 40),
+        // 图标取图偏移量
+        imageOffset: new AMap.Pixel(-9, -3)
+      });
+      const startMarker = new AMap.Marker({
+        position: new AMap.LngLat(lat, lng),
+        icon: startIcon,
+        offset: new AMap.Pixel(-13, -30)
+      })
+      this.map.add([startMarker]);
+    },
+    async loadEndMarker(lat, lng){
+      this.endIcon = new this.AMap.Icon({
+        // 图标尺寸
+        size: new AMap.Size(25, 34),
+        // 图标的取图地址
+        image: '//a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',
+        // 图标所用图片大小
+        imageSize: new AMap.Size(135, 40),
+        // 图标取图偏移量
+        imageOffset: new AMap.Pixel(-95, -3)
+      });
+      const endMarker = new this.AMap.Marker({
+        position: new AMap.LngLat(lat, lng),
+        icon: endIcon,
+        offset: new AMap.Pixel(-13, -30)
+      })
+      this.map.add([endMarker])
     },
     //异步同时加载多个插件
     asnycLoaderPlugins(AMap, map, plugins, selectedLocation) {
