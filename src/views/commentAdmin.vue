@@ -1,9 +1,8 @@
 <template>
-  <el-container style="height: 100vh; overflow: hidden;">
-    <el-header style="position: fixed; width: 100%; z-index: 1000;">
-    </el-header>
+  <el-container style="width:100%; height: 100vh; overflow: hidden;display: flex; flex-direction: column; align-content: center; justify-content: center">
+    <h2 style="align-self: center; justify-self: center"> 管理评论 </h2>
     <el-container style="height: calc(100% - 64px); display: flex;">
-      <el-container style="margin-left: 200px; margin-top:100px; height: 100%; overflow-y: auto;">
+      <el-container style="margin-left: 0; margin-top:0; height: 100%; overflow-y: auto;">
         <el-main style="height: 100%;">
             <Admin></Admin>
         </el-main>
