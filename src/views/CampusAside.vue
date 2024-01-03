@@ -1,7 +1,7 @@
 <template>
   <el-row class="center aside">
-    <el-col :span="4">
-      <el-image :src="url_logo" fit="fill" @click="goSustech"/>
+    <el-col :span="4" style="height: 100%; width: auto; display: flex; justify-content:space-around">
+      <el-image :src="url_logo" fit="contain" @click="goSustech" style="width: 100%; height: 100%; border:5px #ffe6f1; align-self: center"/>
     </el-col>
     <el-col :span="12" style="height: 100%">
       <el-menu
