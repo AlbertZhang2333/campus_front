@@ -10,10 +10,10 @@
       </el-main>
     </el-container>
     <el-container>
-      <Chat></Chat>
+      <Chat style="z-index: 9999"></Chat>
     </el-container>
     <el-container>
-      <comment-area :department="2" :stuff-id="-1"></comment-area>
+      <comment-area :department="0" :stuff-id="-1"></comment-area>
     </el-container>
   </div>
 </template>

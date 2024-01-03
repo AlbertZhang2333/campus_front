@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="background-color: #fff3cd">
     <CampusAside/>
     <router-view></router-view>
   </div>

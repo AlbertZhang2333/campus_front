@@ -8,7 +8,6 @@
       <el-col :span="6">
         <p style="font-weight: bold;font-size: 20px;margin: 10px;"> {{ comment.userName }}：</p>
       </el-col>
-      <el-button icon="el-icon-close" v-if="closeable" @click="$emit('close')" style="width: 10px; height: 10px; background-color: transparent; border-color: transparent"></el-button>
     </el-row>
     <p v-html="comment.comment" style="margin-left: 30px"></p>
 
@@ -21,6 +20,10 @@
     <el-button v-if="replyable" @click="$emit('reply-comment', comment.id)" type="primary" size="mini"
                class="comment-action">
       回复
+    </el-button>
+    <el-button v-if="closeable" @click="$emit('close')" type="primary" size="mini"
+               class="comment-action">
+      取消回复
     </el-button>
   </el-card>
 </template>
@@ -59,6 +62,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  height: auto;
 }
 
 .comment-user-name {
