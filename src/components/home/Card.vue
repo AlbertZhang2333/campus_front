@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     code() {
-      const imageUrl = require(`@/assets/VenuePicture/${this.building.name}.jpg`)
+      const imageUrl = require(`@/assets/VenuePicture/${this.building.photoPath}.jpg`)
       return `<img src="${imageUrl}" alt="" width="80%"/>`
     }
   },

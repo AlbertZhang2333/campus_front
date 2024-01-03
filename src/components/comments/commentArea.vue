@@ -165,7 +165,7 @@ export default {
       // 使用 replace 方法替换匹配到的文件路径
       text = text.replace(regex, (match, filePath) => {
         // 这里可以根据你的逻辑生成图片的URL，比如拼接服务器地址等
-        const imageUrl = require(`@/assets/comments/pic/${filePath}`);
+        const imageUrl = require(`@/assets/comments/${filePath}`);
         return `<img src="${imageUrl}" alt="${filePath}" />`;
       });
 

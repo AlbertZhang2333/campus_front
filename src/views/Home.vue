@@ -27,6 +27,7 @@
 
 <script >
 import Card from "@/components/home/Card.vue";
+import axiosInstance from "@/main";
 
 export default {
   name: 'Home',
@@ -122,10 +123,16 @@ export default {
       ]
     }
   },
-  methods: {
-  },
   mounted() {
-  }
+    this.getBuildingInfo()
+  },
+  methods: {
+    async getBuildingInfo() {
+      const response = await axiosInstance.get(`${this.$httpUrl}allBuilding`);
+      if(response.data.code == 400) this.$message.error("获取建筑列表失败");
+      else this.buildings = response.data.data;
+    }
+  },
 };
 </script>
 
