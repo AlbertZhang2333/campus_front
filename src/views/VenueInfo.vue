@@ -6,13 +6,22 @@
       <el-container v-if="!managing" style="display: flex; flex-direction: column">
         <el-container style="display: flex;flex-direction: column; justify-content: center;align-items: center">
           <h2> {{ building.name }} </h2>
-          <el-image :src="require(`@/assets/VenuePicture/${building.name}.jpg`)" alt=""></el-image>
+          <el-image :src="require(`@/assets/VenuePicture/${building.photoPath}`)" alt=""></el-image>
           <span style="font-size: 30px">
       {{ building.description }}
       </span>
           <el-button @click="$router.push({path:'map', query:{destination:building.name}})">到这去</el-button>
-          <el-divider>
-          </el-divider>
+          <el-divider></el-divider>
+          <el-container style="width: 600px; height: 400px">
+            <el-carousel style="height: 100%; width: 100%">
+              <el-carousel-item v-for="b in buildings" style="height: 100%; width: 100%">
+                <el-image fit="fill" :src="require(`@/assets/VenuePicture/${b.photoPath}`)" alt="" @click="building=b"/>
+              </el-carousel-item>
+            </el-carousel>
+          </el-container>
+
+          <el-divider></el-divider>
+
           <el-container style="background-color: #fff3cd; border-color: #003f43">
             <comment-area :department="1" :stuff-id="building.id"></comment-area>
           </el-container>
@@ -37,34 +46,48 @@ export default {
     ...mapState(['userInfo']),
     admin() {
       return this.userInfo.identity === '2'
-    }
+    },
   },
   data() {
     return {
       managing: false,
       building: {
         name: '一丹图书馆',
-        photoPath: '一丹图书馆',
+        photoPath: '1704359027606_csw123_1.png',
         description: '一丹图书馆是好图书馆',
         id: 1,
       },
       buildings: [{
         name: '一丹图书馆',
-        photoPath: '一丹图书馆',
+        photoPath: '1704359027606_csw123_1.png',
         description: '一丹图书馆是好图书馆',
         id: 1,
       }]
     }
   },
-  mounted() {
-    this.getBuildingInfo()
-    console.log(this.building.name)
+  async beforeMount() {
+    console.log('start')
+    await this.getBuildingInfo()
+    console.log('out!')
+    console.log(this.buildings)
   },
   methods: {
     async getBuildingInfo() {
-      const response = await axiosInstance.get(`${this.$httpUrl}allBuilding`);
-      if (response.data.code === 400) this.$message.error("获取建筑列表失败");
-      else if (response.data.data.length !== 0) this.buildings = response.data.data;
+      await axiosInstance.get(`${this.$httpUrl}allBuilding`)
+          .then(response => response.data)
+          .then(response => {
+            if (response.code === 400) {
+              this.$message.error("获取建筑列表失败");
+              console.log('fail')
+            } else if (response.data.length !== 0) {
+              this.buildings = response.data;
+              console.log('success!')
+              console.log(this.buildings)
+            }
+          }).catch(error => {
+        console.error('Error adding comment:', error);
+        this.$message.warning('数据加载失败!');
+      });
       const building = this.$route.query.building
       if (building === undefined) {
         this.building = this.buildings[0]
@@ -78,5 +101,7 @@ export default {
 
 
 <style scoped>
+
+
 
 </style>

@@ -1,7 +1,7 @@
 <template>
   <el-card class="card" @click.native="handleClick">
     <h3>{{ building.name }}</h3>
-    <el-image class="card-image" :src="require(`@/assets/VenuePicture/${building.name}.jpg`)" alt=""/>
+    <el-image class="card-image" :src="require(`@/assets/VenuePicture/${building.photoPath}`)" alt=""/>
   </el-card>
 </template>
 

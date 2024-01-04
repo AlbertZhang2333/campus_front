@@ -93,7 +93,6 @@ export default {
                 this.commentForm.comment += "'" + res.data + "'";
                 this.$message.success('图片上传成功！');
               } else {
-
               }
             })
             .catch(error => {
