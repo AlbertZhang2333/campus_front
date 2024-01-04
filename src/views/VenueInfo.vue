@@ -62,23 +62,18 @@ export default {
   },
   mounted() {
     this.getBuildingInfo()
-    if (this.$route.query.building === undefined) {
-      this.building = this.buildings[0]
-    } else {
-      this.building = this.$route.query.building
-    }
+    console.log(this.building.name)
   },
   methods: {
     async getBuildingInfo() {
-      const venueName = this.$route.query.venueName
-      if (venueName === undefined || venueName === '') {
-        this.$message.warning('获取失败')
-      }
-      const response = await axiosInstance.get(`${this.$httpUrl}searchBuildingName/${venueName === undefined ? '一丹图书馆' : venueName}`)
-      if (response.data.code === 400) {
-        this.$message.warning('获取失败')
+      const response = await axiosInstance.get(`${this.$httpUrl}allBuilding`);
+      if (response.data.code === 400) this.$message.error("获取建筑列表失败");
+      else if (response.data.data.length !== 0) this.buildings = response.data.data;
+      const building = this.$route.query.building
+      if (building === undefined) {
+        this.building = this.buildings[0]
       } else {
-        this.building = response.data.data
+        this.building = building
       }
     }
   },

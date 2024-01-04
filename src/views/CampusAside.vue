@@ -48,7 +48,7 @@
           {{ userInfo.username }}
         </h2>
 
-        <el-button type="info" icon="el-icon-switch-button" circle @click="logOut"></el-button>
+        <el-button type="info" icon="el-icon-switch-button" circle @click="logOut" style="margin: 20px;"></el-button>
       </el-container>
     </el-col>
   </el-row>

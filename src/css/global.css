@@ -5,8 +5,7 @@
     margin:0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-color: var(--sustech-cyan);
-    border-color: var(--sustech-orange);
+    background-color: #fff3cd;
     color: var(--sustech-dark-green);
 }
 head {

@@ -12,7 +12,7 @@
             class="upload-demo"
             ref="upload"
             accept=".jpg, .png"
-            action="http://localhost:8081/uploadImage/image"
+            action="http://localhost:8080/uploadImage/image"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :on-change="handleChange"
@@ -80,7 +80,7 @@ export default {
         // 如果有选取到文件
         const formData = new FormData();
         formData.append('file', this.fileList[0].raw); // Assuming you want to upload only the first selected file
-        formData.append('path', 'src/image/reservation')
+        formData.append('path', 'src/assets/comments')
         // 如果有其他需要传递的参数，也可以添加到formData中
         // formData.append('comment', this.commentForm.comment);
         // formData.append('otherParam', 'otherValue');
