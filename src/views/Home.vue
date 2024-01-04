@@ -12,6 +12,8 @@
         muted
         style="width: 80%; align-self: center"
     />
+    <el-divider></el-divider>
+    <h1 style="font-size: 30px;">南科场馆</h1>
     <el-container class="card-container">
       <Card
           v-for="(building, index) in buildings"
@@ -34,7 +36,7 @@ export default {
   components: {Card},
   data() {
     return {
-      random:[92, 57, 84, 91, 52, 69, 17, 70, 37, 86, 51, 13, 61, 29, 58, 42, 98, 32, 48, 61, 62, 63, 40, 48, 69, 74, 69],
+      random:[92, 57, 84, 91, 21, 69, 17, 70, 37, 86, 51, 13, 61, 29, 58, 42, 98, 32, 48, 61, 62, 63, 40, 48, 69, 74, 69],
       buildings: [
         {
           id: 1,

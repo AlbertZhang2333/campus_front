@@ -12,7 +12,7 @@
             class="upload-demo"
             ref="upload"
             accept=".jpg, .png"
-            action="http://localhost:8081/uploadImage/image"
+            action="http://localhost:8080/uploadImage/image"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :on-change="handleChange"
