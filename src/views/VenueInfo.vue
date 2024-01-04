@@ -8,16 +8,20 @@
           <h2> {{ building.name }} </h2>
           <el-image :src="require(`@/assets/VenuePicture/${building.name}.jpg`)" alt=""></el-image>
           <span style="font-size: 30px">
-      {{ building.description }}
-      </span>
+            {{ building.description }}
+          </span>
           <el-button @click="$router.push({path:'map', query:{destination:building.name}})">到这去</el-button>
-          <el-divider>
-          </el-divider>
+          <el-divider></el-divider>
+          <el-carousel height="150px">
+            <el-carousel-item v-for="building in buildings">
+              <img :src="require(`@/assets/VenuePicture/${building.photoPath}`)" alt="">
+            </el-carousel-item>
+          </el-carousel>
+          <el-divider></el-divider>
           <el-container style="background-color: #fff3cd; border-color: #003f43">
             <comment-area :department="1" :stuff-id="building.id"></comment-area>
           </el-container>
         </el-container>
-
       </el-container>
       <MapAdmin v-else style="width: 100%; height:auto"></MapAdmin>
     </el-container>
