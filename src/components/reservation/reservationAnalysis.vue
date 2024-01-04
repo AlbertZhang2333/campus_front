@@ -10,6 +10,7 @@
         <h2 class="chart-title">最近三天预约最多的房间</h2>
         <div class="chart" ref="mostInWeek"></div>
     </div>
+      <el-button @click="$router.push('/reservation/admin')"> 返回 </el-button>
     </div>
 </div>
 </template>

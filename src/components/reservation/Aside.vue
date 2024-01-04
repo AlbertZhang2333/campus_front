@@ -4,6 +4,7 @@
       <el-menu-item index="reservation">预约</el-menu-item>
       <el-menu-item index="reservation/admin">预约管理</el-menu-item>
       <el-menu-item index="reservation/admin/room">房间管理</el-menu-item>
+      <el-menu-item index="reservation/admin/analysis">数据分析</el-menu-item>
     </el-menu>
   </div>
 </template>
