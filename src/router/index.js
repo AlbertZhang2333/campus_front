@@ -1,15 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Map from '@/views/map'
-import MapAdmin from '@/views/mapAdmin.vue'
 import Shop from "@/views/shop"
 import ShopAdmin from "@/views/shopAdmin"
-import Comment from '@/views/Comment.vue'
 import CommentAdmin from "@/views/commentAdmin.vue";
 import ReservationAdmin from "@/views/reservationAdmin.vue";
 import Reservation from "@/views/reservation.vue";
 import ReservationRecord from "@/views/reservationRecord.vue";
-import User from "@/components/user/AccountAdmin.vue"
+import AccountAdmin from "@/components/user/AccountAdmin.vue"
 import Login from "@/components/login/Login.vue"
 import Register from "@/components/login/Register.vue"
 import Forgot from "@/components/login/ForgotPassword.vue"
@@ -71,7 +69,7 @@ const routes = [
     },
     {
         path: '/user',
-        component: User
+        component: AccountAdmin
     },
     {
         path: '/login',

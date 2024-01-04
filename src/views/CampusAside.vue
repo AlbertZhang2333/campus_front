@@ -22,6 +22,15 @@
         >
           {{ item.title }}
         </el-menu-item>
+        <el-menu-item
+            v-if="userInfo.identity==='2'"
+            index="/user"
+            :key="5"
+            @click="$router.push(`/user`)"
+            class="menu-item"
+        >
+          用户管理
+        </el-menu-item>
       </el-menu>
     </el-col>
 
