@@ -556,12 +556,6 @@ export default {
     isHistorySearch() {
       return this.isFocus && !this.search || this.isFocus2 && !this.search;
     },
-    isSearchList() {
-      return this.isFocus && this.search;
-    },
-    isSearchList() {
-      return this.isFocus2 && this.search;
-    },
     isSearch() {
       return this.isFocus;
     },

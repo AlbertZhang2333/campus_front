@@ -230,7 +230,7 @@ export default {
         // 如果有选取到文件
         const formData = new FormData();
         formData.append('file', this.fileList[0].raw); // Assuming you want to upload only the first selected file
-        formData.append('path', 'src/image/building')
+        formData.append('path', 'src/assets/VenuePicture')
         // 如果有其他需要传递的参数，也可以添加到formData中
         // formData.append('comment', this.commentForm.comment);
         // formData.append('otherParam', 'otherValue');
@@ -241,6 +241,7 @@ export default {
             .then(res => {
               if (res.code === 200) {
                 this.$message.success('图片上传成功！');
+                this.Building.photo_path = res.data
               } else {
 
               }
