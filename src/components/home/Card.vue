@@ -1,9 +1,7 @@
 <template>
   <el-card class="card" @click.native="handleClick">
     <h3>{{ building.name }}</h3>
-    <p v-html="code"></p>
-<!--    <img :src="code" :alt="name" class="card-image"/>-->
-    <p>{{ building.description }}</p>
+    <el-image class="card-image" :src="require(`@/assets/VenuePicture/${building.name}.jpg`)" alt=""/>
   </el-card>
 </template>
 
@@ -19,10 +17,6 @@ export default {
     }
   },
   computed: {
-    code() {
-      const imageUrl = require(`@/assets/VenuePicture/${this.building.name}.jpg`)
-      return `<img src="${imageUrl}" alt="" width="80%"/>`
-    }
   },
   methods: {
     handleClick() {
@@ -34,7 +28,7 @@ export default {
 
 <style scoped>
 .card {
-  height: 400px;
+  height: 300px;
   width: 350px;
   padding: 20px;
   margin: 10px;
