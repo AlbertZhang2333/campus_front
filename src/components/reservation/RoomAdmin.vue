@@ -1,10 +1,14 @@
 
 <template>
     <div>
-        <el-radio-group v-model="selectedLocation" @change="handleInputChange()" style="align-items: center;">
-            <el-radio-button label="一丹讨论间"></el-radio-button>
-            <el-radio-button label="琳恩讨论间"></el-radio-button>
-        </el-radio-group>
+       <el-select v-model="selectedLocation" @change="handleInputChange" placeholder="请选择地点">
+          <el-option
+              v-for="location in locations"
+              :key="location"
+              :label="location"
+              :value="location">
+          </el-option>
+        </el-select>
       <el-row>
         <el-col :span="2" class="left">
           房间名：
@@ -117,6 +121,7 @@
 
   export default {
     mounted(){
+      this.loadLocation();
       this.handleInputChange();
     },
     data() {
@@ -142,9 +147,15 @@
           selectedLocation: "一丹讨论间",
           addRoom_dialog:false,
           updateRoom_dialog:false,
+          locations:[]
       }
       },
   methods: {
+      async loadLocation() {
+        const response = await axiosInstance.get(`${this.$httpUrl}Room/getAllLocation`);
+        if (response.data.code == 400) alert(response.data.data);
+        else this.locations = response.data.data;
+      },
       tableRowClassName({row, rowIndex}) {
       if (rowIndex === 1) {
           return 'warning-row';
