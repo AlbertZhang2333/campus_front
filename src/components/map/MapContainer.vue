@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <div>
+  <div style="width: 100%; display: flex; place-items: center; flex-direction: column;">
+    <div style="width: 70%;">
       <el-row>
-        <el-col :span="2" class="left">
+        <el-col :span="4" class="left">
           出发地：
         </el-col>
-        <el-col :span="13" class="center">
+        <el-col :span="18" class="center">
           <el-input
             ref="startPointInput"
             v-model="startPoint"
@@ -52,10 +52,10 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="2" class="left">
+        <el-col :span="4" class="left">
           目的地：
         </el-col>
-        <el-col :span="13" class="center">
+        <el-col :span="18" class="center">
           <el-input
             ref="endPointInput"
             v-model="endPoint"
@@ -102,11 +102,11 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="2" class="left">
+        <el-col :span="4" class="left">
           出行方式：
         </el-col>
-        <el-col :span="13" class="center">
-          <el-radio-group v-model="selectedTransport" size="medium">
+        <el-col :span="18" class="center">
+          <el-radio-group v-model="selectedTransport" size="medium" style="align-self: start;">
             <el-radio-button label="步行"></el-radio-button>
             <el-radio-button label="校巴"></el-radio-button>
             <el-radio-button label="驾车"></el-radio-button>
@@ -114,10 +114,10 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="2" class="left">
+        <el-col :span="4" class="left">
           自选地点：
         </el-col>
-        <el-col :span="13" class="right">
+        <el-col :span="18" class="right">
           <el-radio-group v-model="selectedLocation" size="medium" @change="createMap">
             <el-radio-button label="目的地"></el-radio-button>
             <el-radio-button label="出发地"></el-radio-button>
@@ -125,12 +125,12 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="2" class="left">
+        <el-col :span="4" class="left">
           搜索：
         </el-col>
-        <el-col :span="13" class="center">
+        <el-col :span="18" class="center">
           <el-button type="primary" @click="searchRoute"
-                style="margin-top: 10px; horiz-align: center;margin-bottom: 10px">
+                style="margin-top: 10px; horiz-align: center;margin-bottom: 10px; align-self: start;">
             Search
           </el-button>
         </el-col>
@@ -150,10 +150,10 @@
         </el-card>
       </div>
     </el-collapse-transition>
-    <div id="container"></div>
-    <div class="input-card">
+    <div id="container" style="width: 75vw;"></div>
+    <div class="input-card" style="display: flex; flex-direction: row;">
       <h4>左击获取经纬度：</h4>
-      <div class="input-item">
+      <div class="input-item" style="place-self: center; margin: 20px;">
         <input type="text" readonly="true" id="lnglat">
       </div>
     </div>
@@ -585,6 +585,11 @@ export default {
   margin-left: 20px;
 }
 
+.center{
+  display: flex; 
+  flex-direction: column;
+}
+
 #search {
   background-color: #ffa300;
   border-radius: 5px;
@@ -606,7 +611,11 @@ export default {
   margin-top: 10px;
   padding-bottom: 20px;
 }
-
+.el-row{
+  display: flex;
+  flex-direction: row;
+  place-content: center;
+}
 .el-button {
   background-color:  #409eff; /* 改变按钮背景色 */
   color: #fff; /* 改变按钮文字颜色 */
