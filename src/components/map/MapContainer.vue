@@ -348,9 +348,9 @@ export default {
           });
           driving.search([tmpStart.lng, tmpStart.lat], [tmpEnd.lng, tmpEnd.lat], function (status, result) {
             if (status === 'complete') {
-              this.$message.success('绘制驾车路线完成')
+              console.log('绘制驾车路线完成')
             } else {
-              this.$message.error('获取驾车数据失败：' + result)
+              console.log('获取驾车数据失败：' + result)
             }
           });
         });
@@ -421,9 +421,9 @@ export default {
         });
         walking.search([startLng, startLat], [endLng, endLat], function (status, result) {
           if (status === 'complete') {
-            this.$message.success('绘制步行路线完成')
+            console.log('绘制步行路线完成')
           } else {
-            this.$message.error('获取步行数据失败：' + result)
+            console.log('获取步行数据失败：' + result)
           }
         });
       });
@@ -555,6 +555,12 @@ export default {
   computed: {
     isHistorySearch() {
       return this.isFocus && !this.search || this.isFocus2 && !this.search;
+    },
+    isSearchList() {
+      return this.isFocus && this.search;
+    },
+    isSearchList() {
+      return this.isFocus2 && this.search;
     },
     isSearch() {
       return this.isFocus;

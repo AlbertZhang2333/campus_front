@@ -20,6 +20,7 @@ import VenueInfo from "@/views/VenueInfo.vue";
 import UserRecord from "@/views/shopUserRecord.vue";
 import reservationAnalysis from "@/components/reservation/reservationAnalysis.vue"
 import ChatAdmin from "@/components/chat/ChatAdmin.vue";
+import test from "@/components/test/test.vue";
 
 Vue.use(VueRouter)
 
@@ -43,10 +44,6 @@ const routes = [
     {
         path: '/shop/record',
         component: UserRecord
-    },
-    {
-        path: '/comment',
-        component: Comment
     },
     {
         path: '/comment/admin',
@@ -100,6 +97,10 @@ const routes = [
     {
         path: '/shop/chat/admin',
         component: ChatAdmin
+    },
+    {
+        path: '/test',
+        component: test
     },
     {
         path: '/*',

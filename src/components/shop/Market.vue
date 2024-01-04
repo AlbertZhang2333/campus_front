@@ -6,7 +6,6 @@
             <div class="color-mix-container">
                 <p class="large-text">纪念商品 正在热卖</p>
             </div>
-
             <el-carousel class="carousel_style" indicator-position="outside">
                 <el-carousel-item class="carousel_Item_style" v-for="item in carouselImageList" v-bind:key="item.src">
                     <img v-bind:src="item.src" alt="carousel_image" />
@@ -181,11 +180,10 @@ export default {
     margin: auto;
     line-height: 100px;
     flex: auto;
-    width: 100%;
-    height: 400px;
+    width: 500px;
+    height: 300px;
     border-radius: 4px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-
 }
 
 .carousel_Item_style {
