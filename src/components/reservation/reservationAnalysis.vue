@@ -17,6 +17,7 @@
     
 <script>
 import * as echarts from 'echarts';
+import axiosInstance from "@/main";
 export default {
     mounted(){
         this.loadUserCnt();
@@ -33,7 +34,7 @@ export default {
     },
     methods: {
     async loadUserCnt() {
-        const response = await this.$axios.get(`${this.$httpUrl}ManageDataAnalysis/usersNumber`);
+        const response = await axiosInstance.get(`${this.$httpUrl}ManageDataAnalysis/usersNumber`);
         if(response.data.code == 400){
             alert(response.data.data);
         } else{
@@ -41,7 +42,7 @@ export default {
         }
     },
     async loadRoomCnt() {
-        const response = await this.$axios.get(`${this.$httpUrl}ManageDataAnalysis/roomsNumber`);
+        const response = await axiosInstance.get(`${this.$httpUrl}ManageDataAnalysis/roomsNumber`);
         if(response.data.code == 400){
             alert(response.data.data);
         } else{
@@ -49,7 +50,7 @@ export default {
         }
     },
     async loadResverationMostInWeek() {
-        const response = await this.$axios.get(`${this.$httpUrl}ManageDataAnalysis/getTheseDaysRoomReservationNum`);
+        const response = await axiosInstance.get(`${this.$httpUrl}ManageDataAnalysis/getTheseDaysRoomReservationNum`);
         const dataList = response.data.data;
         this.mostInWeek.categories = [];
         this.mostInWeek.data = [];

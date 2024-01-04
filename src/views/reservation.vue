@@ -216,6 +216,8 @@ export default {
       var date = new Date();
       var nowMonth = date.getMonth() + 1;
       var strDate = date.getDate();
+      var strHour = date.getHours()
+      var strMinute = date.getMinutes()
       var seperator = "-";
       if (nowMonth >= 1 && nowMonth <= 9) {
         nowMonth = "0" + nowMonth;
@@ -223,8 +225,14 @@ export default {
       if (strDate >= 0 && strDate <= 9) {
         strDate = "0" + strDate;
       }
+      if (strHour >= 0 && strHour <= 9) {
+        strHour = "0" + strHour;
+      }
+      if (strMinute >= 0 && strMinute <= 9) {
+        strMinute = "0" + strMinute;
+      }
       this.currentDate = date.getFullYear() + seperator + nowMonth + seperator + strDate;
-      this.currentTime = date.getHours() + ":" + date.getMinutes();
+      this.currentTime = strHour + ":" + strMinute;
     },
     async loadRoomList() {
       const response = await axiosInstance.get(`${this.$httpUrl}Room/findRoomByLocation?location=${this.curLocation}`);

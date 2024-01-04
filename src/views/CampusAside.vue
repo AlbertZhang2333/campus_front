@@ -109,10 +109,10 @@ export default {
       this.$confirm('确认登出').then(() => {
         localStorage.clear()
         this.$store.commit('updateUserInfo', {
-          username: 'name',
-          userMail: 'mail',
-          userIcon: 0,
-          identity: 0,
+          username: '',
+          userMail: '',
+          userIcon: 1,
+          identity: '0',
         })
         this.$message.success('退出成功!')
           }
@@ -127,6 +127,14 @@ export default {
         userMail: localStorage.getItem('userMail'),
         userIcon: localStorage.getItem('userIcon'),
         identity: localStorage.getItem('identity'),
+      }
+      this.$store.commit('updateUserInfo', packInfo)
+    } else {
+      const packInfo = {
+        username: '',
+        userMail: '',
+        userIcon: 1,
+        identity: '0',
       }
       this.$store.commit('updateUserInfo', packInfo)
     }

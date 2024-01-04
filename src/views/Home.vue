@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     async getBuildingInfo() {
-      const response = await axiosInstance.get(`${this.$httpUrl}allBuilding`);
+      const response = await axiosInstance.get(`${this.$httpUrl}allShowBuilding`);
       if(response.data.code == 400) this.$message.error("获取建筑列表失败");
       else this.buildings = response.data.data;
     }

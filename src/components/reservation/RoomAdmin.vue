@@ -175,6 +175,7 @@
           this.addRoom_dialog=true;
       },
       async submitAddRoom(submitOrUpdate,index){
+        console.log(this.Room);
         const response = await axiosInstance.post(`${this.$httpUrl}ManageRoom/createRoom?roomName=${this.Room.roomName}&location=${this.Room.location}&capacity=${this.Room.capacity}`);
         if(response.data.code === 400) alert(response.data.data);
         else this.$message.success('添加成功');

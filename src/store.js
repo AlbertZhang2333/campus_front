@@ -9,11 +9,12 @@ const store = new Vuex.Store({
             username: 'name',
             userMail: 'mail',
             userIcon: 0,
-            identity: '2',
+            identity: '0',
         }
     },
     mutations: {
         updateUserInfo(state, userInfo) {
+            console.log(userInfo)
                 state.userInfo = userInfo
         }
     }

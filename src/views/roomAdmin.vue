@@ -2,7 +2,7 @@
   <el-container style="height: 100vh; overflow: hidden;">
     <el-container style="height: calc(100% - 64px); display: flex;">
       <el-aside width="200px"
-                style="background-color: rgb(238, 241, 246); position: fixed; height: 100vh; overflow-y: auto;">
+                style="background-color: rgb(238, 241, 246); height: 100vh; overflow-y: auto;">
         <Aside @menuSelected="handleMenuSelected"></Aside>
       </el-aside>
       <el-container style="margin-left: 200px; margin-top:0px; height: 100%; overflow-y: auto;">

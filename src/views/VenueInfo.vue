@@ -1,16 +1,17 @@
 <template>
   <el-container style="display: flex; flex-direction: column; align-items: center;">
+
     <el-switch v-if="admin" v-model="managing" active-text="管理员模式" inactive-text="普通模式"
                style="margin: 30px; align-self: end"></el-switch>
     <el-container style="width: 100%; height: auto">
       <el-container v-if="!managing" style="display: flex; flex-direction: column">
-        <el-container style="display: flex;flex-direction: column; justify-content: center;align-items: center">
+        <el-container v-if="isShow" style="display: flex;flex-direction: column; justify-content: center;align-items: center">
           <h2> {{ building.name }} </h2>
-          <el-image :src="require(`@/assets/VenuePicture/${building.photoPath}`)" alt=""></el-image>
-          <span style="font-size: 30px">
+          <el-image :src="imagePath" alt="" ></el-image>
+          <el-container style="font-size: 30px; width: 80%; height: auto; border-width: 5px; margin: 20px; border-color: #003f43">
             {{ building.description }}
-          </span>
-          <el-button @click="$router.push({path:'map', query:{destination:building.name}})">到这去</el-button>
+          </el-container>
+          <el-button @click="$router.push({path:'/map', query:{destination:building.name}})">到这去</el-button>
           <el-divider></el-divider>
           <el-container style="width: 600px; height: 400px">
             <el-carousel style="height: 100%; width: 100%">
@@ -46,47 +47,43 @@ export default {
     admin() {
       return this.userInfo.identity === '2'
     },
+    imagePath() {
+      return require(`@/assets/VenuePicture/${this.building.photoPath}`)
+    }
   },
   data() {
     return {
+      isShow: false,
       managing: false,
-      building: {
-        name: '一丹图书馆',
-        photoPath: '1704359027606_csw123_1.png',
-        description: '一丹图书馆是好图书馆',
-        id: 1,
-      },
-      buildings: [{
-        name: '一丹图书馆',
-        photoPath: '1704359027606_csw123_1.png',
-        description: '一丹图书馆是好图书馆',
-        id: 1,
-      }]
+      building: {},
+      buildings: [{}]
     }
   },
-  async beforeMount() {
-    await this.getBuildingInfo()
+  created() {
+    this.getBuildingInfo()
   },
   methods: {
     async getBuildingInfo() {
-      await axiosInstance.get(`${this.$httpUrl}allBuilding`)
+      await axiosInstance.get(`${this.$httpUrl}allShowBuilding`)
           .then(response => response.data)
           .then(response => {
             if (response.code === 400) {
               this.$message.error("获取建筑列表失败");
             } else if (response.data.length !== 0) {
-              this.buildings = response.data;
+              this.buildings = response.data.filter(building=>building.name!==''&&building.name!==undefined);
             }
           }).catch(error => {
         console.error('Error adding comment:', error);
         this.$message.warning('数据加载失败!');
       });
       const building = this.$route.query.building
-      if (building === undefined) {
-        this.building = this.buildings[0]
-      } else {
+      if(building!==undefined){
         this.building = building
+      }else{
+        console.log(this.buildings)
+        this.building = this.buildings[0]
       }
+      this.isShow = true
     }
   },
 }
