@@ -6,7 +6,6 @@
 </template>
 
 <script>
-// import CampusAside from "@/views/CampusAside.vue";
 
 import CampusAside from "@/views/CampusAside.vue";
 

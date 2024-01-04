@@ -74,10 +74,14 @@
           <el-form-item label="房间名" prop="roomName">
             <el-input v-model="Room.roomName" prefix-icon="el-icon-room"/>
           </el-form-item>
-          <el-radio-group v-model="Room.location" style="align-items: center;">
-            <el-radio-button label="一丹讨论间"></el-radio-button>
-            <el-radio-button label="琳恩讨论间"></el-radio-button>
-          </el-radio-group>
+          <el-select v-model="Room.location" placeholder="请选择地点">
+            <el-option
+                v-for="location in locations"
+                :key="location"
+                :label="location"
+                :value="location">
+            </el-option>
+          </el-select>
           <el-form-item label="房间容量" prop="capacity">
             <el-input v-model="Room.capacity" prefix-icon="el-icon-room"/>
           </el-form-item>

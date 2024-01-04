@@ -8,8 +8,8 @@
           <h2> {{ building.name }} </h2>
           <el-image :src="require(`@/assets/VenuePicture/${building.photoPath}`)" alt=""></el-image>
           <span style="font-size: 30px">
-      {{ building.description }}
-      </span>
+            {{ building.description }}
+          </span>
           <el-button @click="$router.push({path:'map', query:{destination:building.name}})">到这去</el-button>
           <el-divider></el-divider>
           <el-container style="width: 600px; height: 400px">
@@ -26,7 +26,6 @@
             <comment-area :department="1" :stuff-id="building.id"></comment-area>
           </el-container>
         </el-container>
-
       </el-container>
       <MapAdmin v-else style="width: 100%; height:auto"></MapAdmin>
     </el-container>
@@ -95,7 +94,5 @@ export default {
 
 
 <style scoped>
-
-
 
 </style>
