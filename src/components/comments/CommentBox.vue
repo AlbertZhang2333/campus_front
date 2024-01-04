@@ -8,24 +8,24 @@
       <el-form-item style="display: flex; align-items: center; justify-items: center">
         <el-button type="primary" @click="$emit('submit', commentForm)">发表评论</el-button>
         <el-button type="primary" @click="showEmoji=!showEmoji"><i class="el-icon-smile"></i> Emoji</el-button>
-        <el-form-item>
-          <el-upload
-              accept=".jpg, .png"
-              action="#"
-              :before-upload="() => false"
-              :auto-upload="false"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :on-change="handleChange"
-              :file-list="fileList"
-              :limit="1"
-          >
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="upload">上传到服务器
-            </el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </el-upload>
-        </el-form-item>
+
+        <el-upload
+            accept=".jpg, .png"
+            action=""
+            :before-upload="() => false"
+            :auto-upload="false"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :on-change="handleChange"
+            :file-list="fileList"
+            :limit="1"
+        >
+          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+          <el-button style="margin-left: 10px;" size="small" type="success" @click="upload">上传到服务器
+          </el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
+
         <el-popover
             placement="bottom"
             width="300"
@@ -77,7 +77,7 @@ export default {
       this.commentForm.comment += '[' + id + ']';
       this.showEmoji = false
     },
-    upload() {
+     upload() {
       if (this.fileList.length > 0) {
         // 如果有选取到文件
         const formData = new FormData();
@@ -88,24 +88,31 @@ export default {
             .then(res => res.data)
             .then(res => {
               if (res.code === 200) {
-                this.commentForm.comment += "'" + res.data + "'";
+                let temp = res.data
+                this.commentForm.comment += "'" + temp + "'";
                 this.$message.success('上传成功!')
+                console.log(1)
+                console.log(this.commentForm.comment)
               }
+              console.log(2)
+              console.log(this.commentForm.comment)
             })
             .catch(error => {
               // 处理错误
               console.error(error);
             });
+        console.log(3)
+        console.log(this.commentForm.comment)
       } else {
         this.$message.warning('请先选取图片！');
       }
-      console.log(this.fileList)
+      console.log(4)
+      console.log(this.commentForm.comment)
     },
     handleRemove(file, fileList) {
       this.fileList = fileList
     },
     handlePreview(file) {
-      console.log(file);
     },
     handleChange(file, fileList) {
       this.fileList = fileList

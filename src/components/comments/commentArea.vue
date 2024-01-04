@@ -5,8 +5,8 @@
       <el-button v-if="admin" @click="$router.push('/comment/admin')" style="width: 100px; margin: 20px">管理评论</el-button>
     </el-container>
         <CommentBox
-        @submit="addComment"
-    />
+          @submit="addComment"
+        />
     <el-divider></el-divider>
     <el-container v-if="replying">
       <comment-card

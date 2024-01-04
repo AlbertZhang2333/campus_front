@@ -53,8 +53,11 @@
                     <el-card class="card_style" shadow="hover">
                         <el-image :src="shoppingItem.imagePath" style="height: 240px;width: 350px"></el-image>
                         <div style="padding: 20px;">
-                            <span>{{ shoppingItem.name }}</span>
-                            <span style="color: orange">现售价:{{ shoppingItem.price }}¥</span>
+                          <el-row>
+                            {{ shoppingItem.name }}
+                          </el-row>
+                          <el-row style="color: orange ;font-size: 19px">{{shoppingItem.description }}</el-row>
+                            <el-row style="color: orange">现售价:{{ shoppingItem.price }}¥</el-row>
                         </div>
                         <el-button @click="openShoppingDialog(shoppingItem)" style="margin-top: 10%">
                             购买商品
