@@ -103,7 +103,7 @@
           class="dialog-form"
         >
           <el-form-item label="房间名" prop="roomName">
-            <el-input v-model="Room.roomName" prefix-icon="el-icon-room"/>
+            <el-input v-model="Room.roomName" prefix-icon="el-icon-room" disabled/>
           </el-form-item>
           <el-radio-group v-model="Room.location" style="align-items: center;">
             <el-radio-button label="一丹讨论间"></el-radio-button>

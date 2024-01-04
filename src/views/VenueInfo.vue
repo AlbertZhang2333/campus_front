@@ -65,10 +65,7 @@ export default {
     }
   },
   async beforeMount() {
-    console.log('start')
     await this.getBuildingInfo()
-    console.log('out!')
-    console.log(this.buildings)
   },
   methods: {
     async getBuildingInfo() {
@@ -77,11 +74,8 @@ export default {
           .then(response => {
             if (response.code === 400) {
               this.$message.error("获取建筑列表失败");
-              console.log('fail')
             } else if (response.data.length !== 0) {
               this.buildings = response.data;
-              console.log('success!')
-              console.log(this.buildings)
             }
           }).catch(error => {
         console.error('Error adding comment:', error);

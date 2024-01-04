@@ -37,7 +37,7 @@
     <el-col :span="4" style="height: 100%">
       <el-button
           type="primary"
-          v-if="(this.userInfo.identity === 0)"
+          v-if="(this.userInfo.identity === '0')"
           icon="el-icon-arrow-right"
           class="button"
           style="height: 100%;"
