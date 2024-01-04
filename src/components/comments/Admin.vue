@@ -143,6 +143,7 @@
         <el-form-item label="归属部门">
           <el-radio v-model="filterOptions.department" label="All Department">All Department</el-radio>
           <el-radio v-model="filterOptions.department" label="Store">Store</el-radio>
+          <el-radio v-model="filterOptions.department" label="Building">Building</el-radio>
         </el-form-item>
         <el-form-item label="类型">
           <el-radio v-model="filterOptions.type" label="All Type">All Type</el-radio>
@@ -223,7 +224,7 @@ export default {
             return null;
           case 'Store':
             return 0;
-          case '其他部门':
+          case 'Building':
             return 1;
           default:
             return null;
