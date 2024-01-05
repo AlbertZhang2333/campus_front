@@ -26,8 +26,7 @@ export default {
   data() {
     return {
       socketAdmin: null,
-      passToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTWFpbCI6IjMwNzcxNjExNTBAcXEuY29tIiwidXNlcm5hbWUiOiIxMTEiLCJpZGVudGl0eSI6MiwidXNlckljb24iOjEsImV4cCI6MTcwNDUwNTk3MywiaWF0IjoxNzA0NDE5NTczfQ.DzPsPRZTFxN9B_obZ44el-a_WaGg7RoAalXvLm8p6NA',
-
+      passToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTWFpbCI6IjMwNzcxNjExNTBAcXEuY29tIiwidXNlcm5hbWUiOiJ5YXoiLCJpZGVudGl0eSI6MiwidXNlckljb24iOjEsImV4cCI6MTcwNDUwNzUyNSwiaWF0IjoxNzA0NDIxMTI1fQ.o2pfZtJPWk1hnfjo9tG0PPz6l1TgJNs4Wp5qFjiO_fU',
       currentUserId: 'Staff',
       selectedRoomIndex: 0,
 

@@ -38,8 +38,7 @@ export default {
     return {
       userMail: null,
       socket: null,
-      passToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTWFpbCI6IjMzNDQ3NjcyNTBAcXEuY29tIiwidXNlcm5hbWUiOiJjc3cxMjMiLCJpZGVudGl0eSI6MiwidXNlckljb24iOjAsImV4cCI6MTcwNDUwNjA4NCwiaWF0IjoxNzA0NDE5Njg0fQ.dejwgjpX4-OVSR4pcixbbtPKjhtOSidm2Axypby80io',
-
+      passToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTWFpbCI6IjEyMTEwNDI5QG1haWwuc3VzdGVjaC5lZHUuY24iLCJ1c2VybmFtZSI6IndhbGx0YWxsIiwiaWRlbnRpdHkiOjIsInVzZXJJY29uIjowLCJleHAiOjE3MDQ1MDc5MzQsImlhdCI6MTcwNDQyMTUzNH0.ESTo2TgnXaBNl3i9x6FtMnkXOuTrJvEmMOXo3nTYBx0',
       selectedUser: null, // 用于存储用户选择的用户 ID
 
       participants: [
