@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       socketAdmin: null,
+      passToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTWFpbCI6IjMwNzcxNjExNTBAcXEuY29tIiwidXNlcm5hbWUiOiIxMTEiLCJpZGVudGl0eSI6MiwidXNlckljb24iOjEsImV4cCI6MTcwNDUwNTk3MywiaWF0IjoxNzA0NDE5NTczfQ.DzPsPRZTFxN9B_obZ44el-a_WaGg7RoAalXvLm8p6NA',
 
       currentUserId: 'Staff',
       selectedRoomIndex: 0,
@@ -133,7 +134,7 @@ export default {
     },
   },
   beforeMount() {
-    this.socketAdmin = new WebSocket(`ws://localhost:8081/ws/${localStorage.getItem('passToken')}?passToken=${localStorage.getItem('passToken')}`);
+    this.socketAdmin = new WebSocket(`ws://localhost:8081/ws/${this.passToken}?passToken=${this.passToken}`);
     this.socketAdmin.addEventListener('message', this.handleWebSocketMessage);
   }
 }

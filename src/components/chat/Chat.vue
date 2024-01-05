@@ -38,6 +38,7 @@ export default {
     return {
       userMail: null,
       socket: null,
+      passToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTWFpbCI6IjMzNDQ3NjcyNTBAcXEuY29tIiwidXNlcm5hbWUiOiJjc3cxMjMiLCJpZGVudGl0eSI6MiwidXNlckljb24iOjAsImV4cCI6MTcwNDUwNjA4NCwiaWF0IjoxNzA0NDE5Njg0fQ.dejwgjpX4-OVSR4pcixbbtPKjhtOSidm2Axypby80io',
 
       selectedUser: null, // 用于存储用户选择的用户 ID
 
@@ -150,11 +151,8 @@ export default {
           });
     },
     initSocket() {
-      this.getUserMail().then(() => {
-        // 在获取用户邮件后创建 WebSocket 连接
-        this.socketAdmin = new WebSocket(`ws://localhost:8081/ws/${localStorage.getItem('passToken')}?passToken=${localStorage.getItem('passToken')}`);
-        this.socketAdmin.addEventListener('message', this.handleWebSocketMessage);
-      });
+        this.socket = new WebSocket(`ws://localhost:8081/ws/${this.passToken}?passToken=${this.passToken}`);
+        this.socket.addEventListener('message', this.handleWebSocketMessage);
     },
   },
 };
