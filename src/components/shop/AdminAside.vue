@@ -17,6 +17,12 @@
                 <span slot="title" style="text-align: center">商城管理</span>
               </el-menu-item>
             </router-link>
+            <router-link :to="'/shop/chat/admin'">
+              <el-menu-item :index="'/shop/chat/admin'" :width="width">
+                <i class="el-icon-s-flag"></i>
+                <span slot="title" style="text-align: center">客户服务</span>
+              </el-menu-item>
+            </router-link>
           </el-menu>
         </el-col>
       </el-row>
