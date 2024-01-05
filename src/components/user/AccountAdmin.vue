@@ -169,6 +169,7 @@ export default {
         userMail: "",
         identity: 1,
         password: "",
+        userIcon: 1,
         enabled: true,
       },
       //-----------------------------
@@ -191,7 +192,7 @@ export default {
   },
   methods: {
     async createAccount() {
-      const response = await axiosInstance.post(this.$httpUrl + `manageAccount/createANewAccount?userName=${this.accountInfoItem.username}&userMail=${this.accountInfoItem.userMail}&password=${this.accountInfoItem.password}&identity=${this.accountInfoItem.identity}`);
+      const response = await axiosInstance.post(this.$httpUrl + `manageAccount/createANewAccount?UserIcon=${this.accountInfoItem.userIcon}&userName=${this.accountInfoItem.username}&userMail=${this.accountInfoItem.userMail}&password=${this.accountInfoItem.password}&identity=${this.accountInfoItem.identity}`);
       if (response.data.code === 400) alert(response.data.data);
       else this.$message.success("已添加");
       this.accountDialogVisible = false;
